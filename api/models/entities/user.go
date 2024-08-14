@@ -3,7 +3,6 @@ package entities
 import (
 	"myanimevault/database"
 	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -14,27 +13,6 @@ type User struct {
 	Email          string    `binding:"required"`
 	PasswordHash   string    `binding:"required"`
 	DateRegistered time.Time `binding:"required"`
-}
-
-func Create(firstName string, lastName string, email string, password string) error {
-	query := `
-	INSERT INTO users
-	VALUES (?, ?, ?, ?, ?, ?)
-	`
-
-	stmt, err := database.Db.Prepare(query)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = stmt.Exec(uuid.New().String(), firstName, lastName, email, password, time.Now().UTC())
-
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (user User) Delete() error {
@@ -49,6 +27,7 @@ func (user User) Delete() error {
 		return err
 	}
 
+	defer stmt.Close()
 	_, err = stmt.Exec(user.Id)
 
 	if err != nil {
