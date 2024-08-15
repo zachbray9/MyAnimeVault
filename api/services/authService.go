@@ -41,8 +41,7 @@ func Register (request requests.RegisterRequest) error{
 
 func Login(request requests.LoginRequest) error {
 	query := `
-	SELECT email, password_hash FROM users
-	WHERE email = ?
+	SELECT password_hash FROM users WHERE email = ?
 	`
 
 	row := database.Db.QueryRow(query, request.Email)
