@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"myanimevault/config"
 	"myanimevault/controllers"
 	"myanimevault/database"

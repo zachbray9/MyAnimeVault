@@ -39,26 +39,27 @@ func Register (request requests.RegisterRequest) error{
 	return nil
 }
 
-func Login(request requests.LoginRequest) error {
+func ValidateCredentials(request requests.LoginRequest) (string, error) {
 	query := `
-	SELECT password_hash FROM users WHERE email = ?
+	SELECT id, password_hash FROM users WHERE email = ?
 	`
 
 	row := database.Db.QueryRow(query, request.Email)
 
+	var id string
 	var hashedPassword string
-	err := row.Scan(&hashedPassword)
+	err := row.Scan(&id, &hashedPassword)
 
 	if(err != nil){
-		return err
+		return "", err
 	}
 
 	passwordIsValid := utils.ComparePasswordWithHash(request.Password, hashedPassword)
 	if(!passwordIsValid){
-		return errors.New("invalid credentials")
+		return "", errors.New("invalid credentials")
 	}
 
-	return nil
+	return id, nil
 }
 
 func GetUserByEmail(email string) (*entities.User, error) {

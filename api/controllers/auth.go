@@ -43,14 +43,21 @@ func login(context *gin.Context) {
 		return
 	}
 
-	err = services.Login(loginRequest)
+	userId, err := services.ValidateCredentials(loginRequest)
 
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials."})
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in."})
+	token, err := services.GenerateAuthToken(userId, loginRequest.Email)
+
+	if(err != nil){
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating an auth token."})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in.", "authToken": token})
 }
 
 func GetUserByEmail(context *gin.Context) {
