@@ -20,7 +20,7 @@ func GenerateAuthToken(id string, email string) (string, error){
 	return token.SignedString([]byte(authTokenKey))
 }
 
-func VerifyAuthToken(token string) error{
+func VerifyAuthToken(token string) (string, error){
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 
@@ -31,20 +31,22 @@ func VerifyAuthToken(token string) error{
 	})
 
 	if(err != nil){
-		return err
+		return "", err
 	}
 
 	tokenIsValid := parsedToken.Valid
 
 	if(!tokenIsValid){
-		return errors.New("invalid auth token")
+		return "", errors.New("invalid auth token")
 	}
 
-	// claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 
-	// if(!ok){
-	// 	return errors.New("Invalid auth token claims.")
-	// }
+	if(!ok){
+		return "", errors.New("invalid auth token claims")
+	}
 
-	return nil
+	userId := claims["id"].(string)
+
+	return userId, nil
 }

@@ -15,11 +15,12 @@ func Authenticate(context *gin.Context) {
 		return
 	}
 
-	err := services.VerifyAuthToken(authToken)
+	userId, err := services.VerifyAuthToken(authToken)
 
 	if(err != nil){
 		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized."})
 	}
 
+	context.Set("userId", userId)
 	context.Next()
 }

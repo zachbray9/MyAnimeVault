@@ -59,16 +59,3 @@ func login(context *gin.Context) {
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in.", "authToken": token})
 }
-
-func GetUserByEmail(context *gin.Context) {
-	email := context.Param("email")
-
-	user, err := services.GetUserByEmail(email)
-
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Something went wrong."})
-		return
-	}
-
-	context.JSON(http.StatusOK, user)
-}

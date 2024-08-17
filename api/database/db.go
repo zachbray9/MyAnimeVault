@@ -38,4 +38,30 @@ func createTables(){
 	if(err != nil){
 		panic("Could not create users table.")
 	}
+
+	userAnimesTable := `
+	CREATE TABLE IF NOT EXISTS userAnimes (
+		id TEXT NOT NULL PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		anime_id INTEGER NOT NULL,
+		title TEXT NOT NULL,
+		title_en TEXT,
+		large_poster TEXT,
+		medium_poster TEXT NOT NULL,
+		media_type TEXT NOT NULL,
+		start_season TEXT,
+		start_year INTEGER,
+		watch_status TEXT,
+		rating INTEGER,
+		num_episodes_watched INTEGER,
+		total_episodes INTEGER NOT NULL,
+		FOREIGN KEY (user_id) REFERENCES users(id)
+	)
+	`
+
+	_, err = Db.Exec(userAnimesTable)
+
+	if(err != nil){
+		panic("Could not create userAnimes table.")
+	}
 }

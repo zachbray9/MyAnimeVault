@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"myanimevault/database"
-	"myanimevault/models/entities"
 	"myanimevault/models/requests"
 	"myanimevault/utils"
 	"time"
@@ -60,20 +59,4 @@ func ValidateCredentials(request requests.LoginRequest) (string, error) {
 	}
 
 	return id, nil
-}
-
-func GetUserByEmail(email string) (*entities.User, error) {
-	query := `
-	SELECT * FROM users WHERE email = ?
-	`
-	row := database.Db.QueryRow(query, email)
-	
-	var user entities.User
-	err := row.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.PasswordHash, &user.DateRegistered)
-
-	if(err != nil){
-		return nil, fmt.Errorf("could not scan row: %w", err)
-	}
-
-	return &user, err
 }
