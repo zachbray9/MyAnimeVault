@@ -13,4 +13,5 @@ func RegisterEndpoints(server *gin.Engine) {
 
 	//userAnime routes
 	server.POST("/api/userAnime", middleware.Authenticate, CreateUserAnime)
+	server.GET("/api/userAnime", middleware.Authenticate, GetUserAnimeList)
 }

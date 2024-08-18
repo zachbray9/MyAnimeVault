@@ -38,3 +38,16 @@ func CreateUserAnime(context *gin.Context) {
 
 	context.JSON(http.StatusOK, gin.H{"message": "New userAnime was successfully added to the database"})
 }
+
+func GetUserAnimeList(context *gin.Context){
+	userId := context.GetString("userId")
+
+	animeList, err := services.GetList(userId)
+
+	if(err != nil){
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem retrieving the users list"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "List successfully retrieved.", "Anime List": animeList})
+}
