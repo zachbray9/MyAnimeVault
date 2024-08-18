@@ -1,5 +1,9 @@
 import { Stack } from "@chakra-ui/react"
 import { Helmet } from "react-helmet-async"
+import TopAiringCarousel from "../components/carousels/TopAiringCarousel"
+import TopUpcomingCarousel from "../components/carousels/TopUpcomingCarousel"
+import PopularCarousel from "../components/carousels/PopularCarousel"
+import FeaturedShow from "../components/featured/FeaturedShow"
 
 export default function Home() {
     return (
@@ -9,7 +13,10 @@ export default function Home() {
             </Helmet>
 
             <Stack>
-                Hello world!
+                <FeaturedShow />
+                <TopAiringCarousel />
+                <TopUpcomingCarousel />
+                <PopularCarousel />
             </Stack>
         </>
     )
