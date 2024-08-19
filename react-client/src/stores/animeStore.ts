@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx"
 import { Anime } from "../models/anime"
-import { malAgent } from "../api/myAnimeListAgent"
+import { malAgent } from "../api/jikanAgent"
 
 export default class AnimeStore {
     topAiringShows: Anime[] = []
@@ -15,7 +15,8 @@ export default class AnimeStore {
 
         try {
             const response = await malAgent.AnimeData.getTopAiring()
-            runInAction(() => this.topAiringShows = response.data.map(anime => anime.node))
+            runInAction(() => this.topAiringShows = response.data)
+            console.log(this.topAiringShows)
             this.setIsLoadingTopAiringShows(false)
         } catch (error) {
             console.log("Couldn't load top airing shows: " + error)
