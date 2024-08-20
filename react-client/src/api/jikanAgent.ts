@@ -5,9 +5,11 @@ import { MalResponseData } from "../models/jikanResponseData";
 axios.defaults.baseURL = 'https://api.jikan.moe/v4'
 
 const AnimeData = {
-    getTopAiring: () => requests.get<MalResponseData>('/top/anime?filter=airing&limit=10')
+    getTopAiring: () => requests.get<MalResponseData>('/top/anime?filter=airing&limit=20'),
+    getPopular: () => requests.get<MalResponseData>('/top/anime?filter=bypopularity&limit=20'),
+    getUpcoming: () => requests.get<MalResponseData>('/top/anime?filter=upcoming&limit=20')
 }
 
-export const malAgent = {
+export const jikanAgent = {
     AnimeData
 }

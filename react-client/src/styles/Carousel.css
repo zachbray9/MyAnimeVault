@@ -1,0 +1,8 @@
+.carousel-container {
+    overflow: inherit;
+    position: static;
+}
+
+.carousel-item {
+    padding-right: 1.25rem;
+}
