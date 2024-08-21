@@ -24,7 +24,7 @@ export default function TopAiringCarousel({data, heading}:Props) {
     }, [])
 
     return (
-        <Stack className="carousel-main-wrapper" gap='2rem' padding='2rem' overflow='hidden'>
+        <Stack className="carousel-main-wrapper" gap='2rem' padding='4rem' overflow='hidden'>
             <Heading>{heading}</Heading>
             <Box overflow='visible' position='relative'>
                 <Carousel
@@ -38,8 +38,8 @@ export default function TopAiringCarousel({data, heading}:Props) {
                     itemClass='carousel-item'
                 >
                     {data.map((anime) => (
-                        <Box key={anime.mal_id} gap={4}>
-                            <Image src={anime.images.webp.image_url ?? undefined} width='100%' aspectRatio='2/3' objectFit='cover' />
+                        <Box key={anime.mal_id} gap={4} bg=''>
+                            <Image src={anime.images.webp.large_image_url ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
                             <Text fontSize='sm'>{anime.titles[0].title}</Text>
                         </Box>
                     ))}
