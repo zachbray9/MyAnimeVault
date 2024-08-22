@@ -9,7 +9,7 @@ const styles = {
     global: () => ({
         body: {
             bg: 'background',
-            color: 'text'
+            color: 'text',
         }
     })
 }

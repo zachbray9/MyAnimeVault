@@ -1,5 +1,4 @@
 import Carousel from "react-multi-carousel";
-import { useEffect, useState } from "react";
 import { Box, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import 'react-multi-carousel/lib/styles.css'
 import '../../styles/Carousel.css'
@@ -13,18 +12,8 @@ interface Props{
 }
 
 export default function TopAiringCarousel({data, heading}:Props) {
-    const [paddingToSubtract, setPaddingToSubtract] = useState(0)
-
-    useEffect(() => {
-        const container = document.querySelector('.carousel-main-wrapper');
-        if (container) {
-            const padding = window.getComputedStyle(container).paddingLeft;
-            setPaddingToSubtract(parseFloat(padding));
-        }
-    }, [])
-
     return (
-        <Stack className="carousel-main-wrapper" gap='2rem' padding='4rem' overflow='hidden'>
+        <Stack className="carousel-main-wrapper" gap='2rem' padding={{base: '1.25rem', md: '4rem'}} overflow='hidden' >
             <Heading>{heading}</Heading>
             <Box overflow='visible' position='relative'>
                 <Carousel
@@ -32,8 +21,8 @@ export default function TopAiringCarousel({data, heading}:Props) {
                     swipeable={true}
                     draggable={false}
                     partialVisbile={false}
-                    customLeftArrow={<CustomLeftCarouselArrow paddingToSubtract={paddingToSubtract}/>}
-                    customRightArrow={<CustomRightCarouselArrow paddingToSubtract={paddingToSubtract}/>}
+                    customLeftArrow={<CustomLeftCarouselArrow />}
+                    customRightArrow={<CustomRightCarouselArrow />}
                     containerClass='carousel-container'
                     itemClass='carousel-item'
                 >

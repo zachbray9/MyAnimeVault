@@ -37,7 +37,7 @@ export default observer( function Home() {
     return (
         <>
             <Helmet>
-                <title>MyAnimeVault - Home</title>
+                <title>MyAnimeVault - Explore, rate, and keep track of your favorite anime</title>
             </Helmet>
 
             <Stack gap='2rem'>

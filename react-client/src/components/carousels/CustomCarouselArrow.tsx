@@ -1,16 +1,19 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { ArrowProps } from "react-multi-carousel";
 
-interface Props extends ArrowProps {
-    paddingToSubtract: number
-}
 
-export function CustomLeftCarouselArrow({ paddingToSubtract, onClick }: Props) {
+export function CustomLeftCarouselArrow({ onClick }: ArrowProps) {
+    //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
+    const responsivePadding = useBreakpointValue({
+        base: '-1.25rem',
+        md: '-4rem'
+    })
+
     return (
         <Box
             position="absolute"
-            left={`-${paddingToSubtract}px`}
+            left={responsivePadding}
             top="0"
             bottom="0"
             display="flex"
@@ -43,11 +46,17 @@ export function CustomLeftCarouselArrow({ paddingToSubtract, onClick }: Props) {
     )
 }
 
-export function CustomRightCarouselArrow({ paddingToSubtract, onClick }: Props) {
+export function CustomRightCarouselArrow({onClick }: ArrowProps) {
+    //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
+    const responsivePadding = useBreakpointValue({
+        base: '-1.25rem',
+        md: '-4rem'
+    })
+
     return (
         <Box
         position="absolute"
-        right={`-${paddingToSubtract}px`}
+        right={responsivePadding}
         top="0"
         bottom="0"
         display="flex"
