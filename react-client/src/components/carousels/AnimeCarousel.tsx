@@ -4,10 +4,10 @@ import 'react-multi-carousel/lib/styles.css'
 import '../../styles/Carousel.css'
 import { responsive } from "./CarouseBreakpoints";
 import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./CustomCarouselArrow";
-import { Anime } from "../../models/anime";
+import { AniListAnime } from "../../models/aniListAnime";
 
 interface Props{
-    data: Anime[],
+    data: AniListAnime[],
     heading: string
 }
 
@@ -27,9 +27,9 @@ export default function TopAiringCarousel({data, heading}:Props) {
                     itemClass='carousel-item'
                 >
                     {data.map((anime) => (
-                        <Box key={anime.mal_id} gap={4} bg=''>
-                            <Image src={anime.images.webp.large_image_url ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
-                            <Text fontSize='sm'>{anime.titles[0].title}</Text>
+                        <Box key={anime.id} gap={4} bg=''>
+                            <Image src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
+                            <Text fontSize='sm'>{anime.title.english ?? anime.title.native}</Text>
                         </Box>
                     ))}
                 </Carousel>
