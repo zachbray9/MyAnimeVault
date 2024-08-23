@@ -33,7 +33,7 @@ export default function FeaturedCarousel({ data }: Props) {
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width='100%' gap={2}>
                                         <Button bg='#ff640a' width={['100%', null, 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
-                                        <Tooltip label='Add to list'>
+                                        <Tooltip label='Add to list' hasArrow bg=''>
                                             <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline'/>
                                         </Tooltip>
                                     </Flex>

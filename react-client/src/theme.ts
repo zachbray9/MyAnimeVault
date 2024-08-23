@@ -48,28 +48,7 @@ const components = {
             outline: {
                 bg: 'transparent',
                 color: 'primary.base',
-                border: '2px solid primary.base',
-                
-            }
-        }
-    },
-    IconButton: {
-        baseStyle: {
-            borderRadius: 'none'
-        },
-        variants: {
-            solid: {
-                bg: 'primary.base',
-                color: '#000',
-                _hover: {
-                    bg: 'primary.hover'
-                },
-                transition: 'all 0.3s'
-            },
-            outline: {
-                bg: 'transparent',
-                color: 'primary.base',
-                border: '2px solid',
+                border: '1px solid',
                 borderColor: 'primary.base',
                 _hover: {
                     borderColor: 'primary.hover'
