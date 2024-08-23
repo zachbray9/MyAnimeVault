@@ -1,6 +1,7 @@
 export interface AniListAnime{
     id: number
     title: {
+        romaji?: string
         english?: string
         native?: string
     }
@@ -12,4 +13,5 @@ export interface AniListAnime{
     bannerImage?: string
     description?: string
     episodes?: number
+    genres?: string[]
 }

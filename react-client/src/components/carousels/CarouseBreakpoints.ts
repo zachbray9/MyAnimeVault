@@ -1,4 +1,4 @@
-export const responsive = {
+export const regularResponsive = {
     superLargeDesktop: {
         breakpoint: { max: 4000, min: 1720 },
         items: 7,
@@ -35,5 +35,14 @@ export const responsive = {
         items: 2,
         slidesToSlide: 2,
         partialVisibilityGutter: 15
+    }
+}
+
+export const featuredResponsive = {
+    all: {
+        breakpoint: { max: 4000, min: 0},
+        items: 1,
+        slidesToSlide: 1,
+        partialVisibilityGutter: 0
     }
 }

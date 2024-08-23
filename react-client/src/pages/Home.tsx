@@ -33,8 +33,8 @@ export default observer(function Home() {
                 <title>MyAnimeVault - Explore, rate, and keep track of your favorite anime</title>
             </Helmet>
 
-            <Stack gap='2rem'>
-                <FeaturedCarousel />
+            <Stack gap='2rem' overflow='hidden'>
+                <FeaturedCarousel data={animeStore.featuredShows}/>
                 <AnimeCarousel heading='Top Airing' data={animeStore.topAiringShows} />
                 <AnimeCarousel heading='Popular' data={animeStore.popularShows} />
                 <AnimeCarousel heading='Upcoming' data={animeStore.upcomingShows} />

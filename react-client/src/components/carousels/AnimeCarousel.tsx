@@ -2,7 +2,7 @@ import Carousel from "react-multi-carousel";
 import { Box, Heading, Image, Stack, Text } from "@chakra-ui/react";
 import 'react-multi-carousel/lib/styles.css'
 import '../../styles/Carousel.css'
-import { responsive } from "./CarouseBreakpoints";
+import { regularResponsive } from "./CarouseBreakpoints";
 import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./CustomCarouselArrow";
 import { AniListAnime } from "../../models/aniListAnime";
 
@@ -17,7 +17,7 @@ export default function TopAiringCarousel({data, heading}:Props) {
             <Heading>{heading}</Heading>
             <Box overflow='visible' position='relative'>
                 <Carousel
-                    responsive={responsive}
+                    responsive={regularResponsive}
                     swipeable={true}
                     draggable={false}
                     partialVisbile={false}
@@ -29,7 +29,7 @@ export default function TopAiringCarousel({data, heading}:Props) {
                     {data.map((anime) => (
                         <Box key={anime.id} gap={4} bg=''>
                             <Image src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
-                            <Text fontSize='sm'>{anime.title.english ?? anime.title.native}</Text>
+                            <Text fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>
                         </Box>
                     ))}
                 </Carousel>

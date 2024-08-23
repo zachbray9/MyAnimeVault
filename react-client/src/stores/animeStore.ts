@@ -22,7 +22,7 @@ export default class AnimeStore {
         const query = {
             query: `
             query {
-                Page(perPage: 5) {
+                Page(perPage: 10) {
                     media(sort: TRENDING_DESC, type: ANIME, status: RELEASING) {
                         id
                         title {
@@ -35,8 +35,7 @@ export default class AnimeStore {
                         }
                         bannerImage
                         description
-                        episodes
-                        trending
+                        genres
                     }
                 }
             }
@@ -46,7 +45,7 @@ export default class AnimeStore {
         try {
             const response = await aniListAgent.AnimeData.getTrending(query)
             console.log(response)
-            runInAction(() => this.featuredShows = response.data.Page.media)
+            runInAction(() => this.featuredShows = response.data.Page.media.filter(anime => anime.bannerImage))
             this.setIsLoadingFeaturedShows(false)
         } catch (error) {
             console.log("Couldn't load the featured shows: " + error)
@@ -71,10 +70,8 @@ export default class AnimeStore {
                         coverImage {
                             large
                         }
-                        bannerImage
                         description
                         episodes
-                        trending
                     }
                 }
             }
@@ -108,10 +105,8 @@ export default class AnimeStore {
                         coverImage {
                             large
                         }
-                        bannerImage
                         description
                         episodes
-                        trending
                     }
                 }
             }
@@ -145,10 +140,8 @@ export default class AnimeStore {
                         coverImage {
                             large
                         }
-                        bannerImage
                         description
                         episodes
-                        trending
                     }
                 }
             }
