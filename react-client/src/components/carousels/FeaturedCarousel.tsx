@@ -4,7 +4,7 @@ import { AniListAnime } from "../../models/aniListAnime";
 import { featuredResponsive } from "./CarouseBreakpoints";
 import '../../styles/Carousel.css'
 import { FaArrowRightLong, FaRegBookmark } from "react-icons/fa6";
-import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./CustomCarouselArrow";
+import { NavLink } from "react-router-dom";
 
 interface Props {
     data: AniListAnime[]
@@ -34,9 +34,9 @@ export default function FeaturedCarousel({ data }: Props) {
                                     {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
-                                        <Button bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
+                                        <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
                                         <Tooltip label='Add to list' hasArrow bg=''>
-                                            <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline'/>
+                                            <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline' />
                                         </Tooltip>
                                     </Flex>
                                 </Stack>

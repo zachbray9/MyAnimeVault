@@ -1,18 +1,17 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Drawer, DrawerContent, DrawerOverlay, Heading, HStack, Icon, IconButton, Menu, MenuButton, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
-import { FaBars, FaMagnifyingGlass, FaRegUser } from "react-icons/fa6";
+import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
+import { navBarHeight, navBarIconSize } from "../../theme";
+import NavBarButton from "./NavBarButton";
 
 export default function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
 
-    const navBarHeight = ['3.75rem', null, '3rem']
-    const iconSize = ['1.25em', null, '1em']
-
     return (
-        <HStack bg='#23252b' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
+        <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
             <IconButton
                 aria-label="hamburger-menu"
-                icon={<Icon as={FaBars} boxSize={iconSize}/>}
+                icon={<Icon as={FaBars} boxSize={navBarIconSize}/>}
                 display={{ base: 'flex', md: 'none' }}
                 boxSize={navBarHeight}
                 padding='1rem'
@@ -60,9 +59,9 @@ export default function Navbar() {
 
             <Spacer />
 
-            <IconButton aria-label="search" icon={<Icon as={FaMagnifyingGlass} boxSize={iconSize} />} boxSize={navBarHeight} padding='1rem' borderRadius={0} variant='unstyled' _hover={{ bg: '#141519' }} />
-            <IconButton aria-label='options' icon={<Icon as={FaRegUser} boxSize={iconSize} />} boxSize={navBarHeight} padding='1rem' borderRadius={0} variant='unstyled' _hover={{ bg: '#141519' }} />
-
+            <NavBarButton name="search" icon={FaMagnifyingGlass}/>
+            <NavBarButton name="list" icon={FaRegBookmark} />
+            <NavBarButton name="options" icon={FaRegUser} />
         </HStack>
     )
 }

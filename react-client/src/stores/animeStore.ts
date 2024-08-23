@@ -3,10 +3,12 @@ import { aniListAgent } from "../api/aniListAgent"
 import { AniListAnime } from "../models/aniListAnime"
 
 export default class AnimeStore {
+    selectedAnime: AniListAnime | null = null
     featuredShows: AniListAnime[] = []
     topAiringShows: AniListAnime[] = []
     popularShows: AniListAnime[] = []
     upcomingShows: AniListAnime[] = []
+    isLoadingSelectedAnime: boolean = false
     isLoadingFeaturedShows: boolean = false
     isLoadingTopAiringShows: boolean = false
     isLoadingPopularShows: boolean = false
@@ -44,7 +46,6 @@ export default class AnimeStore {
 
         try {
             const response = await aniListAgent.AnimeData.getTrending(query)
-            console.log(response)
             runInAction(() => this.featuredShows = response.data.Page.media.filter(anime => anime.bannerImage))
             this.setIsLoadingFeaturedShows(false)
         } catch (error) {
@@ -156,6 +157,66 @@ export default class AnimeStore {
             console.log("Couldn't load upcoming shows: " + error)
             this.setIsLoadingUpcomingShows(false)
         }
+    }
+
+    loadAnimeDetails = async (animeId: number) => {
+        this.setIsLoadingSelectedAnime(true)
+
+        const query = {
+            query: `
+                query ($id: Int!) {
+                    Media(id: $id, type: ANIME) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        bannerImage
+                        coverImage {
+                            large
+                        }
+                        genres
+                        episodes
+                        status
+                        averageScore
+                        popularity
+                        format
+                        season
+                        seasonYear
+                        studios {
+                            edges {
+                                node {
+                                    name
+                                }
+                            }
+                        }
+                    }
+                }
+            `,
+            variables: {
+                id: animeId
+            }
+        }
+
+        try{
+            const response = await aniListAgent.AnimeData.getAnimeDetails(query)
+            runInAction(() => this.selectedAnime = response.data.Media)
+            console.log(this.selectedAnime)
+            this.setIsLoadingSelectedAnime(false)
+        }catch(error){
+            console.log("Couldn't load selected anime: " + error)
+            this.setIsLoadingSelectedAnime(false)
+        }
+    }
+
+    clearSelectedAnime = () => {
+        this.selectedAnime = null
+    }
+
+    setIsLoadingSelectedAnime = (value: boolean) => {
+        this.isLoadingSelectedAnime = value
     }
 
     setIsLoadingFeaturedShows = (value: boolean) => {

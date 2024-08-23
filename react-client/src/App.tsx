@@ -7,7 +7,7 @@ export default function App() {
     <>
       <div id='main'>
         <Navbar />
-        <Box paddingTop={['3.75rem', null, '3rem']}>
+        <Box paddingTop={['3.75rem', null, '3rem']} >
           <Outlet />
         </Box>
       </div>

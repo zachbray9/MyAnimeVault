@@ -1,9 +1,15 @@
 import { AniListAnime } from "./aniListAnime"
 
-export interface AniListResponseData{
+export interface AniListResponseDataPaged{
     data: {
         Page: {
             media: AniListAnime[]
         }
+    }
+}
+
+export interface AniListResponseDataSingle{
+    data: {
+        Media: AniListAnime
     }
 }

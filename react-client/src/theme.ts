@@ -1,5 +1,8 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 
+const navBarHeight = ['3.75rem', null, '3rem']
+const navBarIconSize =  ['1.25em', null, '1em']
+
 const config: ThemeConfig = {
     initialColorMode: 'dark',
     useSystemColorMode: false
@@ -23,12 +26,15 @@ const semanticTokens = {
         background: {
             _dark: '#000'
         },
+        surface: {
+            1: '#141519',
+            2: '#23252b'
+        },
         primary: {
             base: '#ff640a',
             hover: '#ff8c2b'
         }
     }
-
 }
 
 const components = {
@@ -63,3 +69,4 @@ const components = {
 const theme = extendTheme({ config, styles, semanticTokens, components })
 
 export default theme
+export { navBarIconSize, navBarHeight }

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { aniListApi } from "./axios"
-import { AniListResponseData } from "../models/aniListResponseData";
+import { AniListResponseDataSingle, AniListResponseDataPaged } from "../models/aniListResponseData";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -13,10 +13,11 @@ const requests = {
 }
 
 const AnimeData = {
-    getTrending: (query: {query: string}) => requests.post<AniListResponseData>('', query),
-    getUpcoming: (query: {query: string}) => requests.post<AniListResponseData>('', query),
-    getPopular: (query: {query: string}) => requests.post<AniListResponseData>('', query),
-    getTopAiring: (query: {query: string}) => requests.post<AniListResponseData>('', query)
+    getTrending: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
+    getUpcoming: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
+    getPopular: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
+    getTopAiring: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
+    getAnimeDetails: (query: {query: string, variables: {id: number}}) => requests.post<AniListResponseDataSingle>('', query)
 }
 
 export const aniListAgent = {

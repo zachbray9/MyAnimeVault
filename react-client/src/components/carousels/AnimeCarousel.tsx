@@ -5,6 +5,7 @@ import '../../styles/Carousel.css'
 import { regularResponsive } from "./CarouseBreakpoints";
 import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./CustomCarouselArrow";
 import { AniListAnime } from "../../models/aniListAnime";
+import { NavLink } from "react-router-dom";
 
 interface Props{
     data: AniListAnime[],
@@ -27,7 +28,7 @@ export default function TopAiringCarousel({data, heading}:Props) {
                     itemClass='carousel-item'
                 >
                     {data.map((anime) => (
-                        <Box key={anime.id} gap={4} bg=''>
+                        <Box as={NavLink} to={`/anime/${anime.id}/details`} key={anime.id} gap={4} bg='surface.1' cursor='pointer'>
                             <Image src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
                             <Text fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>
                         </Box>
