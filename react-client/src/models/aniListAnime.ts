@@ -1,4 +1,4 @@
-export interface AniListAnime{
+export interface AniListAnime {
     id: number
     title: {
         romaji?: string
@@ -14,4 +14,18 @@ export interface AniListAnime{
     description?: string
     episodes?: number
     genres?: string[]
+    status?: string
+    averageScore?: number
+    popularity?: string
+    format?: string
+    season?: string
+    seasonYear?: string
+    studios?: {
+        edges: {
+            node: {
+                name: string
+            },
+            isMain: boolean
+        }
+    }
 }

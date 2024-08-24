@@ -3,6 +3,7 @@ import { Button, Drawer, DrawerContent, DrawerOverlay, Heading, HStack, Icon, Ic
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import NavBarButton from "./NavBarButton";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
@@ -32,7 +33,7 @@ export default function Navbar() {
                 </DrawerContent>
             </Drawer>
 
-            <Heading size='sm' padding='1rem' color='#ff640a'>MyAnimeVault</Heading>
+            <Heading  as={NavLink} to={''} size='sm' padding='1rem' color='#ff640a'>MyAnimeVault</Heading>
 
             <Menu>
                 <MenuButton
