@@ -15,6 +15,7 @@ export default class AnimeStore {
     topAiringShows: AniListAnime[] = []
     popularShows: AniListAnime[] = []
     upcomingShows: AniListAnime[] = []
+    searchQuery: string = ''
     searchResults: AniListAnime[] = []
     isLoadingSelectedAnime: boolean = false
     isLoadingFeaturedShows: boolean = false
@@ -25,7 +26,6 @@ export default class AnimeStore {
 
     constructor() {
         makeAutoObservable(this)
-        // this.loadSearchResults = debounce(this.loadSearchResults, 1000)
     }
 
     loadFeaturedShows = async () => {
@@ -103,15 +103,15 @@ export default class AnimeStore {
         }
     }
 
-    loadSearchResults = debounce( async (searchQuery: string) => {
+    loadSearchResults = debounce( async () => {
         this.setIsLoadingSearchResults(true)
 
-        if(!searchQuery){
+        if(!this.searchResults){
             this.clearSearchResults()
             return
         }
 
-        const query = LoadSearchResultsQuery(searchQuery)
+        const query = LoadSearchResultsQuery(this.searchQuery)
 
         try {
             const response = await aniListAgent.AnimeData.getSearchResults(query)
@@ -128,7 +128,12 @@ export default class AnimeStore {
     }
 
     clearSearchResults = () => {
+        this.searchQuery = ''
         this.searchResults = []
+    }
+
+    setSearchQuery = (value: string) => {
+        this.searchQuery = value
     }
 
     setIsLoadingSelectedAnime = (value: boolean) => {

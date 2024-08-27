@@ -1,14 +1,16 @@
-import { Box, Heading, Image, Input, InputGroup, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, IconButton, Image, Input, InputGroup, InputRightElement, SimpleGrid, Stack, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../stores/store";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
+import { CloseIcon } from "@chakra-ui/icons";
 
 export default observer(function Search() {
     const { animeStore } = useStore()
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        animeStore.loadSearchResults(event.target.value)
+        animeStore.setSearchQuery(event.target.value)
+        animeStore.loadSearchResults()
     }
 
     useEffect(() => {
@@ -29,8 +31,15 @@ export default observer(function Search() {
                             borderColor: 'primary.base'
                         }}
                         paddingBottom='0.5rem'
+                        value={animeStore.searchQuery}
                         onChange={handleInputChange}
                     />
+
+                    {animeStore.searchQuery && 
+                        <InputRightElement>
+                            <IconButton aria-label="clear-search" icon={<CloseIcon />} variant='unstyled' onClick={animeStore.clearSearchResults}/>
+                        </InputRightElement>
+                    }
                 </InputGroup>
             </Box>
 
