@@ -1,6 +1,13 @@
 import { makeAutoObservable, runInAction } from "mobx"
 import { aniListAgent } from "../api/aniListAgent"
 import { AniListAnime } from "../models/aniListAnime"
+import { debounce } from "lodash"
+import { LoadSearchResultsQuery } from "../api/queries/loadSearchResultsQuery"
+import { LoadAnimeDetailsQuery } from "../api/queries/animeDetailsQuery"
+import { LoadUpcomingShowsQuery } from "../api/queries/upcomingShowsQuery"
+import { LoadPopularShowsQuery } from "../api/queries/popularShowsQuery"
+import { TopAiringShowsQuery } from "../api/queries/topAiringShowsQuery"
+import { FeaturedShowsQuery } from "../api/queries/featuredShowsQuery"
 
 export default class AnimeStore {
     selectedAnime: AniListAnime | null = null
@@ -8,41 +15,23 @@ export default class AnimeStore {
     topAiringShows: AniListAnime[] = []
     popularShows: AniListAnime[] = []
     upcomingShows: AniListAnime[] = []
+    searchResults: AniListAnime[] = []
     isLoadingSelectedAnime: boolean = false
     isLoadingFeaturedShows: boolean = false
     isLoadingTopAiringShows: boolean = false
     isLoadingPopularShows: boolean = false
     isLoadingUpcomingShows: boolean = false
+    isLoadingSearchResults: boolean = false
 
     constructor() {
         makeAutoObservable(this)
+        // this.loadSearchResults = debounce(this.loadSearchResults, 1000)
     }
 
     loadFeaturedShows = async () => {
         this.setIsLoadingFeaturedShows(true)
 
-        const query = {
-            query: `
-            query {
-                Page(perPage: 10) {
-                    media(sort: TRENDING_DESC, type: ANIME, status: RELEASING) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        coverImage {
-                            large
-                        }
-                        bannerImage
-                        description
-                        genres
-                    }
-                }
-            }
-        `,
-        }
+        const query = FeaturedShowsQuery()
 
         try {
             const response = await aniListAgent.AnimeData.getTrending(query)
@@ -57,27 +46,7 @@ export default class AnimeStore {
     loadTopAiringShows = async () => {
         this.setIsLoadingTopAiringShows(true)
 
-        const query = {
-            query: `
-            query {
-                Page(perPage: 20) {
-                    media(sort: POPULARITY_DESC, type: ANIME, status: RELEASING) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        coverImage {
-                            large
-                        }
-                        description
-                        episodes
-                    }
-                }
-            }
-        `,
-        }
+        const query = TopAiringShowsQuery()
 
         try {
             const response = await aniListAgent.AnimeData.getTopAiring(query)
@@ -92,27 +61,7 @@ export default class AnimeStore {
     loadPopularShows = async () => {
         this.setIsLoadingPopularShows(true)
 
-        const query = {
-            query: `
-            query {
-                Page(perPage: 20) {
-                    media(sort: POPULARITY_DESC, type: ANIME) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        coverImage {
-                            large
-                        }
-                        description
-                        episodes
-                    }
-                }
-            }
-        `,
-        }
+        const query = LoadPopularShowsQuery()
 
         try {
             const response = await aniListAgent.AnimeData.getPopular(query)
@@ -127,27 +76,7 @@ export default class AnimeStore {
     loadUpcomingShows = async () => {
         this.setIsLoadingUpcomingShows(true)
 
-        const query = {
-            query: `
-            query {
-                Page(perPage: 20) {
-                    media(sort: POPULARITY_DESC, type: ANIME, status: NOT_YET_RELEASED) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        coverImage {
-                            large
-                        }
-                        description
-                        episodes
-                    }
-                }
-            }
-        `,
-        }
+        const query = LoadUpcomingShowsQuery()
 
         try {
             const response = await aniListAgent.AnimeData.getUpcoming(query)
@@ -162,57 +91,44 @@ export default class AnimeStore {
     loadAnimeDetails = async (animeId: number) => {
         this.setIsLoadingSelectedAnime(true)
 
-        const query = {
-            query: `
-                query ($id: Int!) {
-                    Media(id: $id, type: ANIME) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        description
-                        bannerImage
-                        coverImage {
-                            large
-                        }
-                        genres
-                        episodes
-                        status
-                        averageScore
-                        popularity
-                        format
-                        season
-                        seasonYear
-                        studios {
-                            edges {
-                                node {
-                                    name
-                                }
-                            }
-                        }
-                    }
-                }
-            `,
-            variables: {
-                id: animeId
-            }
-        }
+        const query = LoadAnimeDetailsQuery(animeId)
 
-        try{
+        try {
             const response = await aniListAgent.AnimeData.getAnimeDetails(query)
             runInAction(() => this.selectedAnime = response.data.Media)
-            console.log(this.selectedAnime)
             this.setIsLoadingSelectedAnime(false)
-        }catch(error){
+        } catch (error) {
             console.log("Couldn't load selected anime: " + error)
             this.setIsLoadingSelectedAnime(false)
         }
     }
 
+    loadSearchResults = debounce( async (searchQuery: string) => {
+        this.setIsLoadingSearchResults(true)
+
+        if(!searchQuery){
+            this.clearSearchResults()
+            return
+        }
+
+        const query = LoadSearchResultsQuery(searchQuery)
+
+        try {
+            const response = await aniListAgent.AnimeData.getSearchResults(query)
+            runInAction(() => this.searchResults = response.data.Page.media)
+            this.setIsLoadingSearchResults(false)
+        } catch (error) {
+            console.log("Could not load search results: " + error)
+            this.setIsLoadingSearchResults(false)
+        }
+    }, 500)
+
     clearSelectedAnime = () => {
         this.selectedAnime = null
+    }
+
+    clearSearchResults = () => {
+        this.searchResults = []
     }
 
     setIsLoadingSelectedAnime = (value: boolean) => {
@@ -233,5 +149,9 @@ export default class AnimeStore {
 
     setIsLoadingUpcomingShows = (value: boolean) => {
         this.isLoadingUpcomingShows = value
+    }
+
+    setIsLoadingSearchResults = (value: boolean) => {
+        this.isLoadingSearchResults = value
     }
 }

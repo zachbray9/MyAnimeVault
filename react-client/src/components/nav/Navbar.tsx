@@ -2,7 +2,6 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Drawer, DrawerContent, DrawerOverlay, Heading, HStack, Icon, IconButton, Menu, MenuButton, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
-import NavBarButton from "./NavBarButton";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
@@ -10,6 +9,7 @@ export default function Navbar() {
 
     return (
         <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
+            {/* Hamburger menu button for small screens */}
             <IconButton
                 aria-label="hamburger-menu"
                 icon={<Icon as={FaBars} boxSize={navBarIconSize}/>}
@@ -20,21 +20,24 @@ export default function Navbar() {
                 borderRadius={0}
                 border='none'
                 boxShadow='none'
-                _hover={{ bg: '#141519' }}
-                _active={{ bg: '#141519' }}
+                _hover={{ bg: 'surface.1' }}
+                _active={{ bg: 'surface.1' }}
                 onClick={onToggle}
             />
 
+            {/* Menu for small screens */}
             <Drawer placement="left"isOpen={isOpen} onClose={onClose} size={{base: 'full', sm: 'xs'}} >
                 <DrawerOverlay marginTop={navBarHeight} />
 
-                <DrawerContent marginTop={navBarHeight} bg='#141519' boxShadow='none' border='none'>
+                <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none'>
 
                 </DrawerContent>
             </Drawer>
 
-            <Heading  as={NavLink} to={''} size='sm' padding='1rem' color='#ff640a'>MyAnimeVault</Heading>
+            {/* Logo */}
+            <Heading  as={NavLink} to={''} size='sm' padding='1rem' color='primary.base'>MyAnimeVault</Heading>
 
+            {/* Browse Menu */}
             <Menu>
                 <MenuButton
                     as={Button}
@@ -60,9 +63,16 @@ export default function Navbar() {
 
             <Spacer />
 
-            <NavBarButton name="search" icon={FaMagnifyingGlass}/>
-            <NavBarButton name="list" icon={FaRegBookmark} />
-            <NavBarButton name="options" icon={FaRegUser} />
+            {/* Search, list, and account menu buttons */}
+            <IconButton as={NavLink} to='anime/search' aria-label="search" icon={<Icon as={FaMagnifyingGlass} boxSize={navBarIconSize} />} variant='navbar' />
+            <IconButton aria-label="list" icon={<Icon as={FaRegBookmark} boxSize={navBarIconSize} />} variant='navbar' />
+            <Menu>
+                <MenuButton as={IconButton} aria-label="options" icon={<Icon as={FaRegUser} boxSize={navBarIconSize} />} variant='navbar' />
+
+                <MenuList>
+
+                </MenuList>
+            </Menu>
         </HStack>
     )
 }

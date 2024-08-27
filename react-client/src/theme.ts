@@ -60,6 +60,18 @@ const components = {
                     borderColor: 'primary.hover'
                 },
                 transition: 'all 0.3s'
+            },
+            navbar: {
+                boxSize: navBarHeight,
+                padding:'1rem',
+                borderRadius: 0,
+                variant:'unstyled',
+                _hover: { 
+                    bg: 'surface.1' 
+                },
+                _active: {
+                    bg: 'surface.1'
+                }
             }
         }
     }
