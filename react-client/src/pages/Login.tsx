@@ -1,23 +1,42 @@
 import { observer } from "mobx-react-lite"
-import { Box, Heading, Image, Input, InputGroup, Stack } from "@chakra-ui/react"
-import RamenCat from '../assets/LoginFormCat.png'
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Stack, Text } from "@chakra-ui/react"
+import { Form, Formik } from "formik"
+import FormInput from "../components/common/FormInput"
+import { useStore } from "../stores/store"
 
-export default observer( function Login(){
+export default observer(function Login() {
+    const {userStore } = useStore()
 
     return (
         <Box width='100%' display='flex' justifyContent='center' padding={['1.5rem', '1.75rem', '4rem']}>
-            <Stack maxWidth='31rem' width='100%' align='center' gap={['1.5rem', '1.75rem', '2rem']}>
-                <Heading>Log In</Heading>
-                <Stack pos='relative' alignItems='center' justifyContent='center' width='100%' bg='surface.2' padding={['1.5rem', '1.75rem', '2rem']} gap={['1.5rem', '1.75rem', '2rem']} >
-                    <Image src={RamenCat} position='absolute' top='-95' right='-5' boxSize='6.625rem'/>
-                    <InputGroup>
-                        <Input variant='flushed' placeholder="Email" _focusVisible={{borderColor: 'primary.base'}}/>
-                    </InputGroup>
-                    <InputGroup>
-                        <Input variant='flushed' placeholder="Password" _focusVisible={{borderColor: 'primary.base'}}/>
-                    </InputGroup>
-                </Stack>
-            </Stack>
+            <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Formik
+                    initialValues={{ email: '', password: '', error: null }}
+                    onSubmit={(values, {setErrors}) => userStore.login(values).catch(() => setErrors({error: 'Username or password is incorrect.'}))}
+                >
+                    {({ submitForm, isSubmitting, dirty, errors }) => (
+                        <Form onSubmit={submitForm} >
+                            <CardHeader display='flex' justifyContent='center'>
+                                <Heading>Log In</Heading>
+                            </CardHeader>
+
+                            <CardBody as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
+                                <FormInput name="email" placeholder="Email" variant='flushed' />
+
+                                <FormInput name="password" placeholder="Password" variant='flushed' hideable />
+                            </CardBody>
+
+                            <CardFooter display='flex' flexDirection='column' justify='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
+                                <Box width='100%' >
+                                    {errors.error && <Text color='text.danger'>{errors.error}</Text>}
+                                </Box>
+                                <Button type="submit" variant='solid' disabled={!dirty} isLoading={isSubmitting} >Log In</Button>
+                            </CardFooter>
+                        </Form>
+                    )}
+                </Formik>
+            </Card>
+
         </Box>
     )
 })

@@ -21,7 +21,8 @@ const semanticTokens = {
     colors: {
         text: {
             _dark: '#f5f5f5',
-            subtle: '#a0a0a0'
+            subtle: '#a0a0a0',
+            danger: 'red.600'
         },
         background: {
             _dark: '#000'
@@ -85,6 +86,13 @@ const components = {
                 _hover: {
                     bg: 'surface.2'
                 }
+            }
+        }
+    },
+    Card: {
+        baseStyle: {
+            container: {
+                bg: 'surface.1'
             }
         }
     }

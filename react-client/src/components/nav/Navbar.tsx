@@ -81,8 +81,8 @@ export default function Navbar() {
                     </MenuList>
                 ) : (
                     <MenuList>
-                        <MenuItem>Create Account</MenuItem>
-                        <MenuItem>Log In</MenuItem>
+                        <MenuItem as={NavLink} to='/register'>Create Account</MenuItem>
+                        <MenuItem as={NavLink} to='/login' >Log In</MenuItem>
                     </MenuList>
                 )}
             </Menu>
