@@ -1,18 +1,21 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Button, Drawer, DrawerContent, DrawerOverlay, Heading, HStack, Icon, IconButton, Menu, MenuButton, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
+import { Button, Drawer, DrawerContent, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import { NavLink } from "react-router-dom";
+import { useStore } from "../../stores/store";
+import Logo from "../../assets/MyAnimeVaultLogo.png"
 
 export default function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
+    const { userStore } = useStore()
 
     return (
         <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
             {/* Hamburger menu button for small screens */}
             <IconButton
                 aria-label="hamburger-menu"
-                icon={<Icon as={FaBars} boxSize={navBarIconSize}/>}
+                icon={<Icon as={FaBars} boxSize={navBarIconSize} />}
                 display={{ base: 'flex', md: 'none' }}
                 boxSize={navBarHeight}
                 padding='1rem'
@@ -26,7 +29,7 @@ export default function Navbar() {
             />
 
             {/* Menu for small screens */}
-            <Drawer placement="left"isOpen={isOpen} onClose={onClose} size={{base: 'full', sm: 'xs'}} >
+            <Drawer placement="left" isOpen={isOpen} onClose={onClose} size={{ base: 'full', sm: 'xs' }} >
                 <DrawerOverlay marginTop={navBarHeight} />
 
                 <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none'>
@@ -35,7 +38,10 @@ export default function Navbar() {
             </Drawer>
 
             {/* Logo */}
-            <Heading  as={NavLink} to={''} size='sm' padding='1rem' color='primary.base'>MyAnimeVault</Heading>
+            <Flex as={NavLink} to={''} align='center' gap='0.5rem' padding='1rem'>
+                <Image src={Logo} boxSize='1.75rem' />
+                <Heading size='sm' display={['none', 'flex']} color='primary.base'>MyAnimeVault</Heading>
+            </Flex>
 
             {/* Browse Menu */}
             <Menu>
@@ -69,9 +75,16 @@ export default function Navbar() {
             <Menu>
                 <MenuButton as={IconButton} aria-label="options" icon={<Icon as={FaRegUser} boxSize={navBarIconSize} />} variant='navbar' />
 
-                <MenuList>
-
-                </MenuList>
+                { userStore.user ? (
+                    <MenuList>
+                        <MenuItem>Log Out</MenuItem>
+                    </MenuList>
+                ) : (
+                    <MenuList>
+                        <MenuItem>Create Account</MenuItem>
+                        <MenuItem>Log In</MenuItem>
+                    </MenuList>
+                )}
             </Menu>
         </HStack>
     )

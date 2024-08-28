@@ -3,6 +3,8 @@ import App from "../App";
 import Home from "../pages/Home"
 import AnimeDetails from "../pages/AnimeDetails";
 import Search from "../pages/Search";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 
 const router = createBrowserRouter([
@@ -12,7 +14,9 @@ const router = createBrowserRouter([
         children: [
             { path: '', element: <Home /> },
             { path: 'anime/:animeId/details', element: <AnimeDetails /> },
-            { path: 'anime/search', element: <Search /> }
+            { path: 'anime/search', element: <Search /> },
+            { path: 'login', element: <Login /> },
+            { path: 'register', element: <Register /> }
         ],
     },
 ])

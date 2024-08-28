@@ -74,6 +74,19 @@ const components = {
                 }
             }
         }
+    },
+    Menu: {
+        baseStyle: {
+            list: {
+                bg: 'surface.1',
+            },
+            item: {
+                bg: 'surface.1',
+                _hover: {
+                    bg: 'surface.2'
+                }
+            }
+        }
     }
 }
 

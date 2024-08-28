@@ -11,7 +11,7 @@ import (
 
 func CreateUserAnime(userAnime entities.UserAnime) error {
 	query := `
-	INSERT INTO userAnimes (id, user_id, anime_id, title, title_en, large_poster, medium_poster, media_type, start_season, start_year, watch_status, rating, num_episodes_watched, total_episodes)
+	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
@@ -26,18 +26,17 @@ func CreateUserAnime(userAnime entities.UserAnime) error {
 	_, err = stmt.Exec(
 		uuid.New(), 
 		userAnime.UserId, 
-		userAnime.AnimeId, 
-		userAnime.Title, 
+		userAnime.AnimeId,  
 		userAnime.EnglishTitle, 
 		userAnime.LargePoster, 
 		userAnime.MediumPoster, 
-		userAnime.MediaType, 
-		userAnime.StartSeason, 
-		userAnime.StartYear, 
+		userAnime.Format, 
+		userAnime.Season, 
+		userAnime.SeasonYear, 
 		userAnime.WatchStatus, 
 		userAnime.Rating, 
 		userAnime.NumEpisodesWatched, 
-		userAnime.TotalEpisodes,
+		userAnime.Episodes,
 	)
 
 	if(err != nil){
@@ -49,7 +48,7 @@ func CreateUserAnime(userAnime entities.UserAnime) error {
 
 func GetList(id string) ([]responses.UserAnimeDto, error) {
 	query := `
-	SELECT id, anime_id, title, title_en, large_poster, medium_poster, media_type, start_season, start_year, watch_status, rating, num_episodes_watched, total_episodes 
+	SELECT id, anime_id, english_title, romaji_title, large_poster, medium_poster, media_type, season, season_year, watch_status, rating, num_episodes_watched, episodes 
 	FROM userAnimes
 	WHERE user_id = ?
 	`
@@ -75,17 +74,17 @@ func GetList(id string) ([]responses.UserAnimeDto, error) {
 		rows.Scan(
 			&userAnime.Id, 
 			&userAnime.AnimeId, 
-			&userAnime.Title, 
 			&userAnime.EnglishTitle, 
+			&userAnime.RomajiTitle, 
 			&userAnime.LargePoster, 
 			&userAnime.MediumPoster, 
-			&userAnime.MediaType, 
-			&userAnime.StartSeason, 
-			&userAnime.StartYear, 
+			&userAnime.Format, 
+			&userAnime.Season, 
+			&userAnime.SeasonYear, 
 			&userAnime.WatchStatus, 
 			&userAnime.Rating, 
 			&userAnime.NumEpisodesWatched, 
-			&userAnime.TotalEpisodes,
+			&userAnime.Episodes,
 		)
 
 		animeList = append(animeList, userAnime)
