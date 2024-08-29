@@ -3,8 +3,19 @@ import { myApi } from "./axios";
 import { LoginRequest } from "../models/requests/loginRequest";
 import { LoginResponse } from "../models/responses/loginResponse";
 import { RegisterRequest } from "../models/requests/registerRequest";
+import { store } from "../stores/store";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
+
+myApi.interceptors.request.use(config => {
+    const token = store.commonStore.token
+    
+    if(token && config.headers){
+        config.headers.Authorization = token
+    }
+
+    return config
+})
 
 const requests = {
     get: <T>(url:string) => myApi.get<T>(url).then(ResponseBody),

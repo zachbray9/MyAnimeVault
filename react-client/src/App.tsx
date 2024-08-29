@@ -16,7 +16,7 @@ export default observer(function App() {
     } else {
       commonStore.setAppLoaded(true)
     }
-  })
+  }, [commonStore, Navigate, userStore])
 
   if (!commonStore.appLoaded) {
     return (
