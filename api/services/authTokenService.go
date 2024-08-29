@@ -12,7 +12,7 @@ func GenerateAuthToken(id string, email string) (string, error){
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id": id,
 		"email": email,
-		"exp": time.Now().Add(time.Minute * 10).Unix(),
+		"exp": time.Now().Add(time.Minute * 60).Unix(),
 	})
 
 	var authTokenKey string = os.Getenv("AUTH_TOKEN_KEY")

@@ -11,10 +11,15 @@ export const FeaturedShowsQuery = () => {
                         }
                         coverImage {
                             large
+                            medium
                         }
                         bannerImage
                         description
+                        episodes
+                        format
                         genres
+                        season
+                        seasonYear
                     }
                 }
             }

@@ -1,16 +1,15 @@
 package controllers
 
 import (
-	"myanimevault/models/entities"
+	"myanimevault/models/dtos"
 	"myanimevault/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func CreateUserAnime(context *gin.Context) {
-	var userAnime entities.UserAnime
+	var userAnime dtos.UserAnimeDto
 
 	err := context.ShouldBindJSON(&userAnime)
 
@@ -20,16 +19,8 @@ func CreateUserAnime(context *gin.Context) {
 	}
 
 	userId := context.GetString("userId")
-	parsedUserId, err := uuid.Parse(userId)
-
-	if(err != nil){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem parsing the userId from the context variables into a uuid"})
-		return
-	}
-
-	userAnime.UserId = parsedUserId
 	
-	err = services.CreateUserAnime(userAnime)
+	err = services.AddAnimeToList(userId, userAnime)
 
 	if(err != nil){
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem adding the new userAnime to the database"})

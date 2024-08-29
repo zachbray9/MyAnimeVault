@@ -3,13 +3,19 @@ package services
 import (
 	"fmt"
 	"myanimevault/database"
-	"myanimevault/models/responses"
-	"myanimevault/models/entities"
+	"myanimevault/models/dtos"
 
 	"github.com/google/uuid"
 )
 
-func CreateUserAnime(userAnime entities.UserAnime) error {
+// "fmt"
+// "myanimevault/database"
+// "myanimevault/models/dtos"
+// "myanimevault/models/responses"
+
+// "github.com/google/uuid"
+
+func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 	query := `
 	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -25,11 +31,12 @@ func CreateUserAnime(userAnime entities.UserAnime) error {
 
 	_, err = stmt.Exec(
 		uuid.New(), 
-		userAnime.UserId, 
+		userId, 
 		userAnime.AnimeId,  
-		userAnime.EnglishTitle, 
-		userAnime.LargePoster, 
-		userAnime.MediumPoster, 
+		userAnime.Title.English, 
+		userAnime.Title.Romaji,
+		userAnime.CoverImage.Large, 
+		userAnime.CoverImage.Medium, 
 		userAnime.Format, 
 		userAnime.Season, 
 		userAnime.SeasonYear, 
@@ -46,9 +53,9 @@ func CreateUserAnime(userAnime entities.UserAnime) error {
 	return nil
 }
 
-func GetList(id string) ([]responses.UserAnimeDto, error) {
+func GetList(id string) ([]dtos.UserAnimeDto, error) {
 	query := `
-	SELECT id, anime_id, english_title, romaji_title, large_poster, medium_poster, media_type, season, season_year, watch_status, rating, num_episodes_watched, episodes 
+	SELECT anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes 
 	FROM userAnimes
 	WHERE user_id = ?
 	`
@@ -67,17 +74,16 @@ func GetList(id string) ([]responses.UserAnimeDto, error) {
 
 	defer rows.Close()
 
-	var animeList []responses.UserAnimeDto
+	var animeList []dtos.UserAnimeDto
 
 	for(rows.Next()){
-		var userAnime responses.UserAnimeDto
+		var userAnime dtos.UserAnimeDto
 		rows.Scan(
-			&userAnime.Id, 
 			&userAnime.AnimeId, 
-			&userAnime.EnglishTitle, 
-			&userAnime.RomajiTitle, 
-			&userAnime.LargePoster, 
-			&userAnime.MediumPoster, 
+			&userAnime.Title.English, 
+			&userAnime.Title.Romaji, 
+			&userAnime.CoverImage.Large, 
+			&userAnime.CoverImage.Medium, 
 			&userAnime.Format, 
 			&userAnime.Season, 
 			&userAnime.SeasonYear, 

@@ -48,7 +48,7 @@ func createTables(){
 		medium_poster TEXT,
 		format TEXT,
 		season TEXT,
-		season_year TEXT,
+		season_year INTEGER,
 		watch_status TEXT,
 		rating INTEGER,
 		num_episodes_watched INTEGER,

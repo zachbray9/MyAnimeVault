@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"myanimevault/models/requests"
-	"myanimevault/models/responses"
+	"myanimevault/models/dtos"
 	"myanimevault/services"
 	"net/http"
 
@@ -39,7 +39,7 @@ func register(context *gin.Context) {
 		return
 	}
 
-	var userDto responses.UserDto = responses.UserDto{
+	var userDto dtos.UserDto = dtos.UserDto{
 		Id:        userId,
 		Email:     registerRequest.Email,
 		AuthToken: token,
@@ -71,7 +71,7 @@ func login(context *gin.Context) {
 		return
 	}
 
-	var userDto responses.UserDto = responses.UserDto{
+	var userDto dtos.UserDto = dtos.UserDto{
 		Id:        userId,
 		Email:     loginRequest.Email,
 		AuthToken: token,

@@ -1,14 +1,16 @@
-import { Badge, Box, Button, Flex, Heading, Icon, Image, Stack, Text, Wrap } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Heading, Icon, Image, Stack, Text, useToast, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { FaPlus, FaStar } from "react-icons/fa6";
 import DOMPurify from "dompurify";
+import { Form, Formik } from "formik";
 
 export default observer(function AnimeDetails() {
-    const { animeStore } = useStore()
+    const { animeStore, userStore } = useStore()
     const { animeId } = useParams()
+    const toast = useToast()
     const { selectedAnime } = animeStore
 
     useEffect(() => {
@@ -40,7 +42,18 @@ export default observer(function AnimeDetails() {
                             <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
                             <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
                         </Flex>
-                        <Button variant='solid' width='fit-content' rightIcon={<FaPlus />}>Add to list</Button>
+
+                        <Formik
+                            initialValues={{anime: animeStore.selectedAnime}}
+                            onSubmit={(values) => userStore.addAnimeToList(values.anime!)
+                                .catch(() => toast({title: 'Error', description: "There was a problem adding this anime to your list.", status: 'error', duration: 5000, isClosable: true}))}
+                        >
+                            {({handleSubmit, isSubmitting}) => (
+                                <Form onSubmit={handleSubmit}>
+                                    <Button type="submit" variant='solid' isLoading={isSubmitting} width='fit-content' rightIcon={<FaPlus />}>Add to list</Button>
+                                </Form>
+                            )}
+                        </Formik>
                     </Stack>
                 </Flex>
 

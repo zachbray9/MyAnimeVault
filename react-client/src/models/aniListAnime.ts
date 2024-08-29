@@ -19,7 +19,7 @@ export interface AniListAnime {
     popularity?: string
     format?: string
     season?: string
-    seasonYear?: string
+    seasonYear?: number
     studios?: {
         edges: {
             node: {

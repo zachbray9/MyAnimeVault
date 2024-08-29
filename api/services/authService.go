@@ -1,10 +1,9 @@
 package services
 
 import (
-	"errors"
 	"fmt"
 	"myanimevault/database"
-	"myanimevault/models/responses"
+	"myanimevault/models/dtos"
 	"myanimevault/utils"
 	"time"
 
@@ -56,13 +55,13 @@ func ValidateCredentials(email string, password string) (string, error) {
 
 	passwordIsValid := utils.ComparePasswordWithHash(password, hashedPassword)
 	if !passwordIsValid {
-		return "", errors.New("invalid credentials")
+		return "", fmt.Errorf("invalid credentials")
 	}
 
 	return id, nil
 }
 
-func GetUserById(id string) (responses.UserDto, error){
+func GetUserById(id string) (dtos.UserDto, error){
 	query := `
 	SELECT email FROM users WHERE id = ? 
 	`
@@ -70,7 +69,7 @@ func GetUserById(id string) (responses.UserDto, error){
 	stmt, err := database.Db.Prepare(query)
 
 	if(err != nil){
-		return responses.UserDto{}, fmt.Errorf("couldn't prepare query statement: %w", err)
+		return dtos.UserDto{}, fmt.Errorf("couldn't prepare query statement: %w", err)
 	}
 
 	row := stmt.QueryRow(id)
@@ -79,10 +78,10 @@ func GetUserById(id string) (responses.UserDto, error){
 	err = row.Scan(&email)
 
 	if(err != nil){
-		return responses.UserDto{}, fmt.Errorf("row.scan failed: %w", err)
+		return dtos.UserDto{}, fmt.Errorf("row.scan failed: %w", err)
 	}
 
-	var user responses.UserDto = responses.UserDto{
+	var user dtos.UserDto = dtos.UserDto{
 		Id: id,
 		Email: email,
 	}

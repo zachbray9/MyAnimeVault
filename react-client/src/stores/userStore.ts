@@ -4,11 +4,13 @@ import { LoginRequest } from "../models/requests/loginRequest";
 import { myApiAgent } from "../api/myApiAgent";
 import { store } from "./store";
 import { RegisterRequest } from "../models/requests/registerRequest";
+import { AniListAnime } from "../models/aniListAnime";
 
-export default class UserStore{
+export default class UserStore {
     user: User | null = null
+    isAddingAnimeToList: boolean = false
 
-    constructor(){
+    constructor() {
         makeAutoObservable(this)
     }
 
@@ -32,15 +34,29 @@ export default class UserStore{
         navigate('/')
     }
 
-    getCurrentUser = async(navigate: (path:string) => void) => {
-        try{
+    getCurrentUser = async (navigate: (path: string) => void) => {
+        try {
             const response = await myApiAgent.Auth.getCurrentUser()
             store.commonStore.setAuthToken(response.user.AuthToken)
             runInAction(() => this.user = response.user)
             navigate('/')
-        }catch(error){
+        } catch (error) {
             console.log(error)
             throw error
         }
+    }
+
+    addAnimeToList = async (anime: AniListAnime) => {
+        this.setIsAddingAnimeToList(true)
+
+        console.log(anime)
+        await myApiAgent.List.add(anime)
+        runInAction(() => this.user?.AnimeList.push(anime))
+
+        this.setIsAddingAnimeToList(false)
+    }
+
+    setIsAddingAnimeToList = (value: boolean) => {
+        this.isAddingAnimeToList = value
     }
 }

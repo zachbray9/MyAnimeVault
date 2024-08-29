@@ -1,4 +1,4 @@
-package responses
+package dtos
 
 type UserDto struct {
 	Id string
