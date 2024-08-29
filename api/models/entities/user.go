@@ -7,8 +7,6 @@ import (
 
 type User struct {
 	Id             uuid.UUID `binding:"required"`
-	FirstName      string    `binding:"required"`
-	LastName       string    `binding:"required"`
 	Email          string    `binding:"required"`
 	PasswordHash   string    `binding:"required"`
 	DateRegistered time.Time `binding:"required"`

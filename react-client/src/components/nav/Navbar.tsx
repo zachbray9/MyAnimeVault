@@ -2,13 +2,14 @@ import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Button, Drawer, DrawerContent, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import Logo from "../../assets/MyAnimeVaultLogo.png"
 
 export default function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
     const { userStore } = useStore()
+    const navigate = useNavigate()
 
     return (
         <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
@@ -77,7 +78,7 @@ export default function Navbar() {
 
                 { userStore.user ? (
                     <MenuList>
-                        <MenuItem>Log Out</MenuItem>
+                        <MenuItem onClick={() => userStore.logout(navigate)} >Log Out</MenuItem>
                     </MenuList>
                 ) : (
                     <MenuList>

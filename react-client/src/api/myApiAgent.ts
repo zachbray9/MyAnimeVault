@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 import { myApi } from "./axios";
 import { LoginRequest } from "../models/requests/loginRequest";
-import { User } from "../models/user";
+import { LoginResponse } from "../models/responses/loginResponse";
+import { RegisterRequest } from "../models/requests/registerRequest";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -14,7 +15,9 @@ const requests = {
 }
 
 const Auth = {
-    login: (request: LoginRequest) => requests.post<User>('/users/login', request)
+    login: (request: LoginRequest) => requests.post<LoginResponse>('/users/login', request),
+    register: (request: RegisterRequest) => requests.post<LoginResponse>('/users/register', request),
+    getCurrentUser: () => requests.get<LoginResponse>('/users/getCurrentUser')
 }
 
 export const myApiAgent = {

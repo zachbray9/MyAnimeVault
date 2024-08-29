@@ -1,18 +1,20 @@
 import { observer } from "mobx-react-lite"
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Stack, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
-import FormInput from "../components/common/FormInput"
+import FormInput from "../components/common/form/FormInput"
 import { useStore } from "../stores/store"
+import { useNavigate } from "react-router-dom"
 
 export default observer(function Login() {
-    const {userStore } = useStore()
+    const { userStore } = useStore()
+    const navigate = useNavigate()
 
     return (
         <Box width='100%' display='flex' justifyContent='center' padding={['1.5rem', '1.75rem', '4rem']}>
             <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                 <Formik
                     initialValues={{ email: '', password: '', error: null }}
-                    onSubmit={(values, {setErrors}) => userStore.login(values).catch(() => setErrors({error: 'Username or password is incorrect.'}))}
+                    onSubmit={(values, { setErrors }) => userStore.login(values, navigate).catch(() => setErrors({ error: 'Username or password is incorrect.' }))}
                 >
                     {({ submitForm, isSubmitting, dirty, errors }) => (
                         <Form onSubmit={submitForm} >

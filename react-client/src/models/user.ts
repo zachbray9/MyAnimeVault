@@ -1,6 +1,6 @@
 export interface User{
-    id: string
-    email: string
-    dateJoined: Date
-    authToken: string
+    Id: string
+    Email: string
+    DateJoined: Date
+    AuthToken: string
 }

@@ -8,6 +8,7 @@ import (
 
 func RegisterEndpoints(server *gin.Engine) {
 	//auth routes
+	server.GET("/api/users/getCurrentUser", middleware.Authenticate, getCurrentUser)
 	server.POST("/api/users/register", register)
 	server.POST("/api/users/login", login)
 
