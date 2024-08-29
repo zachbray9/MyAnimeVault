@@ -16,8 +16,8 @@ export default observer(function Register(){
                     initialValues={{ email: '', password: '', confirmPassword: '', error: null }}
                     onSubmit={(values, { setErrors }) => userStore.register(values, navigate).catch(() => setErrors({ error: 'There was a problem creating your account.' }))}
                 >
-                    {({ submitForm, isSubmitting, dirty, errors }) => (
-                        <Form onSubmit={submitForm} >
+                    {({ handleSubmit, isSubmitting, dirty, errors }) => (
+                        <Form onSubmit={handleSubmit} >
                             <CardHeader display='flex' justifyContent='center'>
                                 <Heading>Log In</Heading>
                             </CardHeader>

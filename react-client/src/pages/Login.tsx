@@ -16,8 +16,8 @@ export default observer(function Login() {
                     initialValues={{ email: '', password: '', error: null }}
                     onSubmit={(values, { setErrors }) => userStore.login(values, navigate).catch(() => setErrors({ error: 'Username or password is incorrect.' }))}
                 >
-                    {({ submitForm, isSubmitting, dirty, errors }) => (
-                        <Form onSubmit={submitForm} >
+                    {({ handleSubmit, isSubmitting, dirty, errors }) => (
+                        <Form onSubmit={handleSubmit} >
                             <CardHeader display='flex' justifyContent='center'>
                                 <Heading>Log In</Heading>
                             </CardHeader>
