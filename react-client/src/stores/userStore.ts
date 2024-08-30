@@ -16,14 +16,14 @@ export default class UserStore {
 
     login = async (values: LoginRequest, navigate: (path: string) => void) => {
         const response = await myApiAgent.Auth.login(values)
-        store.commonStore.setAuthToken(response.user.AuthToken)
+        store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
         navigate('/')
     }
 
     register = async (values: RegisterRequest, navigate: (path: string) => void) => {
         const response = await myApiAgent.Auth.register(values)
-        store.commonStore.setAuthToken(response.user.AuthToken)
+        store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
         navigate('/')
     }
@@ -37,8 +37,10 @@ export default class UserStore {
     getCurrentUser = async (navigate: (path: string) => void) => {
         try {
             const response = await myApiAgent.Auth.getCurrentUser()
-            store.commonStore.setAuthToken(response.user.AuthToken)
+            console.log(response.user.animeIds)
+            store.commonStore.setAuthToken(response.user.authToken)
             runInAction(() => this.user = response.user)
+            console.log(this.user?.animeIds)
             navigate('/')
         } catch (error) {
             console.log(error)
@@ -51,7 +53,7 @@ export default class UserStore {
 
         console.log(anime)
         await myApiAgent.List.add(anime)
-        runInAction(() => this.user?.AnimeList.push(anime))
+        runInAction(() => this.user?.animeIds.push(anime.id))
 
         this.setIsAddingAnimeToList(false)
     }

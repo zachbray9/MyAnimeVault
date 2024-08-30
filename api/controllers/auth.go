@@ -45,6 +45,13 @@ func register(context *gin.Context) {
 		AuthToken: token,
 	}
 
+	err = services.GetIdList(userId, &userDto.AnimeIds)
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
+		return
+	}
+
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully registered.", "user": userDto})
 }
 
@@ -77,6 +84,13 @@ func login(context *gin.Context) {
 		AuthToken: token,
 	}
 
+	err = services.GetIdList(userId, &userDto.AnimeIds)
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
+		return
+	}
+
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in.", "user": userDto})
 }
 
@@ -87,15 +101,24 @@ func getCurrentUser(context *gin.Context) {
 
 	if(err != nil){
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem getting the user from the database."})
+		return
 	}
 
 	token, err := services.GenerateAuthToken(userId, userDto.Email)
 
 	if(err != nil){
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating an auth token."})
+		return
 	}
 
 	userDto.AuthToken = token
+
+	err = services.GetIdList(userId, &userDto.AnimeIds)
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
+		return
+	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Current user was successfully returned.", "user": userDto})
 }

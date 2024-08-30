@@ -5,6 +5,7 @@ import { LoginResponse } from "../models/responses/loginResponse";
 import { RegisterRequest } from "../models/requests/registerRequest";
 import { store } from "../stores/store";
 import { AniListAnime } from "../models/aniListAnime";
+import { UserAnimeDetails } from "../models/userAnimeDetails";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -33,8 +34,9 @@ const Auth = {
 }
 
 const List = {
-    add: (anime: AniListAnime) => requests.post('/userAnime', anime),
-    getList: () => requests.get('/userAnime')
+    add: (anime: AniListAnime) => requests.post('/user/anime', anime),
+    getList: () => requests.get('/user/anime'),
+    getUserAnimeDetails: (animeId: number) => requests.get<UserAnimeDetails>(`/user/anime/${animeId}`)
 }
 
 export const myApiAgent = {

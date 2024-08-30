@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { aniListApi } from "./axios"
-import { AniListResponseDataSingle, AniListResponseDataPaged } from "../models/aniListResponseData";
+import { AniListResponseDataSingle, AniListResponseDataPaged } from "../models/responses/aniListResponseData";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 

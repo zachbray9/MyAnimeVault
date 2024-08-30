@@ -8,13 +8,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// "fmt"
-// "myanimevault/database"
-// "myanimevault/models/dtos"
-// "myanimevault/models/responses"
-
-// "github.com/google/uuid"
-
 func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 	query := `
 	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes)
@@ -66,6 +59,7 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 		return nil, fmt.Errorf("could not prepare the database query: %w", err)
 	}
 
+	defer stmt.Close()
 	rows, err := stmt.Query(id)
 
 	if(err != nil){
@@ -97,4 +91,70 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 	}
 
 	return animeList, nil
+}
+
+func GetIdList (userId string, animeIdList *[]int64) error {
+	query := `
+	SELECT anime_id
+	FROM userAnimes
+	WHERE user_id = ?
+	`
+
+	stmt, err := database.Db.Prepare(query)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem preparing the query: %w", err)
+	}
+
+	defer stmt.Close()
+	rows, err := stmt.Query(userId)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem executing the query statement: %w", err)
+	}
+
+	for(rows.Next()){
+		var id int64
+		err = rows.Scan(&id)
+		if(err != nil){
+			return fmt.Errorf("there was a problem scanning the db rows: %w", err)
+		}
+
+		*animeIdList = append(*animeIdList, id)
+	}
+
+	return nil
+}
+
+func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnimeDto) error {
+	query := `
+	SELECT rating, watch_status, num_episodes_watched
+	FROM userAnimes
+	WHERE user_id = ? AND anime_id = ?
+	`
+
+	stmt, err := database.Db.Prepare(query)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem preparing the db query: %w", err)
+	}
+
+	defer stmt.Close()
+	row := stmt.QueryRow(userId, animeId)
+
+	var rating int64
+	var watchStatus string
+	var numEpisodesWatched int64
+
+	err = row.Scan(&rating, &watchStatus, &numEpisodesWatched)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem scanning the db row: %w", err)
+	}
+
+	userAnime.Rating = rating
+	userAnime.WatchStatus = watchStatus
+	userAnime.NumEpisodesWatched = numEpisodesWatched
+
+	return nil
 }

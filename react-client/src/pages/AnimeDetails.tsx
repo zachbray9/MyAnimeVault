@@ -1,6 +1,6 @@
 import { Badge, Box, Button, Flex, Heading, Icon, Image, Stack, Text, useToast, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { FaPlus, FaStar } from "react-icons/fa6";
@@ -8,7 +8,8 @@ import DOMPurify from "dompurify";
 import { Form, Formik } from "formik";
 
 export default observer(function AnimeDetails() {
-    const { animeStore, userStore } = useStore()
+    const [animeIsAlreadyOnList, setAnimeIsAlreadyOnList] = useState(false)
+    const { animeStore, listStore, userStore } = useStore()
     const { animeId } = useParams()
     const toast = useToast()
     const { selectedAnime } = animeStore
@@ -23,6 +24,15 @@ export default observer(function AnimeDetails() {
         }
     }, [animeId, animeStore])
 
+    useEffect(() => {
+        if(userStore.user?.animeIds.includes(selectedAnime?.id ?? 0)){
+            setAnimeIsAlreadyOnList(true)
+            listStore.loadUserAnimeDetails(selectedAnime?.id ?? 0)
+        }
+
+        console.log(animeIsAlreadyOnList)
+    }, [animeIsAlreadyOnList, listStore, selectedAnime?.id, userStore.user?.animeIds])
+
     const averageScore = selectedAnime?.averageScore ? parseFloat((selectedAnime.averageScore * 0.1).toFixed(1)) : null 
 
     return (
@@ -34,7 +44,7 @@ export default observer(function AnimeDetails() {
                         <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
                         <Wrap>
                             {selectedAnime?.genres && selectedAnime.genres.map(genre => (
-                                <Badge variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
+                                <Badge key={genre} variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
                             ))}
                         </Wrap>
                         <Text fontSize='xs' color='text.subtle'>{`${selectedAnime?.format} | ${selectedAnime?.season} ${selectedAnime?.seasonYear}`}</Text>
@@ -42,18 +52,22 @@ export default observer(function AnimeDetails() {
                             <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
                             <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
                         </Flex>
-
-                        <Formik
-                            initialValues={{anime: animeStore.selectedAnime}}
-                            onSubmit={(values) => userStore.addAnimeToList(values.anime!)
-                                .catch(() => toast({title: 'Error', description: "There was a problem adding this anime to your list.", status: 'error', duration: 5000, isClosable: true}))}
-                        >
-                            {({handleSubmit, isSubmitting}) => (
-                                <Form onSubmit={handleSubmit}>
-                                    <Button type="submit" variant='solid' isLoading={isSubmitting} width='fit-content' rightIcon={<FaPlus />}>Add to list</Button>
-                                </Form>
-                            )}
-                        </Formik>
+                        
+                        {animeIsAlreadyOnList ? (
+                            <Text>{listStore.userAnimeDetails?.rating}</Text>
+                        ) : (
+                            <Formik
+                                initialValues={{anime: animeStore.selectedAnime}}
+                                onSubmit={(values) => userStore.addAnimeToList(values.anime!)
+                                    .catch(() => toast({title: 'Error', description: "There was a problem adding this anime to your list.", status: 'error', duration: 5000, isClosable: true}))}
+                            >
+                                {({handleSubmit, isSubmitting}) => (
+                                    <Form onSubmit={handleSubmit}>
+                                        <Button type="submit" variant='solid' isLoading={isSubmitting} width='fit-content' rightIcon={<FaPlus />}>Add to list</Button>
+                                    </Form>
+                                )}
+                            </Formik>
+                        )}
                     </Stack>
                 </Flex>
 

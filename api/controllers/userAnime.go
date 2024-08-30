@@ -4,6 +4,7 @@ import (
 	"myanimevault/models/dtos"
 	"myanimevault/services"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,5 +41,26 @@ func GetUserAnimeList(context *gin.Context){
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "List successfully retrieved.", "Anime List": animeList})
+	context.JSON(http.StatusOK, gin.H{"message": "List successfully retrieved.", "animeList": animeList})
+}
+
+func GetUserAnimeDetails(context *gin.Context){
+	userId := context.GetString("userId")
+	animeId, err :=  strconv.ParseInt(context.Param("animeId"), 10, 64) 
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Anime id in url path is invalid"})
+		return
+	}
+
+	var userAnime dtos.UserAnimeDto = dtos.UserAnimeDto{}
+
+	err = services.GetUserAnimeDetails(userId, animeId, &userAnime)
+
+	if(err != nil){
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem retrieving the UserAnime details."})
+		return 
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "successfully retrieved UserAnime details.", "userAnime": userAnime})
 }
