@@ -37,10 +37,8 @@ export default class UserStore {
     getCurrentUser = async (navigate: (path: string) => void) => {
         try {
             const response = await myApiAgent.Auth.getCurrentUser()
-            console.log(response.user.animeIds)
             store.commonStore.setAuthToken(response.user.authToken)
             runInAction(() => this.user = response.user)
-            console.log(this.user?.animeIds)
             navigate('/')
         } catch (error) {
             console.log(error)
@@ -50,7 +48,7 @@ export default class UserStore {
 
     addAnimeToList = async (anime: AniListAnime) => {
         this.setIsAddingAnimeToList(true)
-
+        
         console.log(anime)
         await myApiAgent.List.add(anime)
         runInAction(() => this.user?.animeIds.push(anime.id))

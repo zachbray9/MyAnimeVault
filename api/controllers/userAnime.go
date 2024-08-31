@@ -53,7 +53,7 @@ func GetUserAnimeDetails(context *gin.Context){
 		return
 	}
 
-	var userAnime dtos.UserAnimeDto = dtos.UserAnimeDto{}
+	var userAnime dtos.UserAnimeDetailsDto = dtos.UserAnimeDetailsDto{}
 
 	err = services.GetUserAnimeDetails(userId, animeId, &userAnime)
 

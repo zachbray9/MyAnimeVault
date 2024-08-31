@@ -126,7 +126,7 @@ func GetIdList (userId string, animeIdList *[]int64) error {
 	return nil
 }
 
-func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnimeDto) error {
+func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnimeDetailsDto) error {
 	query := `
 	SELECT rating, watch_status, num_episodes_watched
 	FROM userAnimes

@@ -17,7 +17,10 @@ export default class ListStore {
 
         try {
             const response = await myApiAgent.List.getUserAnimeDetails(animeId)
-            runInAction(() => this.userAnimeDetails = response)
+            runInAction(() => this.userAnimeDetails = response.userAnime)
+            console.log(this.userAnimeDetails?.rating)
+            console.log(this.userAnimeDetails?.watchStatus)
+            console.log(this.userAnimeDetails?.numEpisodesWatched)
             this.setIsLoadingUserAnimeDetails(false)
         } catch (error) {
             console.log('There was a problem getting the user anime details: ' + error)
@@ -27,5 +30,9 @@ export default class ListStore {
 
     setIsLoadingUserAnimeDetails = (value: boolean) => {
         this.isLoadingUserAnimeDetails = value
+    }
+
+    clearUserAnimeDetails = () => {
+        this.userAnimeDetails = null
     }
 }
