@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { myApi } from "./axios";
 import { LoginRequest } from "../models/requests/loginRequest";
 import { LoginResponse } from "../models/responses/loginResponse";
@@ -19,6 +19,18 @@ myApi.interceptors.request.use(config => {
     return config
 })
 
+myApi.interceptors.response.use(async response => {
+    return response
+}, (error: AxiosError) => {
+    const {status} = error.response as AxiosResponse
+
+    switch(status){
+        case 401:
+            store.userStore.logout()
+            break
+    }
+})
+
 const requests = {
     get: <T>(url:string) => myApi.get<T>(url).then(ResponseBody),
     post: <T>(url:string, body:object) => myApi.post<T>(url, body).then(ResponseBody),
@@ -36,7 +48,8 @@ const Auth = {
 const List = {
     add: (anime: AniListAnime) => requests.post('/user/anime', anime),
     getList: () => requests.get('/user/anime'),
-    getUserAnimeDetails: (animeId: number) => requests.get<GetUserAnimeDetailsResponse>(`/user/anime/${animeId}`)
+    getUserAnimeDetails: (animeId: number) => requests.get<GetUserAnimeDetailsResponse>(`/user/anime/${animeId}`),
+    updateRating: (animeId: number, rating: number) => requests.patch(`/user/anime/${animeId}`, {rating})
 }
 
 export const myApiAgent = {

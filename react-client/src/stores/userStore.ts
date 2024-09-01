@@ -5,6 +5,7 @@ import { myApiAgent } from "../api/myApiAgent";
 import { store } from "./store";
 import { RegisterRequest } from "../models/requests/registerRequest";
 import { AniListAnime } from "../models/aniListAnime";
+import router from "../router/routes";
 
 export default class UserStore {
     user: User | null = null
@@ -14,24 +15,24 @@ export default class UserStore {
         makeAutoObservable(this)
     }
 
-    login = async (values: LoginRequest, navigate: (path: string) => void) => {
+    login = async (values: LoginRequest) => {
         const response = await myApiAgent.Auth.login(values)
         store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
-        navigate('/')
+        router.navigate('/')
     }
 
-    register = async (values: RegisterRequest, navigate: (path: string) => void) => {
+    register = async (values: RegisterRequest) => {
         const response = await myApiAgent.Auth.register(values)
         store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
-        navigate('/')
+        router.navigate('/')
     }
 
-    logout = (navigate: (path: string) => void) => {
+    logout = () => {
         store.commonStore.setAuthToken(null)
         this.user = null
-        navigate('/')
+        router.navigate('/')
     }
 
     getCurrentUser = async (navigate: (path: string) => void) => {
@@ -48,7 +49,7 @@ export default class UserStore {
 
     addAnimeToList = async (anime: AniListAnime) => {
         this.setIsAddingAnimeToList(true)
-        
+
         console.log(anime)
         await myApiAgent.List.add(anime)
         runInAction(() => this.user?.animeIds.push(anime.id))

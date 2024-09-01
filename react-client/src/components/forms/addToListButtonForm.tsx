@@ -17,7 +17,8 @@ export default observer(function AddToListButtonForm({ animeToAdd }: Props) {
         <Formik
             initialValues={{ anime: animeToAdd }}
             onSubmit={(values) => userStore.addAnimeToList(values.anime!)
-                .catch(() => toast({ title: 'Error', description: "There was a problem adding this anime to your list.", status: 'error', duration: 5000, isClosable: true }))}
+                .catch(() => toast({ title: 'Error', description: "There was a problem adding this anime to your list.", status: 'error', duration: 5000, isClosable: true }))
+            }
         >
             {({ handleSubmit, isSubmitting }) => (
                 <Form onSubmit={handleSubmit}>

@@ -32,6 +32,10 @@ export default class ListStore {
         this.userAnimeDetails = userAnimeDetails
     }
 
+    updateRating = async (newRating: number) => {
+        console.log(newRating)
+    }
+
     setIsLoadingUserAnimeDetails = (value: boolean) => {
         this.isLoadingUserAnimeDetails = value
     }
