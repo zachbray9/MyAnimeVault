@@ -77,7 +77,11 @@ export default observer(function AnimeDetails() {
                         
                         {/* List controls */}
                         {userAnimeDetails ? (
-                            <Text>{listStore.userAnimeDetails?.rating}</Text>
+                            <Box>
+                                <Text>{listStore.userAnimeDetails?.rating}</Text>
+                                <Text>{listStore.userAnimeDetails?.watchStatus}</Text>
+                                <Text>{listStore.userAnimeDetails?.numEpisodesWatched}</Text>
+                            </Box>
                         ) : (
                             <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
                         )}

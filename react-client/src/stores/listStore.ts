@@ -28,6 +28,10 @@ export default class ListStore {
         }
     }
 
+    setUserAnimeDetails = (userAnimeDetails: UserAnimeDetails) => {
+        this.userAnimeDetails = userAnimeDetails
+    }
+
     setIsLoadingUserAnimeDetails = (value: boolean) => {
         this.isLoadingUserAnimeDetails = value
     }

@@ -10,7 +10,7 @@ import (
 
 func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 	query := `
-	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes)
+	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, episodes, watch_status, rating, num_episodes_watched)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	`
 
@@ -33,10 +33,10 @@ func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 		userAnime.Format, 
 		userAnime.Season, 
 		userAnime.SeasonYear, 
-		userAnime.WatchStatus, 
-		userAnime.Rating, 
-		userAnime.NumEpisodesWatched, 
 		userAnime.Episodes,
+		"Plan to Watch", 
+		0, 
+		0, 
 	)
 
 	if(err != nil){

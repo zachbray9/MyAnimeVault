@@ -52,6 +52,11 @@ export default class UserStore {
         console.log(anime)
         await myApiAgent.List.add(anime)
         runInAction(() => this.user?.animeIds.push(anime.id))
+        store.listStore.setUserAnimeDetails({
+            rating: 0,
+            watchStatus: 'Plan to Watch',
+            numEpisodesWatched: 0
+        })
 
         this.setIsAddingAnimeToList(false)
     }
