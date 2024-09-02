@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"myanimevault/models/dtos"
+	"myanimevault/models/requests"
 	"myanimevault/services"
 	"net/http"
 	"strconv"
@@ -63,4 +64,31 @@ func GetUserAnimeDetails(context *gin.Context){
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "successfully retrieved UserAnime details.", "userAnime": userAnime})
+}
+
+func UpdateUserAnime(context *gin.Context){
+	userId := context.GetString("userId")
+	animeId, err := strconv.ParseInt(context.Param("animeId"), 10, 64)
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Anime id in url path is invalid"})
+		return
+	}
+
+	var patchRequest requests.UserAnimePatchRequest
+	err = context.ShouldBindJSON(&patchRequest)
+
+	if(err != nil){
+		context.JSON(http.StatusBadRequest, gin.H{"message": "There was an issue with one or more of the fields in your request."})
+		return
+	}
+
+	err = services.UpdateUserAnime(userId, animeId, patchRequest)
+	
+	if(err != nil){
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem updating the database."})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Successfully updated the UserAnime."})
 }

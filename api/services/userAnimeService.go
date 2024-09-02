@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"myanimevault/database"
 	"myanimevault/models/dtos"
+	"myanimevault/models/requests"
 
 	"github.com/google/uuid"
 )
@@ -155,6 +156,47 @@ func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnim
 	userAnime.Rating = rating
 	userAnime.WatchStatus = watchStatus
 	userAnime.NumEpisodesWatched = numEpisodesWatched
+
+	return nil
+}
+
+func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAnimePatchRequest) error {
+	var userAnimeDetails dtos.UserAnimeDetailsDto
+	err := GetUserAnimeDetails(userId, animeId, &userAnimeDetails)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem getting the user anime details: %w", err)
+	}
+
+	if(patchRequest.Rating != nil){
+		userAnimeDetails.Rating = *patchRequest.Rating
+	}
+
+	if(patchRequest.WatchStatus != nil){
+		userAnimeDetails.WatchStatus = *patchRequest.WatchStatus
+	}
+
+	if(patchRequest.NumEpisodesWatched != nil){
+		userAnimeDetails.NumEpisodesWatched = *patchRequest.NumEpisodesWatched
+	}
+
+	query := `
+	UPDATE userAnimes
+	SET rating = ?, watch_status = ?, num_episodes_watched = ?
+	WHERE user_id = ? AND anime_id = ?
+	`
+
+	stmt, err := database.Db.Prepare(query)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem preparing the query statement: %w", err)
+	}
+
+	_, err = stmt.Exec(userAnimeDetails.Rating, userAnimeDetails.WatchStatus, userAnimeDetails.NumEpisodesWatched, userId, animeId)
+
+	if(err != nil){
+		return fmt.Errorf("there was a problem executing the query statement: %w", err)
+	}
 
 	return nil
 }
