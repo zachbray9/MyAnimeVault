@@ -6,8 +6,10 @@ import { RegisterRequest } from "../models/requests/registerRequest";
 import { store } from "../stores/store";
 import { AniListAnime } from "../models/aniListAnime";
 import { GetUserAnimeDetailsResponse } from "../models/responses/getUserAnimeDetailsResponse";
+import { createStandaloneToast } from "@chakra-ui/react";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
+const {toast} = createStandaloneToast()
 
 myApi.interceptors.request.use(config => {
     const token = store.commonStore.token
@@ -22,11 +24,20 @@ myApi.interceptors.request.use(config => {
 myApi.interceptors.response.use(async response => {
     return response
 }, (error: AxiosError) => {
-    const {status} = error.response as AxiosResponse
+    const {status, headers} = error.response as AxiosResponse
 
     switch(status){
         case 401:
-            store.userStore.logout()
+            if(status === 401 && headers['www-authenticate']){
+                store.userStore.logout()
+                toast({
+                    title: 'Session expired',
+                    description: 'Your session has expired. Please login again to continue.',
+                    status: 'error',
+                    position: 'top',
+                    isClosable: true
+                })
+            }
             break
     }
 })
