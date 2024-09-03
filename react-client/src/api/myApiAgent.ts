@@ -7,6 +7,7 @@ import { store } from "../stores/store";
 import { AniListAnime } from "../models/aniListAnime";
 import { GetUserAnimeDetailsResponse } from "../models/responses/getUserAnimeDetailsResponse";
 import { createStandaloneToast } from "@chakra-ui/react";
+import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 const {toast} = createStandaloneToast()
@@ -60,7 +61,7 @@ const List = {
     add: (anime: AniListAnime) => requests.post('/user/anime', anime),
     getList: () => requests.get('/user/anime'),
     getUserAnimeDetails: (animeId: number) => requests.get<GetUserAnimeDetailsResponse>(`/user/anime/${animeId}`),
-    updateRating: (animeId: number, rating: number) => requests.patch(`/user/anime/${animeId}`, {rating})
+    updateUserAnime: (animeId: number, patchRequest: UserAnimePatchRequest) => requests.patch(`/user/anime/${animeId}`, patchRequest)
 }
 
 export const myApiAgent = {

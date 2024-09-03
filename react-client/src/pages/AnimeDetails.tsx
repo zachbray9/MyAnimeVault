@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import AddToListButtonForm from "../components/forms/addToListButtonForm";
 import LoadingComponent from "../components/common/loading/LoadingComponent";
+import RatingInputForm from "../components/forms/ratingInputForm";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -78,7 +79,7 @@ export default observer(function AnimeDetails() {
                         {/* List controls */}
                         {userAnimeDetails ? (
                             <Box>
-                                <Text>{listStore.userAnimeDetails?.rating}</Text>
+                                <RatingInputForm />
                                 <Text>{listStore.userAnimeDetails?.watchStatus}</Text>
                                 <Text>{listStore.userAnimeDetails?.numEpisodesWatched}</Text>
                             </Box>

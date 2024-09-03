@@ -2,6 +2,8 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { AniListAnime } from "../models/aniListAnime";
 import { UserAnimeDetails } from "../models/userAnimeDetails";
 import { myApiAgent } from "../api/myApiAgent";
+import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest";
+import { store } from "./store";
 
 export default class ListStore {
     list: AniListAnime[] | null = null
@@ -18,9 +20,6 @@ export default class ListStore {
         try {
             const response = await myApiAgent.List.getUserAnimeDetails(animeId)
             runInAction(() => this.userAnimeDetails = response.userAnime)
-            console.log(this.userAnimeDetails?.rating)
-            console.log(this.userAnimeDetails?.watchStatus)
-            console.log(this.userAnimeDetails?.numEpisodesWatched)
             this.setIsLoadingUserAnimeDetails(false)
         } catch (error) {
             console.log('There was a problem getting the user anime details: ' + error)
@@ -32,8 +31,19 @@ export default class ListStore {
         this.userAnimeDetails = userAnimeDetails
     }
 
-    updateRating = async (newRating: number) => {
-        console.log(newRating)
+    updateUserAnime = async (rating?: number, watchStatus?: string, numEpisodesWatched?: number) => {
+        const animeId = store.animeStore.selectedAnime!.id
+        console.log(typeof(rating))
+
+        const patchRequest: Partial<UserAnimePatchRequest> = {
+            ...(rating != undefined && {rating}),
+            ...(watchStatus != undefined && {watchStatus}),
+            ...(numEpisodesWatched != undefined && {numEpisodesWatched})
+        }
+
+        console.log(patchRequest)
+        await myApiAgent.List.updateUserAnime(animeId, patchRequest)
+        console.log("successfully updated useranime")
     }
 
     setIsLoadingUserAnimeDetails = (value: boolean) => {
