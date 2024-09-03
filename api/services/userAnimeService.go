@@ -36,7 +36,7 @@ func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 		userAnime.SeasonYear, 
 		userAnime.Episodes,
 		"Plan to Watch", 
-		0, 
+		5, 
 		0, 
 	)
 
@@ -169,14 +169,35 @@ func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAn
 	}
 
 	if(patchRequest.Rating != nil){
+		if(*patchRequest.Rating < 1 || *patchRequest.Rating > 10){
+			return fmt.Errorf("invalid rating value (rating must be 1-10)")
+		}
+
 		userAnimeDetails.Rating = *patchRequest.Rating
 	}
 
 	if(patchRequest.WatchStatus != nil){
+		allowedWatchStatuses := map[string] bool{
+			"Watching": true,
+			"Completed": true,
+			"On hold": true,
+			"Dropped": true,
+			"Plan to watch": true,
+		}
+
+		validWatchStatus := allowedWatchStatuses[*patchRequest.WatchStatus]
+
+		if(!validWatchStatus){
+			return fmt.Errorf("invalid watch status value")
+		}
 		userAnimeDetails.WatchStatus = *patchRequest.WatchStatus
 	}
 
 	if(patchRequest.NumEpisodesWatched != nil){
+		if(*patchRequest.NumEpisodesWatched < 0){
+			return fmt.Errorf("invalid numEpisodesWatched value (value cannot be negative)")
+		}
+
 		userAnimeDetails.NumEpisodesWatched = *patchRequest.NumEpisodesWatched
 	}
 
@@ -191,7 +212,8 @@ func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAn
 	if(err != nil){
 		return fmt.Errorf("there was a problem preparing the query statement: %w", err)
 	}
-
+	
+	defer stmt.Close()
 	_, err = stmt.Exec(userAnimeDetails.Rating, userAnimeDetails.WatchStatus, userAnimeDetails.NumEpisodesWatched, userId, animeId)
 
 	if(err != nil){
