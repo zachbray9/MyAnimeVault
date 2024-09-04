@@ -27,9 +27,9 @@ export default observer(function NumEpisodesWatchedInputForm() {
                 <Form onSubmit={handleSubmit}>
                     <Flex align='center' gap='1rem'>
                         <Text>Episodes:</Text>
-                        <FormNumberInput name="numEpisodesWatched" min={0} max={selectedAnime!.episodes || Infinity} isSubmtting={isSubmitting} autoSubmit />
+                        <FormNumberInput name="numEpisodesWatched" min={0} max={selectedAnime?.episodes || Infinity} isSubmtting={isSubmitting} autoSubmit />
                         <Text>/</Text>
-                        <Text>{selectedAnime?.episodes ? selectedAnime.episodes : '?'}</Text>
+                        <Text>{selectedAnime?.episodes || '?'}</Text>
                     </Flex>
                 </Form>
             )}

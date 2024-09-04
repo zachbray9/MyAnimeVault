@@ -1,16 +1,21 @@
-import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip, useToast } from "@chakra-ui/react";
 import Carousel from "react-multi-carousel";
 import { AniListAnime } from "../../models/aniListAnime";
 import { featuredResponsive } from "./CarouseBreakpoints";
 import '../../styles/Carousel.css'
-import { FaArrowRightLong, FaRegBookmark } from "react-icons/fa6";
+import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
+import { Form, Formik } from "formik";
+import { useStore } from "../../stores/store";
 
 interface Props {
     data: AniListAnime[]
 }
 
 export default function FeaturedCarousel({ data }: Props) {
+    const { userStore } = useStore()
+    const toast = useToast()
+
     const stripHtml = (html: string) => {
         return html.replace(/<[^>]*>/g, ''); // Removes anything between < and >
     }
@@ -35,9 +40,27 @@ export default function FeaturedCarousel({ data }: Props) {
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
                                         <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
-                                        <Tooltip label='Add to list' hasArrow bg=''>
-                                            <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline' />
-                                        </Tooltip>
+                                        {userStore.user?.animeIds.includes(anime.id) ? (
+                                            <Tooltip label='Already on list' hasArrow>
+                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline'/>
+                                            </Tooltip>
+                                        ) : (
+                                            <Formik
+                                                initialValues={{ anime: anime }}
+                                                onSubmit={(values) => userStore.addAnimeToList(values.anime)
+                                                    .catch(() => toast({ title: 'Error', description: 'There was a problem adding the anime to your list.', status: 'error', duration: 5000, isClosable: true, position: 'top' }))}
+                                            >
+                                                {({ handleSubmit, isSubmitting }) => (
+                                                    <Form onSubmit={handleSubmit}>
+                                                        <Tooltip label='Add to list' hasArrow >
+                                                            <IconButton aria-label="add-to-list" type="submit" icon={<FaRegBookmark />} variant='outline' isLoading={isSubmitting} />
+                                                        </Tooltip>
+                                                    </Form>
+                                                )}
+                                            </Formik>
+
+                                        )}
+
                                     </Flex>
                                 </Stack>
                             </Box>
