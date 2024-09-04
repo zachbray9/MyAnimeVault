@@ -1,4 +1,5 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { SelectTheme } from "./styles/ChakraSelectTheme";
 
 const navBarHeight = ['3.75rem', null, '3rem']
 const navBarIconSize =  ['1.25em', null, '1em']
@@ -95,7 +96,8 @@ const components = {
                 bg: 'surface.1'
             }
         }
-    }
+    },
+    Select: SelectTheme
 }
 
 

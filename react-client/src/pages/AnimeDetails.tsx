@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Heading, Icon, Image, Stack, Text, Wrap } from "@chakra-ui/react";
+import { Badge, Box, Flex, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -8,6 +8,8 @@ import DOMPurify from "dompurify";
 import AddToListButtonForm from "../components/forms/addToListButtonForm";
 import LoadingComponent from "../components/common/loading/LoadingComponent";
 import RatingInputForm from "../components/forms/ratingInputForm";
+import WatchStatusInputForm from "../components/forms/watchStatusInputForm";
+import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedInputForm";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -77,15 +79,17 @@ export default observer(function AnimeDetails() {
                         </Flex>
                         
                         {/* List controls */}
-                        {userAnimeDetails ? (
-                            <Box>
-                                <RatingInputForm />
-                                <Text>{listStore.userAnimeDetails?.watchStatus}</Text>
-                                <Text>{listStore.userAnimeDetails?.numEpisodesWatched}</Text>
-                            </Box>
-                        ) : (
-                            <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
-                        )}
+                        <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
+                            {userAnimeDetails ? (
+                                <Stack gap='1rem'>
+                                    <RatingInputForm />
+                                    <WatchStatusInputForm />
+                                    <NumEpisodesWatchedInputForm />
+                                </Stack>
+                            ) : (
+                                <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
+                            )}
+                        </Skeleton>
                     </Stack>
                 </Flex>
 
