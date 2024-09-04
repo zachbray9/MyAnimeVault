@@ -40,6 +40,7 @@ export default function FormSelect({ name, options, autoSubmit, isSubmtting }: P
                     background: surface1,
                     borderColor: state.isFocused ? primarybase : surface1,
                     boxShadow: state.isFocused ? primarybase : surface1,
+                    transition: 'all 0.3s',
                     '&:hover': {
                         borderColor: state.isFocused ? primarybase : surface2,
                         boxShadow: state.isFocused ? primarybase : surface2
@@ -48,6 +49,7 @@ export default function FormSelect({ name, options, autoSubmit, isSubmtting }: P
                 option: (baseStyles) => ({
                     ...baseStyles,
                     background: surface1,
+                    transition: 'all 0.3s',
                     '&:hover': {
                         background: surface2
                     }

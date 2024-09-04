@@ -26,10 +26,12 @@ export default function FormNumberInput({ name, min, max, autoSubmit, isSubmttin
     }, [])
 
     const handleChange = (_: string, valueAsNumber: number) => {
-        setFieldValue(name, valueAsNumber)
-
-        if (autoSubmit) {
-            debouncedSubmitRef.current()
+        if(valueAsNumber !== field.value){
+            setFieldValue(name, valueAsNumber)
+    
+            if (autoSubmit) {
+                debouncedSubmitRef.current()
+            }
         }
     }
 
@@ -37,6 +39,7 @@ export default function FormNumberInput({ name, min, max, autoSubmit, isSubmttin
         <InputGroup width='fit-content'>
             <NumberInput
                 {...field}
+                variant='filled'
                 id={name}
                 min={min}
                 max={max}
