@@ -71,7 +71,7 @@ export default function Navbar() {
 
             {/* Search, list, and account menu buttons */}
             <IconButton as={NavLink} to='anime/search' aria-label="search" icon={<Icon as={FaMagnifyingGlass} boxSize={navBarIconSize} />} variant='navbar' />
-            <IconButton aria-label="list" icon={<Icon as={FaRegBookmark} boxSize={navBarIconSize} />} variant='navbar' />
+            <IconButton as={NavLink} to={'anime/list'} aria-label="list" icon={<Icon as={FaRegBookmark} boxSize={navBarIconSize} />} variant='navbar' />
             <Menu>
                 <MenuButton as={IconButton} aria-label="options" icon={<Icon as={FaRegUser} boxSize={navBarIconSize} />} variant='navbar' />
 

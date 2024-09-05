@@ -8,6 +8,7 @@ import { AniListAnime } from "../models/aniListAnime";
 import { GetUserAnimeDetailsResponse } from "../models/responses/getUserAnimeDetailsResponse";
 import { createStandaloneToast } from "@chakra-ui/react";
 import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest";
+import { GetListResponse } from "../models/responses/getListResponse";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 const {toast} = createStandaloneToast()
@@ -59,7 +60,7 @@ const Auth = {
 
 const List = {
     add: (anime: AniListAnime) => requests.post('/user/anime', anime),
-    getList: () => requests.get('/user/anime'),
+    getList: () => requests.get<GetListResponse>('/user/anime'),
     getUserAnimeDetails: (animeId: number) => requests.get<GetUserAnimeDetailsResponse>(`/user/anime/${animeId}`),
     updateUserAnime: (animeId: number, patchRequest: UserAnimePatchRequest) => requests.patch(`/user/anime/${animeId}`, patchRequest)
 }
