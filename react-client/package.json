@@ -18,6 +18,7 @@
     "dompurify": "^3.1.6",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.28",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "mobx": "^6.13.1",
     "mobx-react-lite": "^4.0.7",
