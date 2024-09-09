@@ -15,6 +15,10 @@ export default class UserStore {
         makeAutoObservable(this)
     }
 
+    get isLoggedIn(){
+        return !!this.user
+    }
+
     login = async (values: LoginRequest) => {
         const response = await myApiAgent.Auth.login(values)
         store.commonStore.setAuthToken(response.user.authToken)
@@ -48,6 +52,11 @@ export default class UserStore {
     }
 
     addAnimeToList = async (anime: AniListAnime) => {
+        if(!this.user){
+            router.navigate('/login')
+            return
+        }
+
         this.setIsAddingAnimeToList(true)
 
         console.log(anime)

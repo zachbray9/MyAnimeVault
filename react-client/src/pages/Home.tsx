@@ -14,17 +14,17 @@ export default observer(function Home() {
             animeStore.loadFeaturedShows()
         }
 
-        // if (animeStore.topAiringShows.length === 0) {
-        //     animeStore.loadTopAiringShows()
-        // }
+        if (animeStore.topAiringShows.length === 0) {
+            animeStore.loadTopAiringShows()
+        }
 
-        // if (animeStore.popularShows.length === 0) {
-        //     animeStore.loadPopularShows()
-        // }
+        if (animeStore.popularShows.length === 0) {
+            animeStore.loadPopularShows()
+        }
 
-        // if (animeStore.upcomingShows.length === 0) {
-        //     animeStore.loadUpcomingShows()
-        // }
+        if (animeStore.upcomingShows.length === 0) {
+            animeStore.loadUpcomingShows()
+        }
     }, [animeStore])
 
     return (
