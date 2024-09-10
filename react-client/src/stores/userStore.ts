@@ -33,9 +33,14 @@ export default class UserStore {
         router.navigate('/')
     }
 
-    logout = () => {
-        store.commonStore.setAuthToken(null)
-        this.user = null
+    logout = async () => {
+        try{
+            store.commonStore.setAuthToken(null)
+            this.user = null
+            await myApiAgent.Auth.logout()
+        } catch (error) {
+            console.log(error)
+        }
         router.navigate('/')
     }
 

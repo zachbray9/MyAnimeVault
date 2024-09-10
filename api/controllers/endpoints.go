@@ -12,6 +12,7 @@ func RegisterEndpoints(server *gin.Engine) {
 	server.POST("/api/users/register", register)
 	server.POST("/api/users/login", login)
 	server.GET("/api/users/refresh", refresh)
+	server.DELETE("/api/users/logout", logout)
 
 	//userAnime routes
 	server.GET("/api/user/anime", middleware.Authenticate, GetUserAnimeList)

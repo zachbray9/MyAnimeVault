@@ -53,7 +53,7 @@ func createTables(){
 		rating INTEGER,
 		num_episodes_watched INTEGER,
 		episodes INTEGER,
-		FOREIGN KEY (user_id) REFERENCES users(id)
+		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	)
 	`
 
@@ -61,5 +61,22 @@ func createTables(){
 
 	if(err != nil){
 		panic("Could not create userAnimes table.")
+	}
+
+	refreshTokensTable := `
+	CREATE TABLE IF NOT EXISTS refreshTokens (
+		id TEXT NOT NULL PRIMARY KEY,
+		user_id TEXT NOT NULL,
+		token_hash TEXT NOT NULL,
+		expires_at DATETIME NOT NULL,
+		revoked_at DATETIME,
+		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+	)
+	`
+
+	_, err = Db.Exec(refreshTokensTable)
+
+	if(err != nil){
+		panic("Could not create refreshTokens table.")
 	}
 }

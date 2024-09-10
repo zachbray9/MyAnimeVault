@@ -48,20 +48,22 @@ func register(context *gin.Context) {
 
 	err = services.GetIdList(userId, &userDto.AnimeIds)
 
-	if(err != nil){
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
 		return
 	}
 
 	err = generateRefreshTokenCookie(userId, userDto.Email, context)
 
-	if(err != nil){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refesh token."})
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refresh token."})
 		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully registered.", "user": userDto})
 }
+
+
 
 func login(context *gin.Context) {
 	var loginRequest requests.LoginRequest
@@ -94,41 +96,95 @@ func login(context *gin.Context) {
 
 	err = services.GetIdList(userId, &userDto.AnimeIds)
 
-	if(err != nil){
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
 		return
 	}
 
 	err = generateRefreshTokenCookie(userId, userDto.Email, context)
 
-	if(err != nil){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refesh token."})
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refresh token."})
 		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in.", "user": userDto})
 }
 
+
+
+func logout(context *gin.Context) {
+	refreshToken, err := context.Cookie("refreshToken")
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Refresh token not found"})
+		return
+	}
+
+	claims, err := services.VerifyRefreshToken(refreshToken)
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid or expired refresh token."})
+		return
+	}
+
+	userId, ok := claims["id"].(string)
+
+	if !ok {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
+		return
+	}
+
+	tokenId, ok := claims["tokenId"].(string)
+
+	if !ok {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
+		return
+	}
+
+	err = services.RevokeRefreshToken(userId, tokenId, refreshToken)
+
+	if(err != nil){
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem revoking the refresh token"})
+		return
+	}
+
+	cookie := &http.Cookie{
+		Name:     "refreshToken",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Now(),
+		HttpOnly: false,
+		Secure:   true,
+		SameSite: http.SameSiteNoneMode,
+	}
+	http.SetCookie(context.Writer, cookie)
+
+	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged out."})
+}
+
+
+
 func getCurrentUser(context *gin.Context) {
 	userId := context.GetString("userId")
 
 	userDto, err := services.GetUserById(userId)
 
-	if(err != nil){
+	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem getting the user from the database."})
 		return
 	}
 
 	err = services.GetIdList(userId, &userDto.AnimeIds)
 
-	if(err != nil){
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
 		return
 	}
 
 	token, err := services.GenerateAuthToken(userId, userDto.Email)
 
-	if(err != nil){
+	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating an auth token."})
 		return
 	}
@@ -138,61 +194,73 @@ func getCurrentUser(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "Current user was successfully returned.", "user": userDto})
 }
 
-func refresh (context *gin.Context) {
+
+
+func refresh(context *gin.Context) {
 	refreshToken, err := context.Cookie("refreshToken")
 
-	if(err != nil){
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Refresh token not found"})
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Refresh token not found", "error": "invalid_refresh_token"})
 		return
 	}
 
-	claims, err := services.VerifyAuthToken(refreshToken)
+	claims, err := services.VerifyRefreshToken(refreshToken)
 
-	if(err != nil){
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid or expired refresh token."})
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid or expired refresh token.", "error": "invalid_refresh_token"})
 		return
 	}
 
 	userId, ok := claims["id"].(string)
 
-	if(!ok){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
+	if !ok {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims", "error": "invalid_refresh_token"})
 		return
 	}
 
 	email, ok := claims["email"].(string)
 
-	if(!ok){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
+	if !ok {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims", "error": "invalid_refresh_token"})
 		return
 	}
 
 	accessToken, err := services.GenerateAuthToken(userId, email)
 
-	if(err != nil){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate access token"})
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Failed to generate access token", "error": "invalid_refresh_token"})
 		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
 }
 
-func generateRefreshTokenCookie(id string, email string, context *gin.Context) error {
-	refreshToken, err := services.GenerateRefeshToken(id, email)
 
-	if(err != nil){
-		return fmt.Errorf("there was a problem generating an auth token: %w", err)
+
+func generateRefreshTokenCookie(id string, email string, context *gin.Context) error {
+	expirationTime := time.Now().Add(time.Hour * 24 * 30)
+
+	refreshToken, tokenId, err := services.GenerateRefreshToken(id, email, expirationTime.Unix())
+
+	if err != nil {
+		return fmt.Errorf("there was a problem generating a refresh token: %w", err)
+	}
+
+	err = services.StoreRefreshToken(id, tokenId, refreshToken, expirationTime)
+
+	if err != nil {
+		return fmt.Errorf("there was a problem storing the refresh token in the database: %w", err)
 	}
 
 	cookie := &http.Cookie{
-        Name:     "refreshToken",
-        Value:    refreshToken,
-        Path:     "/",
-        Expires:  time.Now().Add(30 * 24 * time.Hour),
-        HttpOnly: false,
-        Secure:   true,
-        SameSite: http.SameSiteNoneMode,
-    }
+		Name:     "refreshToken",
+		Value:    refreshToken,
+		Path:     "/",
+		Expires:  expirationTime,
+		HttpOnly: false,
+		Secure:   true,
+		SameSite: http.SameSiteNoneMode,
+	}
 
 	http.SetCookie(context.Writer, cookie)
 

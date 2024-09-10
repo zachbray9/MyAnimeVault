@@ -45,20 +45,24 @@ myApi.interceptors.request.use(async config => {
 myApi.interceptors.response.use(async response => {
     return response
 }, async (error: AxiosError) => {
-    const { status } = error.response as AxiosResponse
+    const { status, data } = error.response as AxiosResponse
 
-    switch (status) {
-        case 401:
-            store.userStore.logout()
-
-            toast({
-                title: 'Session expired',
-                description: 'Your session has expired. Please login again to continue.',
-                status: 'error',
-                position: 'top',
-                isClosable: true
-            })
-            break
+    if(error.response){
+        switch (status) {
+            case 401:
+                if(data.error == 'invalid_refresh_token'){
+                    store.userStore.logout()
+        
+                    toast({
+                        title: 'Session expired',
+                        description: 'Your session has expired. Please login again to continue.',
+                        status: 'error',
+                        position: 'top',
+                        isClosable: true
+                    })
+                }
+                break
+        }
     }
 })
 
@@ -74,7 +78,8 @@ const Auth = {
     login: (request: LoginRequest) => requests.post<LoginResponse>('/users/login', request),
     register: (request: RegisterRequest) => requests.post<LoginResponse>('/users/register', request),
     getCurrentUser: () => requests.get<LoginResponse>('/users/getCurrentUser'),
-    refresh: () => requests.get<RefreshResponse>('/users/refresh')
+    refresh: () => requests.get<RefreshResponse>('/users/refresh'),
+    logout: () => requests.delete('/users/logout')
 }
 
 const List = {

@@ -7,12 +7,13 @@ import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { Form, Formik } from "formik";
 import { useStore } from "../../stores/store";
+import { observer } from "mobx-react-lite";
 
 interface Props {
     data: AniListAnime[]
 }
 
-export default function FeaturedCarousel({ data }: Props) {
+export default observer(function FeaturedCarousel({ data }: Props) {
     const { userStore } = useStore()
     const toast = useToast()
 
@@ -40,7 +41,7 @@ export default function FeaturedCarousel({ data }: Props) {
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
                                         <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
-                                        {userStore.user?.animeIds.includes(anime.id) ? (
+                                        {userStore.user?.animeIds?.includes(anime.id) ? (
                                             <Tooltip label='Already on list' hasArrow>
                                                 <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline'/>
                                             </Tooltip>
@@ -70,4 +71,4 @@ export default function FeaturedCarousel({ data }: Props) {
             </Box>
         </Box>
     )
-}
+})
