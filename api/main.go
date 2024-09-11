@@ -32,9 +32,10 @@ func main() {
 			context.File("./wwwroot/index.html")
 		})
 	}
-	
+
 	controllers.RegisterEndpoints(server)
 
-	server.Run(":8080")
+	port := os.Getenv("PORT")
+	server.Run("0.0.0.0:" + port)
 }
 
