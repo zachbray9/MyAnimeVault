@@ -4,6 +4,7 @@ import (
 	"myanimevault/config"
 	"myanimevault/controllers"
 	"myanimevault/database"
+	"os"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,15 @@ func main() {
 
 	server.Use(cors.New(config))
 
+	if(os.Getenv("MODE") == "production"){
+		server.Static("/static", "./wwwroot/static")
+		server.StaticFile("/", "./wwwroot/index.html")
+		
+		server.NoRoute(func (context *gin.Context){
+			context.File("./wwwroot/index.html")
+		})
+	}
+	
 	controllers.RegisterEndpoints(server)
 
 	server.Run(":8080")

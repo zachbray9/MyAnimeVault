@@ -24,7 +24,7 @@ myApi.interceptors.request.use(async config => {
             const isExpired = decodedToken.exp < (Date.now() / 1000)
 
             if (isExpired) {
-                const response = await axios.get<RefreshResponse>('http://localhost:8080/api/users/refresh', {withCredentials: true})
+                const response = await axios.get<RefreshResponse>(import.meta.env.VITE_API_URL + '/users/refresh', {withCredentials: true})
                 store.commonStore.setAuthToken(response.data.accessToken)
                 token = store.commonStore.token
                 console.log("Token refresh was successful")

@@ -43,7 +43,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                         <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
                                         {userStore.user?.animeIds.includes(anime.id) ? (
                                             <Tooltip label='Already on list' hasArrow>
-                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline'/>
+                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline' />
                                             </Tooltip>
                                         ) : (
                                             <Formik
