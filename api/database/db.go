@@ -2,18 +2,19 @@ package database
 
 import (
 	"database/sql"
+	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var Db *sql.DB
 
 func InitDb(){
 	var err error
-	Db, err = sql.Open("sqlite3", "myanimevault.db")
+	Db, err = sql.Open("postgres", os.Getenv("CONNECTION_STRING"))
 
 	if(err != nil){
-		panic("The database could not be initialized.")
+		panic("The database could not be initialized: " + err.Error())
 	}
 	Db.SetMaxOpenConns(10)
 	Db.SetMaxIdleConns(5)
@@ -24,35 +25,35 @@ func InitDb(){
 func createTables(){
 	usersTable := `
 	CREATE TABLE IF NOT EXISTS users (
-		id TEXT NOT NULL PRIMARY KEY,
-		email TEXT NOT NULL UNIQUE,
-		password_hash TEXT NOT NULL,
-		date_registered DATETIME NOT NULL
+		id UUID PRIMARY KEY NOT NULL,
+		email VARCHAR(255) NOT NULL UNIQUE,
+		password_hash VARCHAR(255) NOT NULL,
+		date_registered TIMESTAMPTZ NOT NULL
 	)
 	`
 
 	_, err := Db.Exec(usersTable)
 
 	if(err != nil){
-		panic("Could not create users table.")
+		panic("Could not create users table: " + err.Error())
 	}
 
 	userAnimesTable := `
 	CREATE TABLE IF NOT EXISTS userAnimes (
-		id TEXT NOT NULL PRIMARY KEY,
-		user_id TEXT NOT NULL,
-		anime_id INTEGER NOT NULL,
-		english_title TEXT,
-		romaji_title TEXT,
-		large_poster TEXT,
-		medium_poster TEXT,
-		format TEXT,
-		season TEXT,
-		season_year INTEGER,
-		watch_status TEXT,
-		rating INTEGER,
-		num_episodes_watched INTEGER,
-		episodes INTEGER,
+		id UUID PRIMARY KEY NOT NULL,
+		user_id UUID NOT NULL,
+		anime_id INT NOT NULL,
+		english_title VARCHAR(255),
+		romaji_title VARCHAR(255),
+		large_poster VARCHAR(2083),
+		medium_poster VARCHAR(2083),
+		format VARCHAR(50),
+		season VARCHAR(50),
+		season_year INT,
+		watch_status VARCHAR(50),
+		rating INT,
+		num_episodes_watched INT,
+		episodes INT,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	)
 	`
@@ -60,16 +61,16 @@ func createTables(){
 	_, err = Db.Exec(userAnimesTable)
 
 	if(err != nil){
-		panic("Could not create userAnimes table.")
+		panic("Could not create userAnimes table: " + err.Error())
 	}
 
 	refreshTokensTable := `
 	CREATE TABLE IF NOT EXISTS refreshTokens (
-		id TEXT NOT NULL PRIMARY KEY,
-		user_id TEXT NOT NULL,
-		token_hash TEXT NOT NULL,
-		expires_at DATETIME NOT NULL,
-		revoked_at DATETIME,
+		id UUID PRIMARY KEY NOT NULL,
+		user_id UUID NOT NULL,
+		token_hash VARCHAR(255) NOT NULL,
+		expires_at TIMESTAMPTZ NOT NULL,
+		revoked_at TIMESTAMPTZ,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	)
 	`
@@ -77,6 +78,6 @@ func createTables(){
 	_, err = Db.Exec(refreshTokensTable)
 
 	if(err != nil){
-		panic("Could not create refreshTokens table.")
+		panic("Could not create refreshTokens table: " + err.Error())
 	}
 }

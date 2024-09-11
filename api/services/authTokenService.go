@@ -53,7 +53,7 @@ func GenerateRefreshToken(id string, email string, expiresAt int64) (string, str
 func StoreRefreshToken(userId string, tokenId string, token string, expiresAt time.Time) error {
 	query := `
 	INSERT INTO refreshTokens (id, user_id, token_hash, expires_at)
-	VALUES (?, ?, ?, ?)
+	VALUES ($1, $2, $3, $4)
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -125,7 +125,7 @@ func VerifyRefreshToken(token string) (jwt.MapClaims, error) {
 	query := `
 	SELECT revoked_at
 	FROM refreshTokens
-	WHERE id = ? AND user_id = ?
+	WHERE id = $1 AND user_id = $2
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -158,8 +158,8 @@ func VerifyRefreshToken(token string) (jwt.MapClaims, error) {
 func RevokeRefreshToken(userId string, tokenId string, token string) error {
 	query := `
 	UPDATE refreshTokens
-	SET revoked_at = ?
-	WHERE id = ? AND user_id = ?
+	SET revoked_at = $1
+	WHERE id = $2 AND user_id = $3
 	`
 
 	stmt, err := database.Db.Prepare(query)

@@ -12,7 +12,7 @@ import (
 func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 	query := `
 	INSERT INTO userAnimes (id, user_id, anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, episodes, watch_status, rating, num_episodes_watched)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -51,7 +51,7 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 	query := `
 	SELECT anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes 
 	FROM userAnimes
-	WHERE user_id = ?
+	WHERE user_id = $1
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -98,7 +98,7 @@ func GetIdList (userId string, animeIdList *[]int64) error {
 	query := `
 	SELECT anime_id
 	FROM userAnimes
-	WHERE user_id = ?
+	WHERE user_id = $1
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -131,7 +131,7 @@ func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnim
 	query := `
 	SELECT rating, watch_status, num_episodes_watched
 	FROM userAnimes
-	WHERE user_id = ? AND anime_id = ?
+	WHERE user_id = $1 AND anime_id = $2
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -203,8 +203,8 @@ func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAn
 
 	query := `
 	UPDATE userAnimes
-	SET rating = ?, watch_status = ?, num_episodes_watched = ?
-	WHERE user_id = ? AND anime_id = ?
+	SET rating = $1, watch_status = $2, num_episodes_watched = $3
+	WHERE user_id = $4 AND anime_id = $5
 	`
 
 	stmt, err := database.Db.Prepare(query)

@@ -1,12 +1,13 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Button, Drawer, DrawerContent, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
+import { Button, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import Logo from "../../assets/MyAnimeVaultLogo.png"
+import { observer } from "mobx-react-lite";
 
-export default function Navbar() {
+export default observer(function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
     const { userStore } = useStore()
 
@@ -33,7 +34,7 @@ export default function Navbar() {
                 <DrawerOverlay marginTop={navBarHeight} />
 
                 <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none'>
-
+                    <DrawerHeader>Coming soon!</DrawerHeader>
                 </DrawerContent>
             </Drawer>
 
@@ -63,7 +64,7 @@ export default function Navbar() {
                 </MenuButton>
 
                 <MenuList>
-
+                    <MenuItem>Coming soon!</MenuItem>
                 </MenuList>
             </Menu>
 
@@ -88,4 +89,4 @@ export default function Navbar() {
             </Menu>
         </HStack>
     )
-}
+})

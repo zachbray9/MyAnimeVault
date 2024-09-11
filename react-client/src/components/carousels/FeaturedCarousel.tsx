@@ -41,7 +41,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
                                         <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
-                                        {userStore.user?.animeIds?.includes(anime.id) ? (
+                                        {userStore.user?.animeIds.includes(anime.id) ? (
                                             <Tooltip label='Already on list' hasArrow>
                                                 <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline'/>
                                             </Tooltip>

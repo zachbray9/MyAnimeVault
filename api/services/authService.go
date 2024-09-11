@@ -13,7 +13,7 @@ import (
 func Register(email string, password string) (string, error) {
 	query := `
 	INSERT INTO users (id, email, password_hash, date_registered)
-	VALUES (?, ?, ?, ?)
+	VALUES ($1, $2, $3, $4)
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -40,7 +40,7 @@ func Register(email string, password string) (string, error) {
 
 func ValidateCredentials(email string, password string) (string, error) {
 	query := `
-	SELECT id, password_hash FROM users WHERE email = ?
+	SELECT id, password_hash FROM users WHERE email = $1
 	`
 
 	row := database.Db.QueryRow(query, email)
@@ -63,7 +63,7 @@ func ValidateCredentials(email string, password string) (string, error) {
 
 func GetUserById(id string) (dtos.UserDto, error){
 	query := `
-	SELECT email FROM users WHERE id = ? 
+	SELECT email FROM users WHERE id = $1
 	`
 
 	stmt, err := database.Db.Prepare(query)
