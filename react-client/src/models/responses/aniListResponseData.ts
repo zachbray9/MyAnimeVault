@@ -1,4 +1,4 @@
-import { AniListAnime } from "./aniListAnime"
+import { AniListAnime } from "../aniListAnime"
 
 export interface AniListResponseDataPaged{
     data: {

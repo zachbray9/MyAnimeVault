@@ -3,18 +3,23 @@ import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Stack, Te
 import { Form, Formik } from "formik"
 import FormInput from "../components/common/form/FormInput"
 import { useStore } from "../stores/store"
-import { useNavigate } from "react-router-dom"
+import * as Yup from "yup"
 
 export default observer(function Login() {
     const { userStore } = useStore()
-    const navigate = useNavigate()
+
+    const validationSchema = Yup.object({
+        email: Yup.string().required("Email field is required.").email("The email you entered is not a valid email.").trim(),
+        password: Yup.string().required("Password field is required.").trim()
+    })
 
     return (
         <Box width='100%' display='flex' justifyContent='center' padding={['1.5rem', '1.75rem', '4rem']}>
             <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                 <Formik
                     initialValues={{ email: '', password: '', error: null }}
-                    onSubmit={(values, { setErrors }) => userStore.login(values, navigate).catch(() => setErrors({ error: 'Username or password is incorrect.' }))}
+                    onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({ error: 'Username or password is incorrect.' }))}
+                    validationSchema={validationSchema}
                 >
                     {({ handleSubmit, isSubmitting, dirty, errors }) => (
                         <Form onSubmit={handleSubmit} >

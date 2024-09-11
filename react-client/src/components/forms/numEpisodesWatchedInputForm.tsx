@@ -12,7 +12,7 @@ export default observer(function NumEpisodesWatchedInputForm() {
     const toast = useToast()
 
     const validationSchema = Yup.object({
-        numEpisodesWatched: Yup.number().min(0, 'Episodes watched cannot be less than 0.').max(selectedAnime?.episodes || Infinity, 'Episodes watched cannot exceed the total number of episodes.').required()
+        numEpisodesWatched: Yup.number().min(0, 'Episodes watched cannot be less than 0.').max(selectedAnime?.episodes || Infinity, 'Episodes watched cannot exceed the total number of episodes.').required("Value cannot be empty.").integer("Value cannot be a decimal.")
     })
 
     return (

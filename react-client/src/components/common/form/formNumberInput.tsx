@@ -15,7 +15,7 @@ export default function FormNumberInput({ name, min, max, autoSubmit, isSubmttin
     const [field] = useField(name)
     const { setFieldValue, submitForm } = useFormikContext()
 
-    const debouncedSubmitRef = useRef(debounce(() => submitForm(), 500));
+    const debouncedSubmitRef = useRef(debounce(() => submitForm(), 800));
 
     useEffect(() => {
         const debouncedSubmit = debouncedSubmitRef.current

@@ -22,7 +22,7 @@ export default function FormInput({ name, hideable, ...props }: Props) {
     }
 
     return (
-        <FormControl>
+        <FormControl isInvalid={meta.touched && !!meta.error}>
             <InputGroup>
                 <Input
                     {...props}
@@ -38,9 +38,9 @@ export default function FormInput({ name, hideable, ...props }: Props) {
                 }
             </InputGroup>
 
-            {meta.error && 
+            {meta.touched && meta.error && (
                 <FormErrorMessage>{meta.error}</FormErrorMessage>
-            }
+            )}
         </FormControl>
     )
 }
