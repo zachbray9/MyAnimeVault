@@ -2,6 +2,7 @@ import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import { SelectTheme } from "./styles/ChakraSelectTheme";
 import { NumberInputTheme } from "./styles/ChakraNumberInputTheme";
 import { ProgressTheme } from "./styles/ChakraProgressBarTheme";
+import { InputTheme } from "./styles/ChakraInputTheme";
 
 const navBarHeight = ['3.75rem', null, '3rem']
 const navBarIconSize =  ['1.25em', null, '1em']
@@ -101,7 +102,8 @@ const components = {
     },
     Select: SelectTheme,
     NumberInput: NumberInputTheme,
-    Progress: ProgressTheme
+    Progress: ProgressTheme,
+    Input: InputTheme
 }
 
 
