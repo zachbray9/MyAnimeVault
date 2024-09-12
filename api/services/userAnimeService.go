@@ -95,6 +95,8 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 }
 
 func GetIdList (userId string, animeIdList *[]int64) error {
+	*animeIdList = []int64{}
+
 	query := `
 	SELECT anime_id
 	FROM userAnimes

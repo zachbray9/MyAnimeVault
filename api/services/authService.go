@@ -84,6 +84,7 @@ func GetUserById(id string) (dtos.UserDto, error){
 	var user dtos.UserDto = dtos.UserDto{
 		Id: id,
 		Email: email,
+		AnimeIds: []int64{},
 	}
 
 	return user, nil
