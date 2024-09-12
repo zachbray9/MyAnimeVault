@@ -25,7 +25,7 @@ func main() {
 	server.Use(cors.New(config))
 
 	if(os.Getenv("MODE") == "production"){
-		server.Static("/static", "./wwwroot/static")
+		server.Static("/assets", "./wwwroot/assets")
 		server.StaticFile("/", "./wwwroot/index.html")
 		
 		server.NoRoute(func (context *gin.Context){
