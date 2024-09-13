@@ -32,7 +32,7 @@ func main() {
 	if(os.Getenv("MODE") == "production"){
 		server.Static("/assets", "./wwwroot/assets")
 		server.StaticFile("/site.webmanifest", "./wwwroot/site.webmanifest")
-		server.StaticFile("/", "./wwwroot/index.html")
+		// server.StaticFile("/", "./wwwroot/index.html")
 		server.NoRoute(func (context *gin.Context){
 			context.File("./wwwroot/index.html")
 		})
