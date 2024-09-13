@@ -13,6 +13,11 @@ import (
 func main() {
 
 	config.InitEnvVariables()
+
+	if os.Getenv("MODE") == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	database.InitDb()
 	var server = gin.Default()
 
