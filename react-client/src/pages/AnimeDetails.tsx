@@ -10,6 +10,7 @@ import LoadingComponent from "../components/common/loading/LoadingComponent";
 import RatingInputForm from "../components/forms/ratingInputForm";
 import WatchStatusInputForm from "../components/forms/watchStatusInputForm";
 import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedInputForm";
+import { Helmet } from "react-helmet-async";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -54,52 +55,58 @@ export default observer(function AnimeDetails() {
     }
 
     return (
-        <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
-            <Stack maxWidth='1200px' justifyContent='center' alignItems='center' gap='8rem'>
-                <Flex justify='center' wrap='wrap' width='100%' gap='2rem' >
-                    <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
-                    <Stack gap={4}>
-                        {/* Title */}
-                        <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
+        <>
+            <Helmet>
+                <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - MyAnimeVault`}</title>
+            </Helmet>
 
-                        {/* Genres */}
-                        <Wrap>
-                            {selectedAnime?.genres && selectedAnime.genres.map(genre => (
-                                <Badge key={genre} variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
-                            ))}
-                        </Wrap>
+            <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
+                <Stack maxWidth='1200px' justifyContent='center' alignItems='center' gap='8rem'>
+                    <Flex justify='center' wrap='wrap' width='100%' gap='2rem' >
+                        <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
+                        <Stack gap={4}>
+                            {/* Title */}
+                            <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
 
-                        {/* Media Type and season */}
-                        <Text fontSize='xs' color='text.subtle'>{`${selectedAnime?.format} | ${selectedAnime?.season} ${selectedAnime?.seasonYear}`}</Text>
+                            {/* Genres */}
+                            <Wrap>
+                                {selectedAnime?.genres && selectedAnime.genres.map(genre => (
+                                    <Badge key={genre} variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
+                                ))}
+                            </Wrap>
 
-                        {/* Score */}
-                        <Flex align='center' justify='start' gap={1}>
-                            <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
-                            <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
-                        </Flex>
-                        
-                        {/* List controls */}
-                        <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
-                            {userAnimeDetails ? (
-                                <Stack gap='1rem'>
-                                    <RatingInputForm />
-                                    <WatchStatusInputForm />
-                                    <NumEpisodesWatchedInputForm />
-                                </Stack>
-                            ) : (
-                                <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
-                            )}
-                        </Skeleton>
-                    </Stack>
-                </Flex>
+                            {/* Media Type and season */}
+                            <Text fontSize='xs' color='text.subtle'>{`${selectedAnime?.format} | ${selectedAnime?.season} ${selectedAnime?.seasonYear}`}</Text>
 
-                {selectedAnime?.description && 
-                    <Stack gap='1rem'>
-                        <Heading size='md'>Synopsis</Heading>
-                        <Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(selectedAnime?.description)}}/>
-                    </Stack>
-                }
-            </Stack>
-        </Box>
+                            {/* Score */}
+                            <Flex align='center' justify='start' gap={1}>
+                                <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
+                                <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
+                            </Flex>
+                            
+                            {/* List controls */}
+                            <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
+                                {userAnimeDetails ? (
+                                    <Stack gap='1rem'>
+                                        <RatingInputForm />
+                                        <WatchStatusInputForm />
+                                        <NumEpisodesWatchedInputForm />
+                                    </Stack>
+                                ) : (
+                                    <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
+                                )}
+                            </Skeleton>
+                        </Stack>
+                    </Flex>
+
+                    {selectedAnime?.description && 
+                        <Stack gap='1rem'>
+                            <Heading size='md'>Synopsis</Heading>
+                            <Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(selectedAnime?.description)}}/>
+                        </Stack>
+                    }
+                </Stack>
+            </Box>
+        </>
     )
 })
