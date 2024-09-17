@@ -19,4 +19,5 @@ func RegisterEndpoints(server *gin.Engine) {
 	server.GET("/api/user/anime/:animeId", middleware.Authenticate, GetUserAnimeDetails)
 	server.POST("/api/user/anime", middleware.Authenticate, CreateUserAnime)
 	server.PATCH("/api/user/anime/:animeId", middleware.Authenticate, UpdateUserAnime)
+	server.DELETE("/api/user/anime/:animeId", middleware.Authenticate, DeleteUserAnime)
 }

@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"myanimevault/database"
+	"myanimevault/models/customErrors"
 	"myanimevault/models/dtos"
 	"myanimevault/models/requests"
 
@@ -17,30 +18,30 @@ func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("couldn't prepare query: %w", err)
 	}
 
 	defer stmt.Close()
 
 	_, err = stmt.Exec(
-		uuid.New(), 
-		userId, 
-		userAnime.AnimeId,  
-		userAnime.Title.English, 
+		uuid.New(),
+		userId,
+		userAnime.AnimeId,
+		userAnime.Title.English,
 		userAnime.Title.Romaji,
-		userAnime.CoverImage.Large, 
-		userAnime.CoverImage.Medium, 
-		userAnime.Format, 
-		userAnime.Season, 
-		userAnime.SeasonYear, 
+		userAnime.CoverImage.Large,
+		userAnime.CoverImage.Medium,
+		userAnime.Format,
+		userAnime.Season,
+		userAnime.SeasonYear,
 		userAnime.Episodes,
-		"Plan to Watch", 
-		5, 
-		0, 
+		"Plan to Watch",
+		5,
+		0,
 	)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("couldn't execute query statement: %w", err)
 	}
 
@@ -56,14 +57,14 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
+	if err != nil {
 		return nil, fmt.Errorf("could not prepare the database query: %w", err)
 	}
 
 	defer stmt.Close()
 	rows, err := stmt.Query(id)
 
-	if(err != nil){
+	if err != nil {
 		return nil, fmt.Errorf("could not execute database query statement: %w", err)
 	}
 
@@ -71,20 +72,20 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 
 	var animeList []dtos.UserAnimeDto
 
-	for(rows.Next()){
+	for rows.Next() {
 		var userAnime dtos.UserAnimeDto
 		rows.Scan(
-			&userAnime.AnimeId, 
-			&userAnime.Title.English, 
-			&userAnime.Title.Romaji, 
-			&userAnime.CoverImage.Large, 
-			&userAnime.CoverImage.Medium, 
-			&userAnime.Format, 
-			&userAnime.Season, 
-			&userAnime.SeasonYear, 
-			&userAnime.WatchStatus, 
-			&userAnime.Rating, 
-			&userAnime.NumEpisodesWatched, 
+			&userAnime.AnimeId,
+			&userAnime.Title.English,
+			&userAnime.Title.Romaji,
+			&userAnime.CoverImage.Large,
+			&userAnime.CoverImage.Medium,
+			&userAnime.Format,
+			&userAnime.Season,
+			&userAnime.SeasonYear,
+			&userAnime.WatchStatus,
+			&userAnime.Rating,
+			&userAnime.NumEpisodesWatched,
 			&userAnime.Episodes,
 		)
 
@@ -94,7 +95,7 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 	return animeList, nil
 }
 
-func GetIdList (userId string, animeIdList *[]int64) error {
+func GetIdList(userId string, animeIdList *[]int64) error {
 	*animeIdList = []int64{}
 
 	query := `
@@ -105,21 +106,21 @@ func GetIdList (userId string, animeIdList *[]int64) error {
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem preparing the query: %w", err)
 	}
 
 	defer stmt.Close()
 	rows, err := stmt.Query(userId)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem executing the query statement: %w", err)
 	}
 
-	for(rows.Next()){
+	for rows.Next() {
 		var id int64
 		err = rows.Scan(&id)
-		if(err != nil){
+		if err != nil {
 			return fmt.Errorf("there was a problem scanning the db rows: %w", err)
 		}
 
@@ -129,7 +130,7 @@ func GetIdList (userId string, animeIdList *[]int64) error {
 	return nil
 }
 
-func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnimeDetailsDto) error {
+func GetUserAnimeDetails(userId string, animeId int64, userAnime *dtos.UserAnimeDetailsDto) error {
 	query := `
 	SELECT rating, watch_status, num_episodes_watched
 	FROM userAnimes
@@ -138,7 +139,7 @@ func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnim
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem preparing the db query: %w", err)
 	}
 
@@ -151,7 +152,7 @@ func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnim
 
 	err = row.Scan(&rating, &watchStatus, &numEpisodesWatched)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem scanning the db row: %w", err)
 	}
 
@@ -162,41 +163,41 @@ func GetUserAnimeDetails (userId string, animeId int64, userAnime *dtos.UserAnim
 	return nil
 }
 
-func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAnimePatchRequest) error {
+func UpdateUserAnime(userId string, animeId int64, patchRequest requests.UserAnimePatchRequest) error {
 	var userAnimeDetails dtos.UserAnimeDetailsDto
 	err := GetUserAnimeDetails(userId, animeId, &userAnimeDetails)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem getting the user anime details: %w", err)
 	}
 
-	if(patchRequest.Rating != nil){
-		if(*patchRequest.Rating < 1 || *patchRequest.Rating > 10){
+	if patchRequest.Rating != nil {
+		if *patchRequest.Rating < 1 || *patchRequest.Rating > 10 {
 			return fmt.Errorf("invalid rating value (rating must be 1-10)")
 		}
 
 		userAnimeDetails.Rating = *patchRequest.Rating
 	}
 
-	if(patchRequest.WatchStatus != nil){
-		allowedWatchStatuses := map[string] bool{
-			"Watching": true,
-			"Completed": true,
-			"On hold": true,
-			"Dropped": true,
+	if patchRequest.WatchStatus != nil {
+		allowedWatchStatuses := map[string]bool{
+			"Watching":      true,
+			"Completed":     true,
+			"On hold":       true,
+			"Dropped":       true,
 			"Plan to watch": true,
 		}
 
 		validWatchStatus := allowedWatchStatuses[*patchRequest.WatchStatus]
 
-		if(!validWatchStatus){
+		if !validWatchStatus {
 			return fmt.Errorf("invalid watch status value")
 		}
 		userAnimeDetails.WatchStatus = *patchRequest.WatchStatus
 	}
 
-	if(patchRequest.NumEpisodesWatched != nil){
-		if(*patchRequest.NumEpisodesWatched < 0){
+	if patchRequest.NumEpisodesWatched != nil {
+		if *patchRequest.NumEpisodesWatched < 0 {
 			return fmt.Errorf("invalid numEpisodesWatched value (value cannot be negative)")
 		}
 
@@ -211,15 +212,48 @@ func UpdateUserAnime (userId string, animeId int64, patchRequest requests.UserAn
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem preparing the query statement: %w", err)
 	}
-	
+
 	defer stmt.Close()
 	_, err = stmt.Exec(userAnimeDetails.Rating, userAnimeDetails.WatchStatus, userAnimeDetails.NumEpisodesWatched, userId, animeId)
 
-	if(err != nil){
+	if err != nil {
 		return fmt.Errorf("there was a problem executing the query statement: %w", err)
+	}
+
+	return nil
+}
+
+func DeleteUserAnime(userId string, animeId int64) error {
+	query := `
+	DELETE 
+	FROM userAnimes 
+	WHERE user_id = $1 AND anime_id = $2
+	`
+
+	stmt, err := database.Db.Prepare(query)
+
+	if err != nil {
+		return fmt.Errorf("there was a problem preparing the delete query: %w", err)
+	}
+
+	defer stmt.Close()
+	result, err := stmt.Exec(userId, animeId)
+
+	if err != nil {
+		return fmt.Errorf("there was a problem executing the delete query: %w", err)
+	}
+
+	numRows, err := result.RowsAffected()
+
+	if err != nil {
+		return fmt.Errorf("there was a problem with executing RowsAffected: %w", err)
+	}
+
+	if numRows < 1 {
+		return customErrors.ErrNotFound
 	}
 
 	return nil
