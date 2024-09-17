@@ -50,7 +50,7 @@ myApi.interceptors.response.use(async response => {
     if(error.response){
         switch (status) {
             case 401:
-                if(data.error == 'invalid_refresh_token'){
+                if(data.error === 'invalid_refresh_token'){
                     store.userStore.logout()
         
                     toast({
