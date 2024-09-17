@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"myanimevault/models/customErrors"
 	"myanimevault/models/dtos"
 	"myanimevault/models/requests"
 	"myanimevault/services"
@@ -16,12 +17,12 @@ func register(context *gin.Context) {
 	err := context.ShouldBindJSON(&registerRequest)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "There was an issue with one or more of the fields in the register request."})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_fields"})
 		return
 	}
 
 	if registerRequest.Password != registerRequest.ConfirmPassword {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Passwords do not match."})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "passwords_do_not_match"})
 		return
 	}
 
@@ -40,24 +41,26 @@ func register(context *gin.Context) {
 		return
 	}
 
+	
+	animeIdList, err := services.GetIdList(userId)
+	
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "internal_server_error"})
+		return
+	}
+	
+	err = services.GenerateRefreshTokenCookie(userId, registerRequest.Email, context)
+	
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+		return
+	}
+
 	var userDto dtos.UserDto = dtos.UserDto{
 		Id:        userId,
 		Email:     registerRequest.Email,
 		AuthToken: token,
-	}
-
-	err = services.GetIdList(userId, &userDto.AnimeIds)
-
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
-		return
-	}
-
-	err = generateRefreshTokenCookie(userId, userDto.Email, context)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refresh token."})
-		return
+		AnimeIds: animeIdList,
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully registered.", "user": userDto})
@@ -70,21 +73,37 @@ func login(context *gin.Context) {
 	err := context.ShouldBindJSON(&loginRequest)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "There was an issue with one or more of the fields in the login request."})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_field"})
 		return
 	}
 
 	userId, err := services.ValidateCredentials(loginRequest.Email, loginRequest.Password)
 
 	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid credentials."})
-		return
+		switch err {
+		case customErrors.ErrNotFound:
+			context.JSON(http.StatusNotFound, gin.H{"error": "email_not_found"})
+			return
+		case customErrors.ErrIncorrectPassword:
+			context.JSON(http.StatusUnauthorized, gin.H{"error": "incorrect_password"})
+			return
+		default:
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+		}
 	}
 
 	token, err := services.GenerateAuthToken(userId, loginRequest.Email)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating an auth token."})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+		return
+	}
+
+	
+	animeIdList, err := services.GetIdList(userId)
+	
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "internal_server_error"})
 		return
 	}
 
@@ -92,19 +111,13 @@ func login(context *gin.Context) {
 		Id:        userId,
 		Email:     loginRequest.Email,
 		AuthToken: token,
+		AnimeIds: animeIdList,
 	}
 
-	err = services.GetIdList(userId, &userDto.AnimeIds)
+	err = services.GenerateRefreshTokenCookie(userId, userDto.Email, context)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
-		return
-	}
-
-	err = generateRefreshTokenCookie(userId, userDto.Email, context)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating a refresh token."})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "internal_server_error"})
 		return
 	}
 
@@ -114,38 +127,18 @@ func login(context *gin.Context) {
 
 
 func logout(context *gin.Context) {
+	userId := context.GetString("userId")
+	
 	refreshToken, err := context.Cookie("refreshToken")
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Refresh token not found"})
-		return
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "refresh_token_not_found"})
 	}
-
-	claims, err := services.VerifyRefreshToken(refreshToken)
-
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid or expired refresh token."})
-		return
-	}
-
-	userId, ok := claims["id"].(string)
-
-	if !ok {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
-		return
-	}
-
-	tokenId, ok := claims["tokenId"].(string)
-
-	if !ok {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims"})
-		return
-	}
-
-	err = services.RevokeRefreshToken(userId, tokenId, refreshToken)
+	
+	err = services.RevokeRefreshToken(userId, refreshToken)
 
 	if(err != nil){
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem revoking the refresh token"})
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
 		return
 	}
 
@@ -167,15 +160,22 @@ func logout(context *gin.Context) {
 
 func getCurrentUser(context *gin.Context) {
 	userId := context.GetString("userId")
+	userEmail := context.GetString("userEmail")
 
 	userDto, err := services.GetUserById(userId)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem getting the user from the database."})
-		return
+		switch err {
+		case customErrors.ErrNotFound: 
+			context.JSON(http.StatusNotFound, gin.H{"error": "user_not_found"})
+			return
+		default:
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+			return
+		}
 	}
 
-	err = services.GetIdList(userId, &userDto.AnimeIds)
+	animeIdList, err := services.GetIdList(userId)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "There was a problem getting the users anime id list."})
@@ -189,7 +189,10 @@ func getCurrentUser(context *gin.Context) {
 		return
 	}
 
+	userDto.Id = userId
+	userDto.Email = userEmail
 	userDto.AuthToken = token
+	userDto.AnimeIds = animeIdList
 
 	context.JSON(http.StatusOK, gin.H{"message": "Current user was successfully returned.", "user": userDto})
 }
@@ -204,24 +207,34 @@ func refresh(context *gin.Context) {
 		return
 	}
 
-	claims, err := services.VerifyRefreshToken(refreshToken)
+	claims, err := services.VerifyAuthToken(refreshToken)
 
 	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid or expired refresh token.", "error": "invalid_refresh_token"})
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid_refresh_token"})
 		return
 	}
 
 	userId, ok := claims["id"].(string)
-
 	if !ok {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims", "error": "invalid_refresh_token"})
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid_refresh_token"})
 		return
 	}
 
-	email, ok := claims["email"].(string)
-
+	tokenId, ok := claims["tokenId"].(string)
 	if !ok {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Invalid token claims", "error": "invalid_refresh_token"})
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid_refresh_token"})
+	}
+
+	email, ok := claims["email"].(string)
+	if !ok {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid_refresh_token"})
+		return
+	}
+
+	err = services.ValidateRefreshToken(userId, tokenId, refreshToken)
+
+	if err != nil {
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "invalid_refresh_token"})
 		return
 	}
 
@@ -233,36 +246,4 @@ func refresh(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
-}
-
-
-
-func generateRefreshTokenCookie(id string, email string, context *gin.Context) error {
-	expirationTime := time.Now().Add(time.Hour * 24 * 30)
-
-	refreshToken, tokenId, err := services.GenerateRefreshToken(id, email, expirationTime.Unix())
-
-	if err != nil {
-		return fmt.Errorf("there was a problem generating a refresh token: %w", err)
-	}
-
-	err = services.StoreRefreshToken(id, tokenId, refreshToken, expirationTime)
-
-	if err != nil {
-		return fmt.Errorf("there was a problem storing the refresh token in the database: %w", err)
-	}
-
-	cookie := &http.Cookie{
-		Name:     "refreshToken",
-		Value:    refreshToken,
-		Path:     "/",
-		Expires:  expirationTime,
-		HttpOnly: false,
-		Secure:   true,
-		SameSite: http.SameSiteNoneMode,
-	}
-
-	http.SetCookie(context.Writer, cookie)
-
-	return nil
 }

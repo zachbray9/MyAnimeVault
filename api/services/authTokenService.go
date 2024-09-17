@@ -5,8 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"myanimevault/database"
+	"myanimevault/models/customErrors"
 	"myanimevault/utils"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -16,7 +18,7 @@ import (
 func GenerateAuthToken(id string, email string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":    id,
-		"email": email,
+		"email": strings.ToLower(email),
 		"exp":   time.Now().Add(time.Minute * 10).Unix(),
 	})
 
@@ -25,14 +27,12 @@ func GenerateAuthToken(id string, email string) (string, error) {
 	return token.SignedString([]byte(authTokenKey))
 }
 
-
-
 func GenerateRefreshToken(id string, email string, expiresAt int64) (string, string, error) {
 	tokenId := uuid.New().String()
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":      id,
-		"email":   email,
+		"email":   strings.ToLower(email),
 		"exp":     expiresAt,
 		"tokenId": tokenId,
 	})
@@ -48,8 +48,6 @@ func GenerateRefreshToken(id string, email string, expiresAt int64) (string, str
 	return signedToken, tokenId, nil
 }
 
-
-
 func StoreRefreshToken(userId string, tokenId string, token string, expiresAt time.Time) error {
 	query := `
 	INSERT INTO refreshTokens (id, user_id, token_hash, expires_at)
@@ -59,7 +57,7 @@ func StoreRefreshToken(userId string, tokenId string, token string, expiresAt ti
 	stmt, err := database.Db.Prepare(query)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem preparing the db query: %w", err)
+		return fmt.Errorf("an error occurred while preparing the db query: %w", err)
 	}
 
 	hashedToken := utils.HashToken(token)
@@ -68,13 +66,11 @@ func StoreRefreshToken(userId string, tokenId string, token string, expiresAt ti
 	_, err = stmt.Exec(tokenId, userId, hashedToken, expiresAt)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem executing the query statement: %w", err)
+		return fmt.Errorf("an error occurred while executing the query statement: %w", err)
 	}
 
 	return nil
 }
-
-
 
 func VerifyAuthToken(token string) (jwt.MapClaims, error) {
 	claims := jwt.MapClaims{}
@@ -101,78 +97,59 @@ func VerifyAuthToken(token string) (jwt.MapClaims, error) {
 	return claims, nil
 }
 
-
-
-func VerifyRefreshToken(token string) (jwt.MapClaims, error) {
-	claims, err := VerifyAuthToken(token)
-
-	if err != nil {
-		return claims, fmt.Errorf("invalid or expired refresh token: %w", err)
-	}
-
-	userId, ok := claims["id"].(string)
-
-	if !ok {
-		return claims, fmt.Errorf("invalid token claims")
-	}
-
-	tokenId, ok := claims["tokenId"].(string)
-
-	if !ok {
-		return claims, fmt.Errorf("invalid token claims")
-	}
+func ValidateRefreshToken(userId string, tokenId string, token string) error {
+	hashedToken := utils.HashToken(token)
 
 	query := `
 	SELECT revoked_at
 	FROM refreshTokens
-	WHERE id = $1 AND user_id = $2
+	WHERE user_id = $1 AND token_hash = $2
 	`
 
 	stmt, err := database.Db.Prepare(query)
 
 	if err != nil {
-		return claims, fmt.Errorf("there was a problem preparing the db query: %w", err)
+		return fmt.Errorf("an error occurred while preparing the db query: %w", err)
 	}
 
 	defer stmt.Close()
-	row := stmt.QueryRow(tokenId, userId)
+	row := stmt.QueryRow(userId, hashedToken)
 
 	var revokedAt sql.NullTime
 
 	err = row.Scan(&revokedAt)
 
 	if err != nil {
-		return claims, fmt.Errorf("there was a problem scanning the db row: %w", err)
+		return fmt.Errorf("an error occurred while scanning the db row: %w", err)
 	}
 
 	if revokedAt.Valid {
-		return claims, fmt.Errorf("token has been revoked: %w", err)
+		return customErrors.ErrRevokedToken
 	}
 
-	return claims, nil
-
+	return nil
 }
 
+func RevokeRefreshToken(userId string, token string) error {
+	hashedToken := utils.HashToken(token)
 
-
-func RevokeRefreshToken(userId string, tokenId string, token string) error {
 	query := `
 	UPDATE refreshTokens
 	SET revoked_at = $1
-	WHERE id = $2 AND user_id = $3
+	WHERE user_id = $2 AND token_hash = $3
 	`
 
 	stmt, err := database.Db.Prepare(query)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem preparing the db query: %w", err)
+		return fmt.Errorf("an error occurred while preparing the db query: %w", err)
 	}
 
 	defer stmt.Close()
-	_, err = stmt.Exec(time.Now(), tokenId, userId)
+	_, err = stmt.Exec(time.Now(), userId, hashedToken)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem executing the query statement: %w", err)
+		return fmt.Errorf("an error occurred while executing the query statement: %w", err)
 	}
 
 	return nil

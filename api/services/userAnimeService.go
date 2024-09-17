@@ -95,8 +95,8 @@ func GetList(id string) ([]dtos.UserAnimeDto, error) {
 	return animeList, nil
 }
 
-func GetIdList(userId string, animeIdList *[]int64) error {
-	*animeIdList = []int64{}
+func GetIdList(userId string) ([]int64, error) {
+	var animeIdList []int64 = []int64{}
 
 	query := `
 	SELECT anime_id
@@ -107,27 +107,27 @@ func GetIdList(userId string, animeIdList *[]int64) error {
 	stmt, err := database.Db.Prepare(query)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem preparing the query: %w", err)
+		return animeIdList, fmt.Errorf("an error occurred while preparing the query: %w", err)
 	}
 
 	defer stmt.Close()
 	rows, err := stmt.Query(userId)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem executing the query statement: %w", err)
-	}
+			return animeIdList, fmt.Errorf("an error occurred while executing the query statement: %w", err)
+		}
 
 	for rows.Next() {
 		var id int64
 		err = rows.Scan(&id)
 		if err != nil {
-			return fmt.Errorf("there was a problem scanning the db rows: %w", err)
+			return animeIdList, fmt.Errorf("an error occurred while scanning the db rows: %w", err)
 		}
 
-		*animeIdList = append(*animeIdList, id)
+		animeIdList = append(animeIdList, id)
 	}
 
-	return nil
+	return animeIdList, nil
 }
 
 func GetUserAnimeDetails(userId string, animeId int64, userAnime *dtos.UserAnimeDetailsDto) error {

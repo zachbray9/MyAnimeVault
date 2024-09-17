@@ -35,12 +35,12 @@ export default class UserStore {
 
     logout = async () => {
         try{
-            store.commonStore.setAuthToken(null)
-            this.user = null
             await myApiAgent.Auth.logout()
         } catch (error) {
             console.log(error)
         }
+        store.commonStore.setAuthToken(null)
+        runInAction(() => this.user = null)
         router.navigate('/')
     }
 
@@ -69,7 +69,7 @@ export default class UserStore {
         runInAction(() => this.user?.animeIds.push(anime.id))
         store.listStore.setUserAnimeDetails({
             rating: 0,
-            watchStatus: 'Plan to Watch',
+            watchStatus: 'Plan to watch',
             numEpisodesWatched: 0
         })
 

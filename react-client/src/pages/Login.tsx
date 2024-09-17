@@ -25,7 +25,7 @@ export default observer(function Login() {
                 <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', error: null }}
-                        onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({ error: 'Username or password is incorrect.' }))}
+                        onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({error: "Your email or password is incorrect."}))}
                         validationSchema={validationSchema}
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
