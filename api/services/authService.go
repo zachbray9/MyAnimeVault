@@ -1,10 +1,13 @@
 package services
 
 import (
+	"database/sql"
 	"fmt"
 	"myanimevault/database"
+	"myanimevault/models/customErrors"
 	"myanimevault/models/dtos"
 	"myanimevault/utils"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -29,7 +32,7 @@ func Register(email string, password string) (string, error) {
 
 	defer stmt.Close()
 	newId := uuid.New().String()
-	_, err = stmt.Exec(newId, email, hashedPassword, time.Now().UTC())
+	_, err = stmt.Exec(newId, strings.ToLower(email), hashedPassword, time.Now().UTC())
 
 	if err != nil {
 		return "", fmt.Errorf("failed to execute statement: %w", err)
@@ -42,34 +45,48 @@ func ValidateCredentials(email string, password string) (string, error) {
 	query := `
 	SELECT id, password_hash FROM users WHERE email = $1
 	`
+	stmt, err := database.Db.Prepare(query)
 
-	row := database.Db.QueryRow(query, email)
+	if err != nil {
+		return "", fmt.Errorf("there was a problem preparing the db query: %w", err)
+	}
+
+	defer stmt.Close()
+	row := stmt.QueryRow(strings.ToLower(email))
 
 	var id string
 	var hashedPassword string
-	err := row.Scan(&id, &hashedPassword)
+
+	err = row.Scan(&id, &hashedPassword)
 
 	if err != nil {
-		return "", err
+		switch err {
+		case sql.ErrNoRows:
+			return "", customErrors.ErrNotFound
+		default:
+			return "", fmt.Errorf("an error occurred while querying the database: %w", err)
+		}
 	}
 
 	passwordIsValid := utils.ComparePasswordWithHash(password, hashedPassword)
 	if !passwordIsValid {
-		return "", fmt.Errorf("invalid credentials")
+		return "", customErrors.ErrIncorrectPassword
 	}
 
 	return id, nil
 }
 
-func GetUserById(id string) (dtos.UserDto, error){
+func GetUserById(id string) (dtos.UserDto, error) {
+	var userDto dtos.UserDto = dtos.UserDto{}
+
 	query := `
 	SELECT email FROM users WHERE id = $1
 	`
 
 	stmt, err := database.Db.Prepare(query)
 
-	if(err != nil){
-		return dtos.UserDto{}, fmt.Errorf("couldn't prepare query statement: %w", err)
+	if err != nil {
+		return userDto, fmt.Errorf("an error occurred while preparing the query statement: %w", err)
 	}
 
 	row := stmt.QueryRow(id)
@@ -77,15 +94,18 @@ func GetUserById(id string) (dtos.UserDto, error){
 	var email string
 	err = row.Scan(&email)
 
-	if(err != nil){
-		return dtos.UserDto{}, fmt.Errorf("row.scan failed: %w", err)
+	if err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			return userDto, customErrors.ErrNotFound
+		default:
+			return userDto, fmt.Errorf("an error occurred while scanning the db row: %w", err)
+		}
 	}
 
-	var user dtos.UserDto = dtos.UserDto{
-		Id: id,
-		Email: email,
-		AnimeIds: []int64{},
-	}
+	userDto.Id = id
+	userDto.Email = email
+	userDto.AnimeIds = []int64{}
 
-	return user, nil
+	return userDto, nil
 }
