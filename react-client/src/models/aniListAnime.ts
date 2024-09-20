@@ -1,3 +1,5 @@
+import { CharacterEdge } from "./characterEdge"
+
 export interface AniListAnime {
     id: number
     title: {
@@ -20,6 +22,14 @@ export interface AniListAnime {
     format?: string
     season?: string
     seasonYear?: number
+    trailer: {
+        id: number
+        site: string
+        thumbnail: string
+    }
+    characters: {
+        edges: CharacterEdge[]
+    }
     studios?: {
         edges: {
             node: {
