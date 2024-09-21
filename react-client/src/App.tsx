@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, ScrollRestoration, useNavigate } from 'react-router-dom'
 import Navbar from './components/nav/Navbar'
 import { Box } from '@chakra-ui/react'
 import { useStore } from './stores/store'
@@ -26,6 +26,7 @@ export default observer(function App() {
 
   return (
     <>
+      <ScrollRestoration />
       <div id='main'>
         <Navbar />
         <Box paddingTop={['3.75rem', null, '3rem']} >

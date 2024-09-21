@@ -1,4 +1,4 @@
-import { AspectRatio, Badge, Box, Flex, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
+import { AspectRatio, Badge, Box, Flex, Grid, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -112,7 +112,7 @@ export default observer(function AnimeDetails() {
                             <Text>No synopsis</Text>
                         )}
                     </Stack>
-                    
+
                     {/* trailer */}
                     <Stack gap='1rem' width='100%'>
                         <Heading size='md'>Trailer</Heading>
@@ -132,13 +132,16 @@ export default observer(function AnimeDetails() {
                     {/* Characters */}
                     <Stack gap='1rem' width='100%'>
                         <Heading size='md'>Characters</Heading>
-                        {selectedAnime?.characters ? (
-                            selectedAnime.characters.edges.map((character: CharacterEdge) => (
-                                <CharacterCard character={character}/>
-                            ))
-                        ) : (
-                            <Text>No characters</Text>
-                        )}
+                        <Grid templateColumns={['1fr', null, '1fr 1fr', '1fr 1fr 1fr']} rowGap='1rem' columnGap='2rem'>
+                            {selectedAnime?.characters ? (
+                                selectedAnime.characters.edges.map((character: CharacterEdge) => (
+                                    <CharacterCard character={character} key={character.node.name.full}/>
+                                ))
+                            ) : (
+                                <Text>No characters</Text>
+                            )}
+
+                        </Grid>
                     </Stack>
 
                 </Stack>
