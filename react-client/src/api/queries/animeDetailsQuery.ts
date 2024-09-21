@@ -21,6 +21,33 @@ export const LoadAnimeDetailsQuery = (animeId: number) => {
                 format
                 season
                 seasonYear
+                trailer {
+                    id
+                    site
+                    thumbnail
+                }
+                characters (role: MAIN) {
+                    edges {
+                        node {
+                            name{
+                                full
+                            }
+                            image {
+                                large
+                            }
+                        }
+                        role
+                        voiceActors (language: JAPANESE) {
+                            name {
+                                full
+                            }
+                            language
+                            image {
+                                large
+                            }
+                        }
+                    }
+                }
                 studios {
                     edges {
                         node {
@@ -31,7 +58,7 @@ export const LoadAnimeDetailsQuery = (animeId: number) => {
             }
         }
     `,
-    variables: {
+        variables: {
             id: animeId
         }
     })

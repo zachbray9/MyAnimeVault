@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
+import { AspectRatio, Badge, Box, Flex, Grid, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -11,12 +11,14 @@ import RatingInputForm from "../components/forms/ratingInputForm";
 import WatchStatusInputForm from "../components/forms/watchStatusInputForm";
 import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedInputForm";
 import { Helmet } from "react-helmet-async";
+import { CharacterEdge } from "../models/characterEdge";
+import CharacterCard from "../components/animeDetails/characterCard";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
     const { animeId } = useParams()
     const { selectedAnime } = animeStore
-    const {userAnimeDetails} = listStore
+    const { userAnimeDetails } = listStore
 
     useEffect(() => {
         const loadAnime = async () => {
@@ -26,6 +28,7 @@ export default observer(function AnimeDetails() {
         }
 
         loadAnime()
+        console.log(animeStore.selectedAnime)
 
         return () => {
             animeStore.clearSelectedAnime()
@@ -33,24 +36,24 @@ export default observer(function AnimeDetails() {
     }, [animeId, animeStore])
 
     useEffect(() => {
-        const loadUserAnime = async() => {
-            if(userStore.user && selectedAnime){
+        const loadUserAnime = async () => {
+            if (userStore.user && selectedAnime) {
                 await listStore.loadUserAnimeDetails(selectedAnime.id)
             }
         }
 
         loadUserAnime()
 
-        return() => {
+        return () => {
             listStore.clearUserAnimeDetails()
         }
     }, [listStore, selectedAnime, userStore.user])
 
-    const averageScore = selectedAnime?.averageScore ? parseFloat((selectedAnime.averageScore * 0.1).toFixed(1)) : null 
+    const averageScore = selectedAnime?.averageScore ? parseFloat((selectedAnime.averageScore * 0.1).toFixed(1)) : null
 
-    if(animeStore.isLoadingSelectedAnime){
+    if (animeStore.isLoadingSelectedAnime) {
         return (
-            <LoadingComponent text="Loading anime..."/>
+            <LoadingComponent text="Loading anime..." />
         )
     }
 
@@ -61,8 +64,8 @@ export default observer(function AnimeDetails() {
             </Helmet>
 
             <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
-                <Stack maxWidth='1200px' justifyContent='center' alignItems='center' gap='8rem'>
-                    <Flex justify='center' wrap='wrap' width='100%' gap='2rem' >
+                <Stack maxWidth='1200px' width='100%' justifyContent='center' alignItems='center' gap='8rem'>
+                    <Flex justify='center' wrap='wrap' gap='2rem' >
                         <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
                         <Stack gap={4}>
                             {/* Title */}
@@ -83,7 +86,7 @@ export default observer(function AnimeDetails() {
                                 <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
                                 <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
                             </Flex>
-                            
+
                             {/* List controls */}
                             <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
                                 {userAnimeDetails ? (
@@ -93,18 +96,54 @@ export default observer(function AnimeDetails() {
                                         <NumEpisodesWatchedInputForm />
                                     </Stack>
                                 ) : (
-                                    <AddToListButtonForm animeToAdd={animeStore.selectedAnime!}/>
+                                    <AddToListButtonForm animeToAdd={animeStore.selectedAnime!} />
                                 )}
                             </Skeleton>
                         </Stack>
                     </Flex>
+                    
 
-                    {selectedAnime?.description && 
-                        <Stack gap='1rem'>
-                            <Heading size='md'>Synopsis</Heading>
-                            <Text dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(selectedAnime?.description)}}/>
-                        </Stack>
-                    }
+                    {/* Synopsis */}
+                    <Stack gap='1rem' width='100%'>
+                        <Heading size='md'>Synopsis</Heading>
+                        {selectedAnime?.description ? (
+                            <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedAnime?.description) }} />
+                        ) : (
+                            <Text>No synopsis</Text>
+                        )}
+                    </Stack>
+
+                    {/* trailer */}
+                    <Stack gap='1rem' width='100%'>
+                        <Heading size='md'>Trailer</Heading>
+                        {selectedAnime?.trailer ? (
+                            <AspectRatio ratio={4 / 3} maxWidth={560}>
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${selectedAnime.trailer.id}`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />   
+                            </AspectRatio>
+                        ) : (
+                            <Text>No trailer</Text>
+                        )}
+                    </Stack>
+
+                    {/* Characters */}
+                    <Stack gap='1rem' width='100%'>
+                        <Heading size='md'>Characters</Heading>
+                        <Grid templateColumns={['1fr', null, '1fr 1fr', '1fr 1fr 1fr']} rowGap='1rem' columnGap='2rem'>
+                            {selectedAnime?.characters ? (
+                                selectedAnime.characters.edges.map((character: CharacterEdge) => (
+                                    <CharacterCard character={character} key={character.node.name.full}/>
+                                ))
+                            ) : (
+                                <Text>No characters</Text>
+                            )}
+
+                        </Grid>
+                    </Stack>
+
                 </Stack>
             </Box>
         </>
