@@ -153,7 +153,7 @@ func GetUserAnimeDetails(userId string, animeId int64, userAnime *dtos.UserAnime
 	err = row.Scan(&rating, &watchStatus, &numEpisodesWatched)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem scanning the db row: %w", err)
+		return customErrors.ErrNotFound
 	}
 
 	userAnime.Rating = rating
@@ -168,12 +168,12 @@ func UpdateUserAnime(userId string, animeId int64, patchRequest requests.UserAni
 	err := GetUserAnimeDetails(userId, animeId, &userAnimeDetails)
 
 	if err != nil {
-		return fmt.Errorf("there was a problem getting the user anime details: %w", err)
+		return err
 	}
 
 	if patchRequest.Rating != nil {
 		if *patchRequest.Rating < 1 || *patchRequest.Rating > 10 {
-			return fmt.Errorf("invalid rating value (rating must be 1-10)")
+			return customErrors.ErrInvalidField
 		}
 
 		userAnimeDetails.Rating = *patchRequest.Rating
@@ -191,14 +191,14 @@ func UpdateUserAnime(userId string, animeId int64, patchRequest requests.UserAni
 		validWatchStatus := allowedWatchStatuses[*patchRequest.WatchStatus]
 
 		if !validWatchStatus {
-			return fmt.Errorf("invalid watch status value")
+			return customErrors.ErrInvalidField
 		}
 		userAnimeDetails.WatchStatus = *patchRequest.WatchStatus
 	}
 
 	if patchRequest.NumEpisodesWatched != nil {
 		if *patchRequest.NumEpisodesWatched < 0 {
-			return fmt.Errorf("invalid numEpisodesWatched value (value cannot be negative)")
+			return customErrors.ErrInvalidField
 		}
 
 		userAnimeDetails.NumEpisodesWatched = *patchRequest.NumEpisodesWatched
