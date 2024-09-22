@@ -76,6 +76,12 @@ export default class UserStore {
         this.setIsAddingAnimeToList(false)
     }
 
+    removeAnimeFromList = async (animeId: number) => {
+        await myApiAgent.List.remove(animeId)
+        runInAction(() => this.user!.animeIds = this.user!.animeIds.filter(id => id !== animeId))
+        store.listStore.clearUserAnimeDetails()
+    }
+
     setIsAddingAnimeToList = (value: boolean) => {
         this.isAddingAnimeToList = value
     }

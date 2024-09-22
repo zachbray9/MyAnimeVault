@@ -13,6 +13,7 @@ import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedI
 import { Helmet } from "react-helmet-async";
 import { CharacterEdge } from "../models/characterEdge";
 import CharacterCard from "../components/animeDetails/characterCard";
+import RemoveFromListButtonForm from "../components/forms/removeFromListButtonForm";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -57,95 +58,98 @@ export default observer(function AnimeDetails() {
         )
     }
 
-    return (
-        <>
-            <Helmet>
-                <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - MyAnimeVault`}</title>
-            </Helmet>
+    if (animeStore.selectedAnime) {
+        return (
+            <>
+                <Helmet>
+                    <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - MyAnimeVault`}</title>
+                </Helmet>
 
-            <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
-                <Stack maxWidth='1200px' width='100%' justifyContent='center' alignItems='center' gap='8rem'>
-                    <Flex justify='center' wrap='wrap' gap='2rem' >
-                        <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
-                        <Stack gap={4}>
-                            {/* Title */}
-                            <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
+                <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
+                    <Stack maxWidth='1200px' width='100%' justifyContent='center' alignItems='center' gap='8rem'>
+                        <Flex justify='center' wrap='wrap' gap='2rem' >
+                            <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
+                            <Stack gap={4}>
+                                {/* Title */}
+                                <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
 
-                            {/* Genres */}
-                            <Wrap>
-                                {selectedAnime?.genres && selectedAnime.genres.map(genre => (
-                                    <Badge key={genre} variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
-                                ))}
-                            </Wrap>
+                                {/* Genres */}
+                                <Wrap>
+                                    {selectedAnime?.genres && selectedAnime.genres.map(genre => (
+                                        <Badge key={genre} variant='subtle' borderRadius={14} width='fit-content' paddingX={2} color='gray.500' fontSize='xs'>{genre}</Badge>
+                                    ))}
+                                </Wrap>
 
-                            {/* Media Type and season */}
-                            <Text fontSize='xs' color='text.subtle'>{`${selectedAnime?.format} | ${selectedAnime?.season} ${selectedAnime?.seasonYear}`}</Text>
+                                {/* Media Type and season */}
+                                <Text fontSize='xs' color='text.subtle'>{`${selectedAnime?.format} | ${selectedAnime?.season} ${selectedAnime?.seasonYear}`}</Text>
 
-                            {/* Score */}
-                            <Flex align='center' justify='start' gap={1}>
-                                <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
-                                <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
-                            </Flex>
+                                {/* Score */}
+                                <Flex align='center' justify='start' gap={1}>
+                                    <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
+                                    <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
+                                </Flex>
 
-                            {/* List controls */}
-                            <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
-                                {userAnimeDetails ? (
-                                    <Stack gap='1rem'>
-                                        <RatingInputForm />
-                                        <WatchStatusInputForm />
-                                        <NumEpisodesWatchedInputForm />
-                                    </Stack>
-                                ) : (
-                                    <AddToListButtonForm animeToAdd={animeStore.selectedAnime!} />
-                                )}
-                            </Skeleton>
-                        </Stack>
-                    </Flex>
-                    
+                                {/* List controls */}
+                                <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
+                                    {userAnimeDetails ? (
+                                        <Stack gap='1rem'>
+                                            <RatingInputForm />
+                                            <WatchStatusInputForm />
+                                            <NumEpisodesWatchedInputForm />
+                                            <RemoveFromListButtonForm animeId={animeStore.selectedAnime!.id} />
+                                        </Stack>
+                                    ) : (
+                                        <AddToListButtonForm animeToAdd={animeStore.selectedAnime!} />
+                                    )}
+                                </Skeleton>
+                            </Stack>
+                        </Flex>
 
-                    {/* Synopsis */}
-                    <Stack gap='1rem' width='100%'>
-                        <Heading size='md'>Synopsis</Heading>
-                        {selectedAnime?.description ? (
-                            <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedAnime?.description) }} />
-                        ) : (
-                            <Text>No synopsis</Text>
-                        )}
-                    </Stack>
 
-                    {/* trailer */}
-                    <Stack gap='1rem' width='100%'>
-                        <Heading size='md'>Trailer</Heading>
-                        {selectedAnime?.trailer ? (
-                            <AspectRatio ratio={4 / 3} maxWidth={560}>
-                                <iframe
-                                    src={`https://www.youtube.com/embed/${selectedAnime.trailer.id}`}
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                />   
-                            </AspectRatio>
-                        ) : (
-                            <Text>No trailer</Text>
-                        )}
-                    </Stack>
-
-                    {/* Characters */}
-                    <Stack gap='1rem' width='100%'>
-                        <Heading size='md'>Characters</Heading>
-                        <Grid templateColumns={['1fr', null, '1fr 1fr', '1fr 1fr 1fr']} rowGap='1rem' columnGap='2rem'>
-                            {selectedAnime?.characters ? (
-                                selectedAnime.characters.edges.map((character: CharacterEdge) => (
-                                    <CharacterCard character={character} key={character.node.name.full}/>
-                                ))
+                        {/* Synopsis */}
+                        <Stack gap='1rem' width='100%'>
+                            <Heading size='md'>Synopsis</Heading>
+                            {selectedAnime?.description ? (
+                                <Text dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedAnime?.description) }} />
                             ) : (
-                                <Text>No characters</Text>
+                                <Text>No synopsis</Text>
                             )}
+                        </Stack>
 
-                        </Grid>
+                        {/* trailer */}
+                        <Stack gap='1rem' width='100%'>
+                            <Heading size='md'>Trailer</Heading>
+                            {selectedAnime?.trailer ? (
+                                <AspectRatio ratio={4 / 3} maxWidth={560}>
+                                    <iframe
+                                        src={`https://www.youtube.com/embed/${selectedAnime.trailer.id}`}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </AspectRatio>
+                            ) : (
+                                <Text>No trailer</Text>
+                            )}
+                        </Stack>
+
+                        {/* Characters */}
+                        <Stack gap='1rem' width='100%'>
+                            <Heading size='md'>Characters</Heading>
+                            <Grid templateColumns={['1fr', null, '1fr 1fr', '1fr 1fr 1fr']} rowGap='1rem' columnGap='2rem'>
+                                {selectedAnime?.characters ? (
+                                    selectedAnime.characters.edges.map((character: CharacterEdge) => (
+                                        <CharacterCard character={character} key={character.node.name.full} />
+                                    ))
+                                ) : (
+                                    <Text>No characters</Text>
+                                )}
+
+                            </Grid>
+                        </Stack>
+
                     </Stack>
-
-                </Stack>
-            </Box>
-        </>
-    )
+                </Box>
+            </>
+        )
+    }
 })
