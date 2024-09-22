@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"myanimevault/models/dtos"
 	"myanimevault/models/customErrors"
+	"myanimevault/models/dtos"
 	"myanimevault/models/requests"
 	"myanimevault/services"
 	"net/http"
@@ -51,7 +51,7 @@ func GetUserAnimeDetails(context *gin.Context) {
 	animeId, err := strconv.ParseInt(context.Param("animeId"), 10, 64)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Anime id in url path is invalid"})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_anime_id"})
 		return
 	}
 
@@ -60,8 +60,14 @@ func GetUserAnimeDetails(context *gin.Context) {
 	err = services.GetUserAnimeDetails(userId, animeId, &userAnime)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem retrieving the UserAnime details."})
-		return
+		switch err {
+		case customErrors.ErrNotFound:
+			context.JSON(http.StatusNotFound, gin.H{"error": "not_found"})
+			return
+		default:
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+			return
+		}
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "successfully retrieved UserAnime details.", "userAnime": userAnime})
@@ -72,7 +78,7 @@ func UpdateUserAnime(context *gin.Context) {
 	animeId, err := strconv.ParseInt(context.Param("animeId"), 10, 64)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "Anime id in url path is invalid"})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_anime_id"})
 		return
 	}
 
@@ -80,15 +86,24 @@ func UpdateUserAnime(context *gin.Context) {
 	err = context.ShouldBindJSON(&patchRequest)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "There was an issue with one or more of the fields in your request."})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_field"})
 		return
 	}
 
 	err = services.UpdateUserAnime(userId, animeId, patchRequest)
 
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem updating the database."})
-		return
+		switch err {
+		case customErrors.ErrInvalidField:
+			context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_field"})
+			return
+		case customErrors.ErrNotFound:
+			context.JSON(http.StatusNotFound, gin.H{"error": "not_found"})
+			return
+		default:
+			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
+			return
+		}
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully updated the UserAnime."})

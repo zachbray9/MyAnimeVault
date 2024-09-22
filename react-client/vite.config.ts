@@ -5,7 +5,8 @@ import mkcert from 'vite-plugin-mkcert'
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    outDir: '../api/wwwroot'
+    outDir: '../api/wwwroot',
+    emptyOutDir: true
   },
   server: {
     https: true

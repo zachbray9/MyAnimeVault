@@ -7,7 +7,7 @@ interface Props {
 
 export default function CharacterCard({ character }: Props) {
     return (
-        <Box maxHeight='300px' height='100%' width='100%' bg='surface.1' overflow='hidden'>
+        <Box height='auto' width='100%' bg='surface.1' overflow='hidden'>
             <Grid templateColumns='1fr 1fr'>
                 <GridItem display='flex'>
                     <Grid templateColumns='60px auto'>
