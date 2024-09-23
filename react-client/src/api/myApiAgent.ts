@@ -86,7 +86,8 @@ const List = {
     add: (anime: AniListAnime) => requests.post('/user/anime', anime),
     getList: () => requests.get<GetListResponse>('/user/anime'),
     getUserAnimeDetails: (animeId: number) => requests.get<GetUserAnimeDetailsResponse>(`/user/anime/${animeId}`),
-    updateUserAnime: (animeId: number, patchRequest: UserAnimePatchRequest) => requests.patch(`/user/anime/${animeId}`, patchRequest)
+    updateUserAnime: (animeId: number, patchRequest: UserAnimePatchRequest) => requests.patch(`/user/anime/${animeId}`, patchRequest),
+    remove: (animeId: number) => requests.delete(`/user/anime/${animeId}`)
 }
 
 export const myApiAgent = {
