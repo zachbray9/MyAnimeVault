@@ -12,7 +12,7 @@ export default observer(function Navbar() {
     const { userStore } = useStore()
 
     return (
-        <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={11} >
+        <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={9999} >
             {/* Hamburger menu button for small screens */}
             <IconButton
                 aria-label="hamburger-menu"
