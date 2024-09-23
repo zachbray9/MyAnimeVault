@@ -41,10 +41,22 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
                                         <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
+
                                         {userStore.user?.animeIds.includes(anime.id) ? (
-                                            <Tooltip label='Already on list' hasArrow>
-                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline' />
-                                            </Tooltip>
+                                            <Formik
+                                                initialValues={{ animeId: anime.id }}
+                                                onSubmit={(values) => userStore.removeAnimeFromList(values.animeId)
+                                                    .catch(() => toast({ title: 'Error', description: 'There was a problem removing the anime from your list.', status: 'error', duration: 5000, isClosable: true, position: 'top' }))}
+                                            >
+                                                {({ handleSubmit, isSubmitting }) => (
+                                                    <Form onSubmit={handleSubmit}>
+                                                        <Tooltip label='Remove from list' hasArrow>
+                                                            <IconButton aria-label="already-on-list" type="submit" icon={<FaCheck />} variant='outline' isLoading={isSubmitting} />
+                                                        </Tooltip>
+                                                    </Form>
+                                                )}
+                                            </Formik>
+
                                         ) : (
                                             <Formik
                                                 initialValues={{ anime: anime }}
@@ -59,7 +71,6 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                                     </Form>
                                                 )}
                                             </Formik>
-
                                         )}
 
                                     </Flex>
