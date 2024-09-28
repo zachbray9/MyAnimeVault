@@ -13,7 +13,11 @@ export const TopAiringShowsQuery = () => {
                             large
                         }
                         description
+                        averageScore
                         episodes
+                        format
+                        season
+                        seasonYear
                     }
                 }
             }

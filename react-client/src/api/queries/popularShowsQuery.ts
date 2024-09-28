@@ -13,7 +13,11 @@ export const LoadPopularShowsQuery = () => {
                             large
                         }
                         description
+                        averageScore
                         episodes
+                        format
+                        season
+                        seasonYear
                     }
                 }
             }
