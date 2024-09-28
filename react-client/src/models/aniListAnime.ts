@@ -18,6 +18,7 @@ export interface AniListAnime {
     genres?: string[]
     status?: string
     averageScore?: number
+    numScored?: number
     popularity?: string
     format?: string
     season?: string

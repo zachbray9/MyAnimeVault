@@ -13,7 +13,11 @@ export const LoadUpcomingShowsQuery = () => {
                                 large
                             }
                             description
+                            averageScore
                             episodes
+                            format
+                            season
+                            seasonYear
                         }
                     }
                 }

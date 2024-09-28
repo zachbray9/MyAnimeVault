@@ -1,11 +1,10 @@
-import { AspectRatio, Badge, Box, Flex, Grid, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
+import { AspectRatio, Badge, Box, Button, Flex, Grid, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { FaStar } from "react-icons/fa6";
+import { FaPlus, FaStar, FaTrash } from "react-icons/fa6";
 import DOMPurify from "dompurify";
-import AddToListButtonForm from "../components/forms/addToListButtonForm";
 import LoadingComponent from "../components/common/loading/LoadingComponent";
 import RatingInputForm from "../components/forms/ratingInputForm";
 import WatchStatusInputForm from "../components/forms/watchStatusInputForm";
@@ -13,7 +12,6 @@ import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedI
 import { Helmet } from "react-helmet-async";
 import { CharacterEdge } from "../models/characterEdge";
 import CharacterCard from "../components/animeDetails/characterCard";
-import RemoveFromListButtonForm from "../components/forms/removeFromListButtonForm";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -96,10 +94,10 @@ export default observer(function AnimeDetails() {
                                             <RatingInputForm />
                                             <WatchStatusInputForm />
                                             <NumEpisodesWatchedInputForm />
-                                            <RemoveFromListButtonForm animeId={animeStore.selectedAnime!.id} />
+                                            <Button variant='outline' isLoading={userStore.isRemovingAnimeFromList} width='fit-content' rightIcon={<FaTrash />} onClick={() => userStore.removeAnimeFromList(animeStore.selectedAnime!.id)}>Remove from list</Button>
                                         </Stack>
                                     ) : (
-                                        <AddToListButtonForm animeToAdd={animeStore.selectedAnime!} />
+                                        <Button variant='solid' isLoading={userStore.isAddingAnimeToList} width='fit-content' rightIcon={<FaPlus />} onClick={() => userStore.addAnimeToList(animeStore.selectedAnime!)}>Add to list</Button>
                                     )}
                                 </Skeleton>
                             </Stack>

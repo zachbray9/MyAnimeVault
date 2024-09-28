@@ -6,16 +6,18 @@ import { store } from "./store";
 import { RegisterRequest } from "../models/requests/registerRequest";
 import { AniListAnime } from "../models/aniListAnime";
 import router from "../router/routes";
+import { createStandaloneToast } from "@chakra-ui/react";
 
 export default class UserStore {
     user: User | null = null
     isAddingAnimeToList: boolean = false
+    isRemovingAnimeFromList: boolean = false
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    get isLoggedIn(){
+    get isLoggedIn() {
         return !!this.user
     }
 
@@ -34,7 +36,7 @@ export default class UserStore {
     }
 
     logout = async () => {
-        try{
+        try {
             await myApiAgent.Auth.logout()
         } catch (error) {
             console.log(error)
@@ -57,32 +59,55 @@ export default class UserStore {
     }
 
     addAnimeToList = async (anime: AniListAnime) => {
-        if(!this.user){
+        const { toast } = createStandaloneToast()
+
+        if (!this.user) {
             router.navigate('/login')
             return
         }
 
         this.setIsAddingAnimeToList(true)
 
-        console.log(anime)
-        await myApiAgent.List.add(anime)
-        runInAction(() => this.user?.animeIds.push(anime.id))
-        store.listStore.setUserAnimeDetails({
-            rating: 0,
-            watchStatus: 'Plan to watch',
-            numEpisodesWatched: 0
-        })
+        try {
+            await myApiAgent.List.add(anime)
+            runInAction(() => this.user?.animeIds.push(anime.id))
+            store.listStore.setUserAnimeDetails({
+                rating: 0,
+                watchStatus: 'Plan to watch',
+                numEpisodesWatched: 0
+            })
 
-        this.setIsAddingAnimeToList(false)
+            this.setIsAddingAnimeToList(false)
+        } catch (error) {
+            console.log(error)
+            toast({ title: 'Error', description: 'There was a problem adding the anime to your list.', status: 'error', duration: 5000, isClosable: true, position: 'top' })
+            this.setIsAddingAnimeToList(false)
+        }
+
     }
 
     removeAnimeFromList = async (animeId: number) => {
-        await myApiAgent.List.remove(animeId)
-        runInAction(() => this.user!.animeIds = this.user!.animeIds.filter(id => id !== animeId))
-        store.listStore.clearUserAnimeDetails()
+        const { toast } = createStandaloneToast()
+
+        this.setIsRemovingAnimeFromList(true)
+
+        try{
+            await myApiAgent.List.remove(animeId)
+            runInAction(() => this.user!.animeIds = this.user!.animeIds.filter(id => id !== animeId))
+            store.listStore.clearUserAnimeDetails()
+            this.setIsRemovingAnimeFromList(false)
+        } catch (error) {
+            console.log(error)
+            toast({title: 'Error', description: 'There was a problem removing the anime from your list.', status: 'error', duration: 5000, isClosable: true, position: 'top'})
+            this.setIsRemovingAnimeFromList(false)
+        }
     }
 
     setIsAddingAnimeToList = (value: boolean) => {
         this.isAddingAnimeToList = value
     }
+
+    setIsRemovingAnimeFromList = (value: boolean) => {
+        this.isRemovingAnimeFromList = value
+    } 
 }
