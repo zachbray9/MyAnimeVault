@@ -3,7 +3,6 @@ import { Input, InputGroup, InputLeftElement, Stack, Text } from "@chakra-ui/rea
 import ReactSelect from "react-select";
 import { useReactSelectStyles } from "../../styles/reactSelectStyles";
 import { WatchStatusOptions } from "../../constants/watchStatusOptions";
-import { GenreOptions } from "../../constants/genreOptions";
 import { SortOptions } from "../../constants/sortOptions";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
@@ -33,7 +32,7 @@ export default observer(function FilterSection() {
                     onChange={selectedOption => listStore.setWatchStatusFilter(selectedOption ? selectedOption.value as string : null)}
                     isClearable
                 />
-                <ReactSelect<ReactSelectOption, true>
+                {/* <ReactSelect<ReactSelectOption, true>
                     styles={selectStyles}
                     placeholder='Genres'
                     options={GenreOptions}
@@ -43,7 +42,7 @@ export default observer(function FilterSection() {
                     onChange={selectedGenres => {
                         listStore.setGenresFilter(selectedGenres.map(option => option.value as string))
                     }}
-                />
+                /> */}
             </Stack>
 
             <Stack gap='0.5rem'>

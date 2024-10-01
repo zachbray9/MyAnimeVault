@@ -34,9 +34,9 @@ export default observer(function List() {
                             <FilterSection />
                         </GridItem>
 
-                        <GridItem as={Stack} alignItems='end'>
+                        <GridItem as={Stack} alignItems='end' gap='1rem'>
                             <Text color='text.subtle'>{`${filteredList.length} entries`}</Text>
-                            
+
                             <Stack gap={['1rem', '1.25rem', '2rem']} width='100%'>
                                 {filteredList.map(userAnime => (
                                     <AnimeListEntry userAnime={userAnime} key={userAnime.id}/>
