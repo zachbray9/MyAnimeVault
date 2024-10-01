@@ -8,15 +8,15 @@ interface Props {
 }
 
 export default function AnimeListEntry({ userAnime }: Props) {
-    const imageHeight = ['150px', '225px', '300px']
+    const imageHeight = ['100px', '150px', '225px']
 
     return (
-        <Flex as={NavLink} to={`/anime/${userAnime.id}/details`} key={userAnime.id} width='100%' justify='start' gap={['1.5rem', '1.75rem', '2rem']} padding={['1rem', '1.25rem', '1.5rem']} _hover={{ bg: 'surface.1' }}>
+        <Flex as={NavLink} to={`/anime/${userAnime.id}/details`} key={userAnime.id} width='100%' justify='start' gap={['1.5rem', '1.75rem', '2rem']} padding={['0.5rem', '0.75rem', '1rem']} _hover={{ bg: 'surface.1' }}>
             <Image src={userAnime.coverImage?.large} aspectRatio='2/3' boxSize={imageHeight} objectFit='contain' />
             <Stack width='100%' justify='space-between'>
                 <Stack>
-                    <Heading size={['sm', 'md', 'lg']}>{userAnime.title?.english || userAnime.title?.romaji}</Heading>
-                    <Text fontSize={['xs', 'sm', 'md']} color='text.subtle'>{`${userAnime.format}, ${userAnime.season} ${userAnime.seasonYear}`}</Text>
+                    <Heading size={['sm', 'md']}>{userAnime.title?.english || userAnime.title?.romaji}</Heading>
+                    <Text fontSize={['xs', 'sm']} color='text.subtle'>{`${userAnime.format}, ${userAnime.season} ${userAnime.seasonYear}`}</Text>
                 </Stack>
 
                 <Stack>
