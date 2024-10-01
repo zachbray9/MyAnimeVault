@@ -1,17 +1,13 @@
 import Select, { SingleValue } from 'react-select'
 import { useField, useFormikContext } from "formik";
 import { useToken } from '@chakra-ui/react';
-
-interface Option{
-    value: string | number,
-    label: string
-}
+import { ReactSelectOption } from '../../../models/reactSelectOption';
 
 interface Props {
     name: string
-    options: Option[]
+    options: ReactSelectOption[]
     autoSubmit?: boolean
-    isSubmtting: boolean
+    isSubmtting?: boolean
 }
 
 export default function FormSelect({ name, options, autoSubmit, isSubmtting }: Props) {
@@ -19,15 +15,13 @@ export default function FormSelect({ name, options, autoSubmit, isSubmtting }: P
     const { setFieldValue, submitForm } = useFormikContext()
     const [primarybase, surface1, surface2, text] = useToken('colors', ['primary.base', 'surface.1', 'surface.2', 'text._dark'])
 
-    const selectedOption = options.find(option => option.value === field.value)
-
     return (
-        <Select
-            value={selectedOption}
+        <Select<ReactSelectOption>
             options={options}
+            value={options.find(option => option.value === field.value)}
             isDisabled={isSubmtting}
             isLoading={isSubmtting}
-            onChange={(selectedOption: SingleValue<Option>) => {
+            onChange={(selectedOption: SingleValue<ReactSelectOption>) => {
                 setFieldValue(name, selectedOption?.value)
 
                 if (autoSubmit) {

@@ -5,13 +5,32 @@ import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest"
 import { store } from "./store";
 
 export default class ListStore {
-    list: UserAnimeDetails[] | null = []
+    list: UserAnimeDetails[] = []
     userAnimeDetails: UserAnimeDetails | null = null
     isLoadingUserAnimeDetails: boolean = false
     isLoadingList: boolean = false
+    searchQuery: string = ''
+    watchStatusFilter: string | null = null
+    genresFilter: string[] = []
+    sortPreference: string = 'title'
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    get filteredList() {
+        let filteredList: UserAnimeDetails[] = this.list
+
+        if(this.searchQuery) filteredList = filteredList.filter(userAnime => userAnime.title?.romaji?.toLowerCase().includes(this.searchQuery.toLowerCase()) || userAnime.title?.english?.toLowerCase().includes(this.searchQuery.toLowerCase()))
+
+        if (this.watchStatusFilter) filteredList = filteredList.filter(userAnime => userAnime.watchStatus === this.watchStatusFilter)
+        
+        let sortedList: UserAnimeDetails[] = []
+        if (this.sortPreference === 'title') sortedList = filteredList.slice().sort((a, b) => a.title!.romaji!.localeCompare(b.title!.romaji!))
+        if (this.sortPreference === 'rating') sortedList = filteredList.slice().sort((a, b) => b.rating - a.rating)
+        if (this.sortPreference === 'progress') sortedList = filteredList.slice().sort((a, b) => b.numEpisodesWatched - a.numEpisodesWatched)
+
+        return sortedList
     }
 
     loadList = async () => {
@@ -66,6 +85,22 @@ export default class ListStore {
 
     setIsLoadingUserAnimeDetails = (value: boolean) => {
         this.isLoadingUserAnimeDetails = value
+    }
+
+    setSearchQuery = (query: string) => {
+        this.searchQuery = query
+    }
+
+    setWatchStatusFilter = (watchStatusFilter: string | null) => {
+        this.watchStatusFilter = watchStatusFilter
+    }
+
+    setGenresFilter = (genres: string[]) => {
+        this.genresFilter = genres
+    }
+
+    setSortPreference = (sortPreference: string) => {
+        this.sortPreference = sortPreference
     }
 
     clearList = () => {
