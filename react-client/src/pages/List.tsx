@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Skeleton, Stack, Text } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
@@ -38,12 +38,18 @@ export default observer(function List() {
                             <Text color='text.subtle'>{`${filteredList.length} entries`}</Text>
 
                             <Stack gap={['1rem', '1.25rem', '2rem']} width='100%'>
-                                {filteredList.map(userAnime => (
-                                    <AnimeListEntry userAnime={userAnime} key={userAnime.id}/>
-                                ))}
+                                {listStore.isLoadingList ? (
+                                        Array.from({ length: 5 }).map((_, index) => (
+                                            <Skeleton key={index} height={['100px', '150px', '225px']} />
+                                        ))
+                                ) : (
+                                    filteredList.map(userAnime => (
+                                        <AnimeListEntry userAnime={userAnime} key={userAnime.id} />
+                                    ))
+                                )}
                             </Stack>
                         </GridItem>
-                        
+
                     </Grid>
                 </Stack>
             </Box>
