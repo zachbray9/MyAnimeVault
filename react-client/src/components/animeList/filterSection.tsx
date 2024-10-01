@@ -19,7 +19,7 @@ export default observer(function FilterSection() {
                     <SearchIcon color='text.subtle' />
                 </InputLeftElement>
 
-                <Input placeholder="Search" variant='outline' onChange={e => listStore.setSearchQuery(e.target.value)}/>
+                <Input placeholder="Search" variant='outline' value={listStore.searchQuery} onChange={e => listStore.setSearchQuery(e.target.value)}/>
             </InputGroup>
 
             <Stack gap='0.5rem'>
