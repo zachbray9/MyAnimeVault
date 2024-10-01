@@ -3,18 +3,11 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import FormSelect from "../common/form/FormSelect";
 import { useToast } from "@chakra-ui/react";
+import { WatchStatusOptions } from "../../constants/watchStatusOptions";
 
 export default observer(function WatchStatusInputForm() {
     const { listStore } = useStore()
     const toast = useToast()
-
-    const watchStatusOptions = [
-        {value: 'Watching', label: 'Watching'},
-        {value: 'Completed', label: 'Completed'},
-        {value: 'On hold', label: 'On hold'},
-        {value: 'Dropped', label: 'Dropped'},
-        {value: 'Plan to watch', label: 'Plan to watch'},
-    ]
 
     return (
         <Formik
@@ -25,7 +18,7 @@ export default observer(function WatchStatusInputForm() {
         >
             {({ handleSubmit, isSubmitting }) => (
                 <Form onSubmit={handleSubmit}>
-                    <FormSelect name="watchStatus" options={watchStatusOptions} autoSubmit isSubmtting={isSubmitting}/>
+                    <FormSelect name="watchStatus" options={WatchStatusOptions} autoSubmit isSubmtting={isSubmitting}/>
                 </Form>
             )}
         </Formik>

@@ -3,23 +3,11 @@ import { useStore } from "../../stores/store";
 import { useToast } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import FormSelect from "../common/form/FormSelect";
+import { RatingOptions } from "../../constants/ratingOptions";
 
 export default observer(function RatingInputForm() {
     const { listStore } = useStore()
     const toast = useToast()
-
-    const ratingOptions = [
-        {value: 1, label: '(1) Appalling'},
-        {value: 2, label: '(2) Horrible'},
-        {value: 3, label: '(3) Very bad'},
-        {value: 4, label: '(4) Bad'},
-        {value: 5, label: '(5) Average'},
-        {value: 6, label: '(6) Fine'},
-        {value: 7, label: '(7) Good'},
-        {value: 8, label: '(8) Very good'},
-        {value: 9, label: '(9) Great'},
-        {value: 10, label: '(10) Masterpiece'},
-    ]
 
     return (
         <Formik
@@ -30,7 +18,7 @@ export default observer(function RatingInputForm() {
         >
             {({ handleSubmit, isSubmitting }) => (
                 <Form onSubmit={handleSubmit}>
-                    <FormSelect name="rating" options={ratingOptions} autoSubmit isSubmtting={isSubmitting} />
+                    <FormSelect name="rating" options={RatingOptions} autoSubmit isSubmtting={isSubmitting} />
                 </Form>
             )}
         </Formik>

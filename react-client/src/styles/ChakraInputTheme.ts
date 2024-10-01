@@ -24,4 +24,25 @@ const flushed = definePartsStyle({
     }
 })
 
-export const InputTheme = defineMultiStyleConfig({ variants: { flushed } })
+const outline = definePartsStyle({
+    field: {
+        border: '1px solid',
+        borderRadius: '6px',
+        _focus: {
+            borderColor: 'primary.base',
+            boxShadow: 'none',
+            _hover: {
+                borderColor: 'primary.base',
+                boxShadow: 'none'
+            }
+        },
+        '&:-webkit-autofill': {
+            backgroundColor: 'transparent', // Ensure it doesn't change to a different color
+            boxShadow: '0 0 0px 1000px transparent inset',
+            WebkitTextFillColor: 'inherit', // Keep text color same as the rest of the inputs
+            transition: 'background-color 5000s ease-in-out 0s', // Prevent browser's autofill transition effect
+        },
+    }
+})
+
+export const InputTheme = defineMultiStyleConfig({ variants: { flushed, outline } })

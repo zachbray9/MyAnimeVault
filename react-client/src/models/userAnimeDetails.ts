@@ -15,4 +15,5 @@ export interface UserAnimeDetails{
     season?: string
     seasonYear?: number
     episodes?: number
+    genres?: string[]
 }

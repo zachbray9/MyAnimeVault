@@ -36,7 +36,7 @@ func AddAnimeToList(userId string, userAnime dtos.UserAnimeDto) error {
 		userAnime.Season,
 		userAnime.SeasonYear,
 		userAnime.Episodes,
-		"Plan to Watch",
+		"watching",
 		5,
 		0,
 	)
@@ -181,11 +181,11 @@ func UpdateUserAnime(userId string, animeId int64, patchRequest requests.UserAni
 
 	if patchRequest.WatchStatus != nil {
 		allowedWatchStatuses := map[string]bool{
-			"Watching":      true,
-			"Completed":     true,
-			"On hold":       true,
-			"Dropped":       true,
-			"Plan to watch": true,
+			"watching":      true,
+			"completed":     true,
+			"on hold":       true,
+			"dropped":       true,
+			"plan to watch": true,
 		}
 
 		validWatchStatus := allowedWatchStatuses[*patchRequest.WatchStatus]
