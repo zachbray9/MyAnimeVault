@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { FaCheck, FaRegBookmark, FaStar } from "react-icons/fa6";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
+import '../../styles/CarouselCard.css'
 
 interface Props {
     anime: AniListAnime
@@ -40,7 +41,7 @@ export default observer(function CarouselCard({ anime }: Props) {
 
             <Text fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>
 
-            <Box className='overlay' position='absolute' top='-.5rem' bottom='-.5rem' right='-.5rem' left='-.5rem' opacity={0} transition='opacity 0.2s ease'>
+            <Box className='overlay' position='absolute' top='-.5rem' bottom='-.5rem' right='-.5rem' left='-.5rem' opacity={0} transition='opacity 0.2s ease' overflow='hidden'>
                 <Image src={anime.coverImage.large} position='absolute' top={0} bottom={0} left={0} right={0} width='100%' height='100%' objectFit='cover' />
                 <Box position='absolute' top={0} bottom={0} left={0} right={0} bg='rgb(20, 21, 25, 0.9)'>
                     <Stack height='100%' justifyContent='space-between' padding='0.5rem'>
