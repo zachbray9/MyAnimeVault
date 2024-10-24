@@ -16,7 +16,7 @@ export default function FooterItem({ children, href, isExternal, icon, onClick }
         color: 'text.subtle',
         _hover: {
             color: 'text._dark',
-            textDecoration: 'underline',
+            textDecoration: 'underline',                              
             cursor: 'pointer'
         }
     }
