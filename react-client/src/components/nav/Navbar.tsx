@@ -1,11 +1,12 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Button, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Grid, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuGroup, MenuItem, MenuList, Spacer, Stack, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import Logo from "../../assets/MyAnimeVaultLogo.png"
 import { observer } from "mobx-react-lite";
+import SideMenuButton from "./SideMenuButton";
 
 export default observer(function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
@@ -30,11 +31,39 @@ export default observer(function Navbar() {
             />
 
             {/* Menu for small screens */}
-            <Drawer placement="left" isOpen={isOpen} onClose={onClose} size={{ base: 'full', sm: 'xs' }} >
+            <Drawer placement="left" isOpen={isOpen} onClose={onClose} size={{ base: 'full', sm: 'xs' }} trapFocus={false}>
                 <DrawerOverlay marginTop={navBarHeight} />
 
-                <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none'>
-                    <DrawerHeader>Coming soon!</DrawerHeader>
+                <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none' padding='0px'>
+                    <DrawerHeader color='text.subtle'>Browse</DrawerHeader>
+                    <DrawerBody as={Stack} paddingX='0px'>
+                        <SideMenuButton>New</SideMenuButton>
+                        <SideMenuButton>Popular</SideMenuButton>
+                        <Accordion allowToggle>
+                            <AccordionItem border='none' boxShadow='none'>
+                                <h2>
+                                    <AccordionButton>
+                                        <Box flex={1} textAlign='left'>Browse</Box>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                </h2>
+                                <AccordionPanel as={Stack} background='surface.2' padding='0px' gap={0}>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Action</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Adventure</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Comedy</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Drama</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Fantasy</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Horror</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Mystery</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Romance</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Sci-Fi</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Slice of Life</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Sports</SideMenuButton>
+                                    <SideMenuButton paddingX="2.5rem" paddingY="1.5rem">Supernatural</SideMenuButton>
+                                </AccordionPanel>
+                            </AccordionItem>
+                        </Accordion>
+                    </DrawerBody>
                 </DrawerContent>
             </Drawer>
 
@@ -64,7 +93,33 @@ export default observer(function Navbar() {
                 </MenuButton>
 
                 <MenuList>
-                    <MenuItem>Coming soon!</MenuItem>
+                    <Grid width='600px' templateColumns='1fr 3fr'>
+                        <Box maxWidth='300px'>
+                            <MenuGroup>
+                                <MenuItem>New</MenuItem>
+                                <MenuItem>Popular</MenuItem>
+                            </MenuGroup>
+                        </Box>
+
+                        <Box borderLeft='.125rem solid #23252b'>
+                            <MenuGroup title="Genres" color='text.subtle'>
+                                <Grid templateColumns='repeat(3, 1fr)' columnGap='1rem'>
+                                    <MenuItem>Action</MenuItem>
+                                    <MenuItem>Adventure</MenuItem>
+                                    <MenuItem>Comedy</MenuItem>
+                                    <MenuItem>Drama</MenuItem>
+                                    <MenuItem>Fantasy</MenuItem>
+                                    <MenuItem>Horror</MenuItem>
+                                    <MenuItem>Mystery</MenuItem>
+                                    <MenuItem>Romance</MenuItem>
+                                    <MenuItem>Sci-Fi</MenuItem>
+                                    <MenuItem>Slice of Life</MenuItem>
+                                    <MenuItem>Sports</MenuItem>
+                                    <MenuItem>Supernatural</MenuItem>
+                                </Grid>
+                            </MenuGroup>
+                        </Box>
+                    </Grid>
                 </MenuList>
             </Menu>
 
