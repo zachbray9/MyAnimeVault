@@ -20,8 +20,8 @@ export default function SideMenu({isOpen, onClose} : Props){
                         <Accordion allowToggle>
                             <AccordionItem border='none' boxShadow='none'>
                                 <h2>
-                                    <AccordionButton>
-                                        <Box flex={1} textAlign='left'>Browse</Box>
+                                    <AccordionButton _focus={{background: 'inherit'}}>
+                                        <Box flex={1} textAlign='left' fontWeight={500}>Browse</Box>
                                         <AccordionIcon />
                                     </AccordionButton>
                                 </h2>
