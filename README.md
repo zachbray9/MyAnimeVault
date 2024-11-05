@@ -21,7 +21,6 @@
 * Made Api calls using custom Axios agent and interceptors
 ### Styling
 * Learned about Chakra Ui's diverse component library 
-* Created custom theme to implement dark mode and globally adjust component styles to whatever I want
 * Used Chakra's built in breakpoints to make components responsive for different screen sizes
 ### Central State Management
 * Used MobX to create stores for different parts of the application (commonStore, userStore, animeStore, etc..)
@@ -29,8 +28,8 @@
 ### Authentication
 * Implemented JWT Bearer authentication for my api to ensure only authorized users could call my endpoints.
 * Used Auth and Refresh Tokens to allow users to call the api without having to reauthenticate every time.
-### Entity Framework
-* Learned about relational databases and how to create entity relationships.
+### Gin Framework and PostgresSQL
+* Learned about the Gin Framework engine and how to create API endpoints and handlers.
 * Handwrote SQL tables and queries for maximum performance and customization.
 ### Render
 * Used Renders built in PostgreSQL database for my production database.
