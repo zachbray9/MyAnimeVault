@@ -36,7 +36,7 @@ export default observer(function CarouselCard({ anime }: Props) {
     }
 
     return (
-        <Box as={NavLink} to={`/anime/${anime.id}/details`} key={anime.id} position='relative' gap={4} bg='surface.1' cursor='pointer' _hover={{'.overlay': {opacity: 1}}}>
+        <Box as={NavLink} to={`/anime/${anime.id}/details`} key={anime.id} position='relative' gap={4} cursor='pointer' _hover={{'.overlay': {opacity: 1}}}>
             <Image src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
 
             <Text fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>

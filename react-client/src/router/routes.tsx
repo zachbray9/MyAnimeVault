@@ -7,6 +7,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import List from "../pages/List";
 import RequireAuth from "./requireAuth";
+import Browse from "../pages/Browse";
 
 
 const router = createBrowserRouter([
@@ -21,7 +22,8 @@ const router = createBrowserRouter([
             { path: 'anime/:animeId/details', element: <AnimeDetails /> },
             { path: 'anime/search', element: <Search /> },
             { path: 'login', element: <Login /> },
-            { path: 'register', element: <Register /> }
+            { path: 'register', element: <Register /> },
+            { path: 'anime/browse/:category?', element: <Browse /> }
         ],
     },
 ])

@@ -8,6 +8,7 @@ import { LoadUpcomingShowsQuery } from "../api/queries/upcomingShowsQuery"
 import { LoadPopularShowsQuery } from "../api/queries/popularShowsQuery"
 import { TopAiringShowsQuery } from "../api/queries/topAiringShowsQuery"
 import { FeaturedShowsQuery } from "../api/queries/featuredShowsQuery"
+import { CategoryQuery } from "../api/queries/categoryQuery"
 
 export default class AnimeStore {
     selectedAnime: AniListAnime | null = null
@@ -100,6 +101,18 @@ export default class AnimeStore {
         } catch (error) {
             console.log("Couldn't load selected anime: " + error)
             this.setIsLoadingSelectedAnime(false)
+        }
+    }
+
+    loadAnimeCategory = async(genre: string | undefined, sortBy: string) : Promise<AniListAnime[]> => {
+        const query = CategoryQuery(genre, sortBy)
+
+        try{
+            const response = await aniListAgent.AnimeData.getCategory(query)
+            return response.data.Page.media
+        } catch (error) {
+            console.log(error)
+            return []
         }
     }
 

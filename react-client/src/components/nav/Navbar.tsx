@@ -1,11 +1,12 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Button, Drawer, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
+import { Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
 import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import Logo from "../../assets/MyAnimeVaultLogo.png"
 import { observer } from "mobx-react-lite";
+import SideMenu from "./SideMenu";
+import BrowseMenu from "./BrowseMenu";
 
 export default observer(function Navbar() {
     const { isOpen, onClose, onToggle } = useDisclosure()
@@ -30,13 +31,7 @@ export default observer(function Navbar() {
             />
 
             {/* Menu for small screens */}
-            <Drawer placement="left" isOpen={isOpen} onClose={onClose} size={{ base: 'full', sm: 'xs' }} >
-                <DrawerOverlay marginTop={navBarHeight} />
-
-                <DrawerContent marginTop={navBarHeight} bg='surface.1' boxShadow='none' border='none'>
-                    <DrawerHeader>Coming soon!</DrawerHeader>
-                </DrawerContent>
-            </Drawer>
+            <SideMenu isOpen={isOpen} onClose={onClose}/>
 
             {/* Logo */}
             <Flex as={NavLink} to={''} align='center' gap='0.5rem' padding='1rem'>
@@ -45,28 +40,7 @@ export default observer(function Navbar() {
             </Flex>
 
             {/* Browse Menu */}
-            <Menu>
-                <MenuButton
-                    as={Button}
-                    rightIcon={<ChevronDownIcon />}
-                    display={{ base: 'none', md: 'flex' }}
-                    variant='unstyled'
-                    size='sm'
-                    padding='1rem'
-                    height='100%'
-                    width='auto'
-                    alignItems='center'
-                    borderRadius={0}
-                    _hover={{ bg: '#141519' }}
-                    _active={{ bg: '#141519' }}
-                >
-                    Browse
-                </MenuButton>
-
-                <MenuList>
-                    <MenuItem>Coming soon!</MenuItem>
-                </MenuList>
-            </Menu>
+            <BrowseMenu />
 
             <Spacer />
 
