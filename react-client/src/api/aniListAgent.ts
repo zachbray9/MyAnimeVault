@@ -17,6 +17,7 @@ const AnimeData = {
     getUpcoming: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
     getPopular: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
     getTopAiring: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
+    getCategory: (query: {query: string}) => requests.post<AniListResponseDataPaged>('', query),
     getAnimeDetails: (query: {query: string, variables: {id: number}}) => requests.post<AniListResponseDataSingle>('', query),
     getSearchResults: (query: {query: string, variables: {search: string}}) => requests.post<AniListResponseDataPaged>('', query)
 }
