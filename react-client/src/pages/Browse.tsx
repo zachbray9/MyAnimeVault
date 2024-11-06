@@ -62,14 +62,15 @@ export default observer(function Browse() {
     )
 })
 
-const genres = [
+export const genres = [
     'action',
     'adventure',
     'comedy',
     'drama',
+    'ecchi',
     'fantasy',
     'horror',
-    'magic',
+    'mahou shoujo',
     'mecha',
     'music',
     'mystery',
@@ -82,7 +83,7 @@ const genres = [
     'thriller'
 ]
 
-const sortValues = [
+export const sortValues = [
     'new',
     'popular',
     'trending'
@@ -96,9 +97,10 @@ const categoryDescriptionMap = new Map<string, string>([
     ['adventure', 'Epic quests and thrilling journeys await!'],
     ['comedy', 'Laugh out loud with hilarious antics!'],
     ['drama', 'Intense emotions and complex relationships.'],
+    ['ecchi', 'Flirty, funny, and a bit daring!'],
     ['fantasy', 'Magic, mythical worlds, and epic battles!'],
     ['horror', 'Spine-chilling thrills and eerie encounters.'],
-    ['magic', 'Unleash your inner wizard or sorceress!'],
+    ['mahou shoujo', 'Magic, friendship, and unstoppable courage!'],
     ['mecha', 'Giant robots, high-tech battles, and heroism!'],
     ['music', 'Feel the rhythm, live the melody!'],
     ['mystery', 'Puzzles, secrets, and mind-bending twists.'],
