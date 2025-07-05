@@ -34,9 +34,11 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                     customRightArrow={<CustomFeaturedRightArrow />}
                 >
                     {data.map((anime) => (
-                        <Box key={anime.id} bgImage={[anime.coverImage.large!, anime.bannerImage!]} position='relative' height={['60vh', null, '70vh']} backgroundSize='cover' backgroundPosition='center' display='flex' alignItems='center' justifyContent='center' overflow='visible'>
-                            <Box position='absolute' top={0} bottom={0} left={0} right={0} background='rgba(0, 0, 0, 0.3)' bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' alignItems={['end', 'center']} justifyContent={['center', null, 'start']} padding={{ base: '1rem', md: '8rem' }}>
-                                <Stack marginTop={[null, '10%']} alignItems={['center', null, 'start']} width='100%' maxWidth={['100%', null, '40vw']} gap={4} >
+                        <Box id="carousel-item-container" key={anime.id} bgImage={[anime.coverImage.large!, anime.bannerImage!]} position='relative' height={['60vh', null, '70vh']} backgroundPosition='center' backgroundSize='cover' display='flex' alignItems={['end', null, 'center']} justifyContent='left' overflow='visible' >
+                            <Box id="carousel-item-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
+
+                            <Stack id="carousel-item-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
+                                <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]}>
                                     <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
                                     {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
@@ -54,8 +56,10 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                             </Tooltip>
                                         )}
                                     </Flex>
+
                                 </Stack>
-                            </Box>
+                            </Stack>
+
                         </Box>
                     ))}
                 </Carousel>
