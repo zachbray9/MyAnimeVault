@@ -2,10 +2,10 @@ package services
 
 import (
 	"fmt"
-	"myanimevault/database"
-	"myanimevault/models/customErrors"
-	"myanimevault/models/dtos"
-	"myanimevault/models/requests"
+	"myanimevault/internal/database"
+	"myanimevault/internal/models/customErrors"
+	"myanimevault/internal/models/dtos"
+	"myanimevault/internal/models/requests"
 
 	"github.com/google/uuid"
 )

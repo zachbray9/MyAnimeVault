@@ -2,8 +2,8 @@ package main
 
 import (
 	"myanimevault/config"
-	"myanimevault/controllers"
-	"myanimevault/database"
+	"myanimevault/internal/database"
+	"myanimevault/internal/routes"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -50,7 +50,7 @@ func main() {
 
 	}
 
-	controllers.RegisterEndpoints(server)
+	routes.InitRouter(server)
 
 	port := os.Getenv("PORT")
 	server.Run("0.0.0.0:" + port)

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"myanimevault/services"
+	"myanimevault/internal/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
