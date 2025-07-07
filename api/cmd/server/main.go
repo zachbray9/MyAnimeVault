@@ -1,10 +1,12 @@
 package main
 
 import (
+	"log"
 	"myanimevault/config"
 	"myanimevault/internal/database"
 	"myanimevault/internal/routes"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -30,22 +32,30 @@ func main() {
 	server.Use(cors.New(config))
 
 	if os.Getenv("MODE") == "production" {
+		rootDir, err := os.Getwd()
 
-		server.Static("/assets", "./wwwroot/assets")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-		server.StaticFile("/android-chrome-192x192.png", "./wwwroot/android-chrome-192x192.png")
-		server.StaticFile("/android-chrome-512x512.png", "./wwwroot/android-chrome-512x512.png")
-		server.StaticFile("/apple-touch-icon.png", "./wwwroot/apple-touch-icon.png")
-		server.StaticFile("/browserconfig.xml", "./wwwroot/browserconfig.xml")	
-		server.StaticFile("/favicon-16x16.png", "./wwwroot/favicon-16x16.png")
-		server.StaticFile("/favicon-32x32.png", "./wwwroot/favicon-32x32.png")
-		server.StaticFile("/favicon.ico", "./wwwroot/favicon.ico")
-		server.StaticFile("/mstile-150x150.png", "./wwwroot/mstile-150x150.png")
-		server.StaticFile("/safari-pinned-tab.svg", "./wwwroot/safari-pinned-tab.svg")
-		server.StaticFile("/site.webmanifest", "./wwwroot/site.webmanifest")
+		wwwrootPath := filepath.Join(rootDir, "..", "..", "wwwroot")
+		log.Println("Serving static files from:", wwwrootPath)
+
+		server.Static("/assets", filepath.Join(wwwrootPath, "assets"))
+
+		server.StaticFile("/android-chrome-192x192.png", filepath.Join(wwwrootPath, "android-chrome-192x192.png"))
+		server.StaticFile("/android-chrome-512x512.png", filepath.Join(wwwrootPath, "android-chrome-512x512.png"))
+		server.StaticFile("/apple-touch-icon.png", filepath.Join(wwwrootPath, "apple-touch-icon.png"))
+		server.StaticFile("/browserconfig.xml", filepath.Join(wwwrootPath, "browserconfig.xml"))	
+		server.StaticFile("/favicon-16x16.png", filepath.Join(wwwrootPath, "favicon-16x16.png"))
+		server.StaticFile("/favicon-32x32.png", filepath.Join(wwwrootPath, "favicon-32x32.png"))
+		server.StaticFile("/favicon.ico", filepath.Join(wwwrootPath, "favicon.ico"))
+		server.StaticFile("/mstile-150x150.png", filepath.Join(wwwrootPath, "mstile-150x150.png"))
+		server.StaticFile("/safari-pinned-tab.svg", filepath.Join(wwwrootPath, "safari-pinned-tab.svg"))
+		server.StaticFile("/site.webmanifest", filepath.Join(wwwrootPath, "site.webmanifest"))
 
 		server.NoRoute(func (c *gin.Context){
-			c.File("./wwwroot/index.html")
+			c.File(filepath.Join(wwwrootPath, "index.html"))
 		})
 
 	}
