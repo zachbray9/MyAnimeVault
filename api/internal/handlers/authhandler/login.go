@@ -4,8 +4,8 @@ import (
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/dtos"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/services"
 	"myanimevault/internal/services/authservice"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -35,14 +35,7 @@ func LoginHandler(context *gin.Context) {
 		}
 	}
 
-	token, err := services.GenerateAuthToken(userId, loginRequest.Email)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
-		return
-	}
-
-	animeIdList, err := services.GetIdList(userId)
+	animeIdList, err := useranimeservice.GetIdList(userId)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "internal_server_error"})
@@ -52,16 +45,12 @@ func LoginHandler(context *gin.Context) {
 	var userDto dtos.UserDto = dtos.UserDto{
 		Id:        userId,
 		Email:     loginRequest.Email,
-		AuthToken: token,
 		AnimeIds:  animeIdList,
 	}
 
-	err = services.GenerateRefreshTokenCookie(userId, userDto.Email, context)
+	//create session id cookie
 
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "internal_server_error"})
-		return
-	}
+	//create device id cookie
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged in.", "user": userDto})
 }

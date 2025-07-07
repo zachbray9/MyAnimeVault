@@ -3,7 +3,7 @@ package useranimehandler
 import (
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 	"strconv"
 
@@ -27,7 +27,7 @@ func UpdateUserAnimeHandler(context *gin.Context) {
 		return
 	}
 
-	err = services.UpdateUserAnime(userId, animeId, patchRequest)
+	err = useranimeservice.Update(userId, animeId, patchRequest)
 
 	if err != nil {
 		switch err {

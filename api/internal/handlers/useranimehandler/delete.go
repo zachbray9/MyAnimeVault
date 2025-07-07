@@ -2,7 +2,7 @@ package useranimehandler
 
 import (
 	"myanimevault/internal/models/customErrors"
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 	"strconv"
 
@@ -19,7 +19,7 @@ func DeleteUserAnimeHandler(context *gin.Context) {
 		return
 	}
 
-	err = services.DeleteUserAnime(userId, animeId)
+	err = useranimeservice.Delete(userId, animeId)
 
 	if err != nil {
 		switch err {

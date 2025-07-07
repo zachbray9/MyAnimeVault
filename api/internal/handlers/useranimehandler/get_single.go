@@ -3,7 +3,7 @@ package useranimehandler
 import (
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/dtos"
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 	"strconv"
 
@@ -21,7 +21,7 @@ func GetUserAnimeHandler(context *gin.Context) {
 
 	var userAnime dtos.UserAnimeDetailsDto = dtos.UserAnimeDetailsDto{}
 
-	err = services.GetUserAnimeDetails(userId, animeId, &userAnime)
+	err = useranimeservice.GetUserAnime(userId, animeId, &userAnime)
 
 	if err != nil {
 		switch err {

@@ -1,7 +1,7 @@
 package useranimehandler
 
 import (
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 func GetUserListHandler(context *gin.Context) {
 	userId := context.GetString("userId")
 
-	animeList, err := services.GetList(userId)
+	animeList, err := useranimeservice.GetList(userId)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem retrieving the users list"})

@@ -1,7 +1,6 @@
 package authhandler
 
 import (
-	"myanimevault/internal/services"
 	"net/http"
 	"time"
 
@@ -11,18 +10,9 @@ import (
 func LogoutHandler(context *gin.Context) {
 	userId := context.GetString("userId")
 
-	refreshToken, err := context.Cookie("refreshToken")
+	//delete session from database
 
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"error": "refresh_token_not_found"})
-	}
-
-	err = services.RevokeRefreshToken(userId, refreshToken)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
-		return
-	}
+	//
 
 	cookie := &http.Cookie{
 		Name:     "refreshToken",

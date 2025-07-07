@@ -2,7 +2,7 @@ package useranimehandler
 
 import (
 	"myanimevault/internal/models/dtos"
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/useranimeservice"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ func AddToListHandler(context *gin.Context) {
 
 	userId := context.GetString("userId")
 
-	err = services.AddAnimeToList(userId, userAnime)
+	_, err = useranimeservice.Create(userId, userAnime)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem adding the new userAnime to the database"})

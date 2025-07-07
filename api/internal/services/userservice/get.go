@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func Get(id int64) (entities.User, error) {
+func Get(id string) (entities.User, error) {
 	user := entities.User{}
 
 	query := `

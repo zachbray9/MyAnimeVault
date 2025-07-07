@@ -1,28 +1,14 @@
 package middleware
 
 import (
-	"myanimevault/internal/services"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Authenticate(context *gin.Context) {
-	authToken := context.Request.Header.Get("Authorization")
+	//check if there is a valid session in the database, then return user details
 
-	if(authToken == ""){
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized."})
-		return
-	}
-
-	claims, err := services.VerifyAuthToken(authToken)
-
-	if(err != nil){
-		context.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "Not authorized."})
-	}
-
-	userId := claims["id"].(string)
-	userEmail := claims["email"].(string)
+	//
 
 	context.Set("userId", userId)
 	context.Set("userEmail", userEmail)

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"myanimevault/internal/models/dtos"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/services"
+	"myanimevault/internal/services/userservice"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +24,7 @@ func RegisterHandler(context *gin.Context) {
 		return
 	}
 
-	userId, err := services.Register(registerRequest.Email, registerRequest.Password)
+	user, err := userservice.Create(registerRequest.Email, registerRequest.Password)
 
 	if err != nil {
 		fmt.Println(err)
@@ -32,32 +32,14 @@ func RegisterHandler(context *gin.Context) {
 		return
 	}
 
-	token, err := services.GenerateAuthToken(userId, registerRequest.Email)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "There was a problem generating an auth token."})
-		return
-	}
-
-	animeIdList, err := services.GetIdList(userId)
-
-	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "internal_server_error"})
-		return
-	}
-
-	err = services.GenerateRefreshTokenCookie(userId, registerRequest.Email, context)
-
-	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
-		return
-	}
+	//create session id cookie
+	
+	//create device id cookie
 
 	var userDto dtos.UserDto = dtos.UserDto{
-		Id:        userId,
-		Email:     registerRequest.Email,
-		AuthToken: token,
-		AnimeIds:  animeIdList,
+		Id:        user.Id.String(),
+		Email:     user.Email,
+		AnimeIds:  make([]int64, 0),
 	}
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully registered.", "user": userDto})
