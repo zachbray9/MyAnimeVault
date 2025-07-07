@@ -38,7 +38,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		wwwrootPath := filepath.Join(rootDir, "..", "..", "wwwroot")
+		wwwrootPath := filepath.Join(rootDir, "wwwroot")
 		log.Println("Serving static files from:", wwwrootPath)
 
 		server.Static("/assets", filepath.Join(wwwrootPath, "assets"))
