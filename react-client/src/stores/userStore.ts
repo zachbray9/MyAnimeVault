@@ -23,14 +23,12 @@ export default class UserStore {
 
     login = async (values: LoginRequest) => {
         const response = await myApiAgent.Auth.login(values)
-        store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
         router.navigate('/')
     }
 
     register = async (values: RegisterRequest) => {
         const response = await myApiAgent.Auth.register(values)
-        store.commonStore.setAuthToken(response.user.authToken)
         runInAction(() => this.user = response.user)
         router.navigate('/')
     }
@@ -41,16 +39,14 @@ export default class UserStore {
         } catch (error) {
             console.log(error)
         }
-        store.commonStore.setAuthToken(null)
         runInAction(() => this.user = null)
-        router.navigate('/')
+        // router.navigate('/')
     }
 
     getCurrentUser = async (navigate: (path: string) => void) => {
         try {
             const response = await myApiAgent.Auth.getCurrentUser()
-            store.commonStore.setAuthToken(response.user.authToken)
-            runInAction(() => this.user = response.user)
+            runInAction(() => this.user = response.user ?? null)
             navigate('/')
         } catch (error) {
             console.log(error)
@@ -80,7 +76,7 @@ export default class UserStore {
             this.setIsAddingAnimeToList(false)
         } catch (error) {
             console.log(error)
-            toast({ title: 'Error', description: 'There was a problem adding the anime to your list.', status: 'error', duration: 5000, isClosable: true, position: 'top' })
+            toast({ title: 'Add failed!', description: 'Looks like we need to power up. Try again!', colorScheme: "red", variant: "solid", duration: 7000, isClosable: true, position: 'top' })
             this.setIsAddingAnimeToList(false)
         }
 

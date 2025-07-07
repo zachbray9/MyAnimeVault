@@ -1,70 +1,42 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { myApi } from "./axios";
 import { LoginRequest } from "../models/requests/loginRequest";
 import { LoginResponse } from "../models/responses/loginResponse";
 import { RegisterRequest } from "../models/requests/registerRequest";
-import { store } from "../stores/store";
 import { AniListAnime } from "../models/aniListAnime";
 import { GetUserAnimeDetailsResponse } from "../models/responses/getUserAnimeDetailsResponse";
-import { createStandaloneToast } from "@chakra-ui/react";
 import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest";
 import { GetListResponse } from "../models/responses/getListResponse";
 import { RefreshResponse } from "../models/responses/refreshResponse";
-import { jwtDecode } from "jwt-decode";
+import { createStandaloneToast } from "@chakra-ui/react";
+import { store } from "../stores/store";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
 const { toast } = createStandaloneToast()
 
-myApi.interceptors.request.use(async config => {
-    let token = store.commonStore.token
+myApi.interceptors.response.use(
+    (res) => res,
+    (err: AxiosError) => {
+        const { response } = err
 
-    if (token && config.headers) {
-        try {
-            const decodedToken = jwtDecode<{ exp: number }>(token)
-            const isExpired = decodedToken.exp < (Date.now() / 1000)
-
-            if (isExpired) {
-                const response = await axios.get<RefreshResponse>(import.meta.env.VITE_API_URL + '/users/refresh', {withCredentials: true})
-                store.commonStore.setAuthToken(response.data.accessToken)
-                token = store.commonStore.token
-                console.log("Token refresh was successful")
-            }
-
-            config.headers.Authorization = token
-        } catch (error) {
-            return Promise.reject(error)
-        }
-
-    }
-
-    return config
-}, error => {
-    return Promise.reject(error)
-})
-
-myApi.interceptors.response.use(async response => {
-    return response
-}, async (error: AxiosError) => {
-    const { status, data } = error.response as AxiosResponse
-
-    if(error.response){
-        switch (status) {
-            case 401:
-                if(data.error === 'invalid_refresh_token'){
-                    store.userStore.logout()
-        
-                    toast({
-                        title: 'Session expired',
-                        description: 'Your session has expired. Please login again to continue.',
-                        status: 'error',
-                        position: 'top',
-                        isClosable: true
-                    })
+        if (response?.status === 401 && store.userStore.isLoggedIn) {
+            store.userStore.logout()
+            
+            toast({
+                title: "Logged out",
+                description: "Your session has expired. Please login again to power up.",
+                colorScheme: "yellow",
+                position: "top",
+                variant: "solid",
+                isClosable: true,
+                duration: 7000,
+                containerStyle: {
+                    zIndex: 9999
                 }
-                break
+            })
         }
     }
-})
+)
 
 const requests = {
     get: <T>(url: string) => myApi.get<T>(url).then(ResponseBody),
