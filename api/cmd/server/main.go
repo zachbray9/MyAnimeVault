@@ -33,39 +33,41 @@ func main() {
 	server.Use(cors.New(config))
 
 	if os.Getenv("MODE") == "production" {
-    wwwrootPath := "./wwwroot"
-    
-    log.Println("Serving static files from:", wwwrootPath)
-    
-    // Verify the directory exists
-    if _, err := os.Stat(wwwrootPath); os.IsNotExist(err) {
-        log.Fatal("wwwroot directory does not exist:", wwwrootPath)
-    }
+		wwwrootPath := "./wwwroot"
 
-    server.Static("/assets", filepath.Join(wwwrootPath, "assets"))
-    
-    server.StaticFile("/android-chrome-192x192.png", filepath.Join(wwwrootPath, "android-chrome-192x192.png"))
-    server.StaticFile("/android-chrome-512x512.png", filepath.Join(wwwrootPath, "android-chrome-512x512.png"))
-    server.StaticFile("/apple-touch-icon.png", filepath.Join(wwwrootPath, "apple-touch-icon.png"))
-    server.StaticFile("/browserconfig.xml", filepath.Join(wwwrootPath, "browserconfig.xml"))	
-    server.StaticFile("/favicon-16x16.png", filepath.Join(wwwrootPath, "favicon-16x16.png"))
-    server.StaticFile("/favicon-32x32.png", filepath.Join(wwwrootPath, "favicon-32x32.png"))
-    server.StaticFile("/favicon.ico", filepath.Join(wwwrootPath, "favicon.ico"))
-    server.StaticFile("/mstile-150x150.png", filepath.Join(wwwrootPath, "mstile-150x150.png"))
-    server.StaticFile("/safari-pinned-tab.svg", filepath.Join(wwwrootPath, "safari-pinned-tab.svg"))
-    server.StaticFile("/site.webmanifest", filepath.Join(wwwrootPath, "site.webmanifest"))
+		log.Println("Serving static files from:", wwwrootPath)
 
-    server.NoRoute(func (c *gin.Context){
-        // Don't serve index.html for API routes
-        if strings.HasPrefix(c.Request.URL.Path, "/api/") {
-            c.JSON(404, gin.H{"error": "API endpoint not found"})
-            return
-        }
-        c.File(filepath.Join(wwwrootPath, "index.html"))
-    })
-}
+		// Verify the directory exists
+		if _, err := os.Stat(wwwrootPath); os.IsNotExist(err) {
+			log.Fatal("wwwroot directory does not exist:", wwwrootPath)
+		}
 
-	routes.InitRouter(server)
+		routes.InitRouter(server)
+
+		server.Static("/assets", filepath.Join(wwwrootPath, "assets"))
+
+		server.StaticFile("/android-chrome-192x192.png", filepath.Join(wwwrootPath, "android-chrome-192x192.png"))
+		server.StaticFile("/android-chrome-512x512.png", filepath.Join(wwwrootPath, "android-chrome-512x512.png"))
+		server.StaticFile("/apple-touch-icon.png", filepath.Join(wwwrootPath, "apple-touch-icon.png"))
+		server.StaticFile("/browserconfig.xml", filepath.Join(wwwrootPath, "browserconfig.xml"))
+		server.StaticFile("/favicon-16x16.png", filepath.Join(wwwrootPath, "favicon-16x16.png"))
+		server.StaticFile("/favicon-32x32.png", filepath.Join(wwwrootPath, "favicon-32x32.png"))
+		server.StaticFile("/favicon.ico", filepath.Join(wwwrootPath, "favicon.ico"))
+		server.StaticFile("/mstile-150x150.png", filepath.Join(wwwrootPath, "mstile-150x150.png"))
+		server.StaticFile("/safari-pinned-tab.svg", filepath.Join(wwwrootPath, "safari-pinned-tab.svg"))
+		server.StaticFile("/site.webmanifest", filepath.Join(wwwrootPath, "site.webmanifest"))
+
+		server.NoRoute(func(c *gin.Context) {
+			// Don't serve index.html for API routes
+			if strings.HasPrefix(c.Request.URL.Path, "/api/") {
+				c.JSON(404, gin.H{"error": "API endpoint not found"})
+				return
+			}
+			c.File(filepath.Join(wwwrootPath, "index.html"))
+		})
+	}
+
+	
 
 	port := os.Getenv("PORT")
 	server.Run("0.0.0.0:" + port)
