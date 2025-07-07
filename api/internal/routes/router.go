@@ -13,7 +13,7 @@ func InitRouter(server *gin.Engine) {
 	server.GET("/api/users/getCurrentUser", middleware.Authenticate, authhandler.GetCurrentUserHandler)
 	server.POST("/api/users/register", authhandler.RegisterHandler)
 	server.POST("/api/users/login", authhandler.LoginHandler)
-	server.DELETE("/api/users/logout", middleware.Authenticate, authhandler.LogoutHandler)
+	server.DELETE("/api/users/logout", authhandler.LogoutHandler)
 
 	//userAnime routes
 	server.GET("/api/user/anime", middleware.Authenticate, useranimehandler.GetUserListHandler)

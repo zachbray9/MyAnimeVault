@@ -3,12 +3,14 @@ package userservice
 import (
 	"fmt"
 	"myanimevault/internal/database"
+	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/entities"
 	"myanimevault/internal/utils"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 func Create(email string, password string) (entities.User, error) {
@@ -36,8 +38,14 @@ func Create(email string, password string) (entities.User, error) {
 	_, err = stmt.Exec(newId.String(), strings.ToLower(email), hashedPassword, dateRegistered)
 
 	if err != nil {
-		return newUser, fmt.Errorf("failed to execute statement: %w", err)
+	// check if it's a pq error
+	if pqErr, ok := err.(*pq.Error); ok {
+		if pqErr.Code == "23505" && pqErr.Constraint == "users_email_key" {
+			return newUser, customErrors.ErrEmailAlreadyExists
+		}
 	}
+	return newUser, fmt.Errorf("failed to execute statement: %w", err)
+}
 
 	newUser.Id = newId
 	newUser.Email = email

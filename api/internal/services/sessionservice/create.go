@@ -16,7 +16,7 @@ func Create(context context.Context, userId uuid.UUID, deviceId string, duration
 	query := `
 		INSERT INTO sessions (id, user_id, device_id, created_at, expires_at)
 		VALUES ($1, $2, $3, NOW(), $4)
-		RETURNING id, user_id, devide_id, created_at, expires_at;
+		RETURNING id, user_id, device_id, created_at, expires_at;
 	`
 
 	session := entities.Session{}
