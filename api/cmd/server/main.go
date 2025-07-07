@@ -23,7 +23,7 @@ func main() {
 
 	//cors policy
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"https://localhost:5173"}
+	config.AllowOrigins = []string{"http://localhost:5173"}
 	config.AllowHeaders = []string{"Authorization", "Content-Type"}
 	config.AllowCredentials = true
 

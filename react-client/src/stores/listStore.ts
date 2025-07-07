@@ -38,7 +38,7 @@ export default class ListStore {
 
         try {
             const response = await myApiAgent.List.getList()
-            runInAction(() => this.list = response.animeList)
+            this.list = response.animeList ?? []
             console.log("Successfully loaded list.")
             this.setIsLoadingList(false)
         } catch (error) {

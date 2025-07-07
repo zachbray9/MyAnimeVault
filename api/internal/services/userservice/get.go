@@ -15,7 +15,7 @@ func Get(context context.Context, id uuid.UUID) (entities.User, error) {
 	user := entities.User{}
 
 	query := `
-		SELECT id, email, passwordHash, date_registered
+		SELECT id, email, password_hash, date_registered
 		FROM users
 		WHERE id = $1
 	`

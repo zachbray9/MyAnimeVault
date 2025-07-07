@@ -100,6 +100,13 @@ const components = {
             }
         }
     },
+    Toast: {
+        baseStyle: {
+            container: {
+                zindex: 9999
+            }
+        }
+    },
     Select: SelectTheme,
     NumberInput: NumberInputTheme,
     Progress: ProgressTheme,

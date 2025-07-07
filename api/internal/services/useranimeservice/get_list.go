@@ -28,7 +28,7 @@ func GetList(userId string) ([]dtos.UserAnimeDto, error) {
 
 	defer rows.Close()
 
-	var animeList []dtos.UserAnimeDto
+	animeList := make([]dtos.UserAnimeDto, 0)
 
 	for rows.Next() {
 		var userAnime dtos.UserAnimeDto
