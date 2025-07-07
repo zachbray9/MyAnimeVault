@@ -1,18 +1,22 @@
 package cookieutil
 
 import (
+	"myanimevault/config"
 	"net/http"
 	"time"
 )
 
 func CreateSessionCookie(sessionId string) *http.Cookie {
- return &http.Cookie{
-	Name: "sid",
-	Value: sessionId,
-	Path: "/",
-	HttpOnly: true,
-	Secure: true,
-	SameSite: http.SameSiteLaxMode,
-	MaxAge: int(24 * time.Hour * 30),
- }
+	ttl := 30 * 24 * time.Hour
+
+	return &http.Cookie{
+		Name:     "sid",
+		Value:    sessionId,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   config.CookieSecure(),
+		SameSite: config.CookieSameSite(),
+		Expires: time.Now().Add(ttl),
+		MaxAge:   int(ttl.Seconds()),
+	}
 }

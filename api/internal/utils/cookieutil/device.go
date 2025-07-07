@@ -1,18 +1,22 @@
 package cookieutil
 
 import (
+	"myanimevault/config"
 	"net/http"
 	"time"
 )
 
-func CreateDeviceCookie(deviceId string) *http.Cookie{
+func CreateDeviceCookie(deviceId string) *http.Cookie {
+	ttl := 365 * 24 * time.Hour
+
 	return &http.Cookie{
-		Name: "did",
-		Value: deviceId,
-		Path: "/",
+		Name:     "did",
+		Value:    deviceId,
+		Path:     "/",
 		HttpOnly: true,
-		Secure: true,
-		SameSite: http.SameSiteLaxMode,
-		MaxAge: int(24 * time.Hour * 30),
+		Secure:   config.CookieSecure(),
+		SameSite: config.CookieSameSite(),
+		Expires: time.Now().Add(ttl),
+		MaxAge:   int(ttl.Seconds()),
 	}
 }

@@ -1,6 +1,8 @@
 package authhandler
 
 import (
+	"log"
+	"myanimevault/internal/services/sessionservice"
 	"net/http"
 	"time"
 
@@ -8,22 +10,46 @@ import (
 )
 
 func LogoutHandler(context *gin.Context) {
-	userId := context.GetString("userId")
+	//get session id from cookie
+	sessionId, err := context.Cookie("sid")
+	if err != nil {
+		context.JSON(http.StatusOK, gin.H{"message": "Already logged out."})
+		return
+	}
 
 	//delete session from database
-
+	err = sessionservice.Delete(context.Request.Context(), sessionId)
+	if err != nil {
+		log.Printf("sessionservice.Delete: failed to delete the session from the database: %v", err)
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error", "message": "Something went wrong. Please try again later."})
+		return
+	}
 	//
 
-	cookie := &http.Cookie{
-		Name:     "refreshToken",
+	sessionIdCookie := &http.Cookie{
+		Name:     "sid",
 		Value:    "",
 		Path:     "/",
-		Expires:  time.Now(),
-		HttpOnly: false,
+		Expires:  time.Unix(0, 0),
+		MaxAge: -1,
+		HttpOnly: true,
 		Secure:   true,
-		SameSite: http.SameSiteNoneMode,
+		SameSite: http.SameSiteLaxMode,
 	}
-	http.SetCookie(context.Writer, cookie)
+
+	deviceIdCookie := &http.Cookie{
+		Name:     "did",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Unix(0, 0),
+		MaxAge: -1,
+		HttpOnly: true,
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	}
+
+	http.SetCookie(context.Writer, sessionIdCookie)
+	http.SetCookie(context.Writer, deviceIdCookie)
 
 	context.JSON(http.StatusOK, gin.H{"message": "Successfully logged out."})
 }

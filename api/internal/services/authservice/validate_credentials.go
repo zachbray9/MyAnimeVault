@@ -1,45 +1,42 @@
 package authservice
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
+	"myanimevault/internal/models/entities"
 	"myanimevault/internal/utils"
 	"strings"
 )
 
-func ValidateCredentials(email string, password string) (string, error) {
+func ValidateCredentials(context context.Context, email string, password string) (entities.User, error) {
 	query := `
-	SELECT id, password_hash FROM users WHERE email = $1
+	SELECT id, email, password_hash, date_registered
+	FROM users
+	WHERE email = $1
 	`
-	stmt, err := database.Db.Prepare(query)
 
-	if err != nil {
-		return "", fmt.Errorf("there was a problem preparing the db query: %w", err)
-	}
+	row := database.Db.QueryRowContext(context, query, strings.ToLower(email))
 
-	defer stmt.Close()
-	row := stmt.QueryRow(strings.ToLower(email))
+	user := entities.User{}
 
-	var id string
-	var hashedPassword string
-
-	err = row.Scan(&id, &hashedPassword)
+	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.DateRegistered)
 
 	if err != nil {
 		switch err {
 		case sql.ErrNoRows:
-			return "", customErrors.ErrNotFound
+			return entities.User{}, customErrors.ErrNotFound
 		default:
-			return "", fmt.Errorf("an error occurred while querying the database: %w", err)
+			return entities.User{}, fmt.Errorf("an error occurred while querying the database: %w", err)
 		}
 	}
 
-	passwordIsValid := utils.ComparePasswordWithHash(password, hashedPassword)
+	passwordIsValid := utils.ComparePasswordWithHash(password, user.PasswordHash)
 	if !passwordIsValid {
-		return "", customErrors.ErrIncorrectPassword
+		return entities.User{}, customErrors.ErrIncorrectPassword
 	}
 
-	return id, nil
+	return user, nil
 }

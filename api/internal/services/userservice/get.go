@@ -1,21 +1,23 @@
 package userservice
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/entities"
-	"time"
 
 	"github.com/google/uuid"
 )
 
-func Get(id string) (entities.User, error) {
+func Get(context context.Context, id uuid.UUID) (entities.User, error) {
 	user := entities.User{}
 
 	query := `
-	SELECT id, email, passwordHash, date_registered FROM users WHERE id = $1
+		SELECT id, email, passwordHash, date_registered
+		FROM users
+		WHERE id = $1
 	`
 
 	stmt, err := database.Db.Prepare(query)
@@ -26,11 +28,7 @@ func Get(id string) (entities.User, error) {
 
 	row := stmt.QueryRow(id)
 
-	var uuid uuid.UUID
-	var email string
-	var passwordHash string
-	var dateRegistered time.Time
-	err = row.Scan(&uuid, &email, &passwordHash, &dateRegistered)
+	err = row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.DateRegistered)
 
 	if err != nil {
 		switch err {
@@ -40,11 +38,6 @@ func Get(id string) (entities.User, error) {
 			return user, fmt.Errorf("an error occurred while scanning the db row: %w", err)
 		}
 	}
-
-	user.Id = uuid
-	user.Email = email
-	user.PasswordHash = passwordHash
-	user.DateRegistered = dateRegistered
 
 	return user, nil
 }

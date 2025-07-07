@@ -8,7 +8,7 @@ import (
 
 func InitEnvVariables(){
 	if(os.Getenv("RENDER") == ""){
-		err := godotenv.Load()
+		err := godotenv.Load("../../.env")
 		
 		if(err != nil){
 			panic(err)

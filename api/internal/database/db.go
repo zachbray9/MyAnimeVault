@@ -64,20 +64,20 @@ func createTables(){
 		panic("Could not create userAnimes table: " + err.Error())
 	}
 
-	refreshTokensTable := `
-	CREATE TABLE IF NOT EXISTS refreshTokens (
+	sessionsTable := `
+	CREATE TABLE IF NOT EXISTS sessions (
 		id UUID PRIMARY KEY NOT NULL,
 		user_id UUID NOT NULL,
-		token_hash VARCHAR(255) NOT NULL,
+		device_id TEXT NOT NULL,
+		created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 		expires_at TIMESTAMPTZ NOT NULL,
-		revoked_at TIMESTAMPTZ,
 		FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 	)
 	`
 
-	_, err = Db.Exec(refreshTokensTable)
+	_, err = Db.Exec(sessionsTable)
 
 	if(err != nil){
-		panic("Could not create refreshTokens table: " + err.Error())
+		panic("Could not create sessions table: " + err.Error())
 	}
 }

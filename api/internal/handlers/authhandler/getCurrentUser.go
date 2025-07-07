@@ -1,6 +1,7 @@
 package authhandler
 
 import (
+	"log"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/dtos"
 	"myanimevault/internal/services/useranimeservice"
@@ -8,12 +9,19 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func GetCurrentUserHandler(context *gin.Context) {
 	userId := context.GetString("userId")
+	parsedUserId, err := uuid.Parse(userId)
+	if err != nil {
+		log.Printf("failed to parse userId from context: %v", err)
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized", "message": "Session invalid or expired."})
+		return
+	}
 
-	user, err := userservice.Get(userId)
+	user, err := userservice.Get(context.Request.Context(), parsedUserId)
 
 	if err != nil {
 		switch err {
