@@ -9,16 +9,19 @@ import (
 )
 
 func InitRouter(server *gin.Engine) {
+	api := server.Group("/api")
 	//auth routes
-	server.GET("/api/users/getCurrentUser", middleware.Authenticate, authhandler.GetCurrentUserHandler)
-	server.POST("/api/users/register", authhandler.RegisterHandler)
-	server.POST("/api/users/login", authhandler.LoginHandler)
-	server.DELETE("/api/users/logout", authhandler.LogoutHandler)
+	api.GET("/users/getCurrentUser", middleware.Authenticate, authhandler.GetCurrentUserHandler)
+	api.POST("/users/register", authhandler.RegisterHandler)
+	api.POST("/users/login", authhandler.LoginHandler)
+	api.DELETE("/users/logout", authhandler.LogoutHandler)
 
 	//userAnime routes
-	server.GET("/api/user/anime", middleware.Authenticate, useranimehandler.GetUserListHandler)
-	server.GET("/api/user/anime/:animeId", middleware.Authenticate, useranimehandler.GetUserAnimeHandler)
-	server.POST("/api/user/anime", middleware.Authenticate, useranimehandler.AddToListHandler)
-	server.PATCH("/api/user/anime/:animeId", middleware.Authenticate, useranimehandler.UpdateUserAnimeHandler)
-	server.DELETE("/api/user/anime/:animeId", middleware.Authenticate, useranimehandler.DeleteUserAnimeHandler)
+	api.GET("/user/anime", middleware.Authenticate, useranimehandler.GetUserListHandler)
+	api.GET("/user/anime/:animeId", middleware.Authenticate, useranimehandler.GetUserAnimeHandler)
+	api.POST("/user/anime", middleware.Authenticate, useranimehandler.AddToListHandler)
+	api.PATCH("/user/anime/:animeId", middleware.Authenticate, useranimehandler.UpdateUserAnimeHandler)
+	api.DELETE("/user/anime/:animeId", middleware.Authenticate, useranimehandler.DeleteUserAnimeHandler)
 }
+
+
