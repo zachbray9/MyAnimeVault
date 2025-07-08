@@ -1,13 +1,10 @@
 package main
 
 import (
-	"log"
 	"myanimevault/config"
 	"myanimevault/internal/database"
 	"myanimevault/internal/routes"
 	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
