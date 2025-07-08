@@ -33,7 +33,8 @@ func main() {
 	routes.InitRouter(server)
 
 	if os.Getenv("MODE") == "production" {
-		server.Static("/assets", "./wwwroot/assets")
+		// server.Static("/assets", "./wwwroot/assets")
+		server.Static("/", "./wwwroot")
 
 		server.StaticFile("/android-chrome-192x192.png", "./wwwroot/android-chrome-192x192.png")
 		server.StaticFile("/android-chrome-512x512.png", "./wwwroot/android-chrome-512x512.png")
