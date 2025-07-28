@@ -8,6 +8,7 @@ export interface AniListAnime {
         native?: string
     }
     coverImage: {
+        extraLarge?: string
         large?: string
         medium?: string
         small?: string
