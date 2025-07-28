@@ -10,6 +10,7 @@ export const FeaturedShowsQuery = () => {
                             english
                         }
                         coverImage {
+                            extraLarge
                             large
                             medium
                         }

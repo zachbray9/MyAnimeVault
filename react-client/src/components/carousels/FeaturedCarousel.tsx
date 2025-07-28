@@ -34,7 +34,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                     customRightArrow={<CustomFeaturedRightArrow />}
                 >
                     {data.map((anime) => (
-                        <Box id="carousel-item-container" key={anime.id} bgImage={[anime.coverImage.large!, anime.bannerImage!]} position='relative' height={['60vh', null, '70vh']} backgroundPosition='center' backgroundSize='cover' display='flex' alignItems={['end', null, 'center']} justifyContent='left' overflow='visible' >
+                        <Box id="carousel-item-container" key={anime.id} bgImage={[anime.coverImage.extraLarge ?? anime.coverImage.large!, anime.bannerImage!]} position='relative' height={['60vh', null, '70vh']} backgroundPosition='center' backgroundSize='cover' display='flex' alignItems={['end', null, 'center']} justifyContent='left' overflow='visible' >
                             <Box id="carousel-item-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
 
                             <Stack id="carousel-item-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
