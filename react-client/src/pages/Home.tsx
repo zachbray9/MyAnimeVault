@@ -6,7 +6,7 @@ import FeaturedCarousel from "../components/carousels/FeaturedCarousel"
 import useHomePageData from "../hooks/useHomePageData"
 
 export default observer(function Home() {
-    const { featuredShows, trendingShows, popularShows, upcomingShows} = useHomePageData()
+    const { featuredShows, trendingShows, popularShows, upcomingShows } = useHomePageData()
 
     return (
         <>
@@ -14,11 +14,14 @@ export default observer(function Home() {
                 <title>MyAnimeVault - Explore, rate, and keep track of your favorite anime</title>
             </Helmet>
 
-            <Stack gap='2rem' overflow='hidden'>
+            <Stack as="main" gap='4rem' overflow='hidden'>
                 <FeaturedCarousel data={featuredShows}/>
-                <AnimeCarousel heading='Top Airing' data={trendingShows} />
-                <AnimeCarousel heading='Popular' data={popularShows} />
-                <AnimeCarousel heading='Upcoming' data={upcomingShows} />
+
+                <Stack gap={{base: '2rem', md: "4rem"}}>
+                    <AnimeCarousel heading='Top Airing' data={trendingShows} />
+                    <AnimeCarousel heading='Popular' data={popularShows} />
+                    <AnimeCarousel heading='Upcoming' data={upcomingShows} />
+                </Stack>
             </Stack>
         </>
     )

@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 export default function useHomePageData() {
     const { toast } = createStandaloneToast()
 
-    const fetchHomeData = async () => {
+    const fetchHomeData = async() : Promise<HomePageData> => {
         const response: HomePageData = await aniListAgent.AnimeData.getHomePageData(HomePageQuery)
         return response
     }
