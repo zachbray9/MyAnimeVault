@@ -21,7 +21,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
     }
 
     return (
-        <Box overflow='hidden'>
+        <Box as="section" overflow='hidden'>
             <Box overflow='visible' position='relative'>
                 <Carousel
                     responsive={featuredResponsive}

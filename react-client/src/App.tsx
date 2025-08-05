@@ -12,7 +12,7 @@ export default observer(function App() {
   const Navigate = useNavigate()
 
   useEffect(() => {
-      userStore.getCurrentUser(Navigate).finally(() => commonStore.setAppLoaded(true))
+    userStore.getCurrentUser(Navigate).finally(() => commonStore.setAppLoaded(true))
   }, [commonStore, Navigate, userStore])
 
   if (!commonStore.appLoaded) {

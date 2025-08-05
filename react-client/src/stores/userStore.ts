@@ -40,7 +40,6 @@ export default class UserStore {
             console.log(error)
         }
         runInAction(() => this.user = null)
-        // router.navigate('/')
     }
 
     getCurrentUser = async (navigate: (path: string) => void) => {
