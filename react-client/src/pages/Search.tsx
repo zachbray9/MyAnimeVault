@@ -1,27 +1,19 @@
-import { Box, Heading, IconButton, Image, Input, InputGroup, InputRightElement, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Heading, IconButton, Input, InputGroup, InputRightElement, SimpleGrid, Stack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
-import { useStore } from "../stores/store";
-import { NavLink } from "react-router-dom";
-import { useEffect } from "react";
 import { CloseIcon } from "@chakra-ui/icons";
+import useAnimeSearch from "../hooks/useAnimeSearch";
+import CarouselCard from "../components/carousels/CarouselCard";
 
 export default observer(function Search() {
-    const { animeStore } = useStore()
+    const { query, setQuery, results } = useAnimeSearch()
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        animeStore.setSearchQuery(event.target.value)
-        animeStore.loadSearchResults()
+        setQuery(event.target.value)
     }
 
-    useEffect(() => {
-        return () => {
-            animeStore.clearSearchResults()
-        }
-    }, [animeStore])
-
     return (
-        <Stack alignItems='center' gap={['1.25rem', null, '4rem']}>
-            <Box width='100%' bg='surface.1' display='flex' alignItems='center' justifyContent='center' paddingY={['1.25rem', '2rem']} >
+        <Stack as="main" alignItems='center' gap={['1.25rem', null, '4rem']}>
+            <Box as="section" width='100%' bg='surface.1' display='flex' alignItems='center' justifyContent='center' paddingY={['1.25rem', '2rem']} >
                 <InputGroup maxWidth='55rem' paddingX={['1.25rem', '2rem']} >
                     <Input
                         variant='flushed'
@@ -31,28 +23,25 @@ export default observer(function Search() {
                             borderColor: 'primary.base'
                         }}
                         paddingBottom='0.5rem'
-                        value={animeStore.searchQuery}
+                        value={query}
                         onChange={handleInputChange}
                     />
 
-                    {animeStore.searchQuery && 
+                    {query &&
                         <InputRightElement>
-                            <IconButton aria-label="clear-search" icon={<CloseIcon />} variant='unstyled' onClick={animeStore.clearSearchResults}/>
+                            <IconButton aria-label="clear-search" icon={<CloseIcon />} variant='unstyled' onClick={() => setQuery("")} />
                         </InputRightElement>
                     }
                 </InputGroup>
             </Box>
 
-            {animeStore.searchResults.length > 0 &&
-                <Stack maxWidth='65rem' width='100%' gap={['1.25rem', null, '2rem']} padding={['1.25rem', null, '4rem']}>
+            {results.length > 0 &&
+                <Stack as="section" maxWidth='65rem' width='100%' gap={['1.25rem', null, '2rem']} padding={['1.25rem', null, '4rem']}>
                     <Heading size='lg'>Results</Heading>
 
                     <SimpleGrid columns={[2, 3, 4]} spacing={['1.25rem', '1.75rem', '2.125rem']}>
-                        {animeStore.searchResults.map((anime) => (
-                            <Stack key={anime.id} as={NavLink} to={`/anime/${anime.id}/details`} maxWidth='200px' >
-                                <Image src={anime.coverImage.large} aspectRatio='2/3' objectFit='contain' width='100%' />
-                                <Text fontSize='sm'>{anime.title.english || anime.title.romaji}</Text>
-                            </Stack>
+                        {results.map((anime) => (
+                            <CarouselCard key={anime.id} anime={anime}/>
                         ))}
                     </SimpleGrid>
                 </Stack>

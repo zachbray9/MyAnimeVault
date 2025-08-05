@@ -12,6 +12,12 @@ export const LoadSearchResultsQuery = (query: string) => {
                         coverImage {
                             large
                         }
+                        description
+                        averageScore
+                        episodes
+                        format
+                        season
+                        seasonYear
                     }
                 }
             }
