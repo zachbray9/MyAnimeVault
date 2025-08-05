@@ -12,7 +12,7 @@ export const HomePageQuery: string = `
                     large
                     medium
                 }
-                banner
+                bannerImage
                 description
                 episodes
                 format
