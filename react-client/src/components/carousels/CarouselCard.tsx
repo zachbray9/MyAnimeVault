@@ -36,10 +36,10 @@ export default observer(function CarouselCard({ anime }: Props) {
     }
 
     return (
-        <Box as={NavLink} to={`/anime/${anime.id}/details`} key={anime.id} position='relative' gap={4} cursor='pointer' _hover={{'.overlay': {opacity: 1}}}>
-            <Image src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
+        <Stack as={NavLink} to={`/anime/${anime.id}/details`} key={anime.id} position='relative' gap={2} cursor='pointer' _hover={{'.overlay': {opacity: 1}}}>
+            <Image id="anime-poster" src={anime.coverImage.large ?? undefined} width='100%' aspectRatio='2/3' objectFit='contain' />
 
-            <Text fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>
+            <Text id="anime-title" fontSize='sm'>{anime.title.english ?? anime.title.romaji}</Text>
 
             <Box className='overlay' position='absolute' top='-.5rem' bottom='-.5rem' right='-.5rem' left='-.5rem' opacity={0} transition='opacity 0.2s ease' overflow='hidden'>
                 <Image src={anime.coverImage.large} position='absolute' top={0} bottom={0} left={0} right={0} width='100%' height='100%' objectFit='cover' />
@@ -65,6 +65,6 @@ export default observer(function CarouselCard({ anime }: Props) {
                     </Stack>
                 </Box>
             </Box>
-        </Box>
+        </Stack>
     )
 })
