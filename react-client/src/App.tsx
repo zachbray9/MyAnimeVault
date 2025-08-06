@@ -1,19 +1,15 @@
-import { Outlet, ScrollRestoration, useNavigate } from 'react-router-dom'
+import { Outlet, ScrollRestoration } from 'react-router-dom'
 import Navbar from './components/nav/Navbar'
 import { Box, Stack } from '@chakra-ui/react'
 import { useStore } from './stores/store'
-import { useEffect } from 'react'
 import LoadingComponent from './components/common/loading/LoadingComponent'
 import { observer } from 'mobx-react-lite'
 import Footer from './components/footer/Footer'
+import usePersistentLogin from './hooks/usePersistentLogin'
 
 export default observer(function App() {
-  const { commonStore, userStore } = useStore()
-  const Navigate = useNavigate()
-
-  useEffect(() => {
-    userStore.getCurrentUser(Navigate).finally(() => commonStore.setAppLoaded(true))
-  }, [commonStore, Navigate, userStore])
+  const { commonStore } = useStore()
+  usePersistentLogin()
 
   if (!commonStore.appLoaded) {
     return (
