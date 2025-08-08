@@ -1,13 +1,16 @@
 import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip } from "@chakra-ui/react";
-import Carousel from "react-multi-carousel";
 import { AniListAnime } from "../../models/aniListAnime";
-import { featuredResponsive } from "./CarouseBreakpoints";
 import '../../styles/Carousel.css'
 import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
-import { CustomFeaturedLeftArrow, CustomFeaturedRightArrow } from "./CustomCarouselArrow";
+import { CustomFeaturedNextArrow, CustomFeaturedPrevArrow, usePrevNextButtons } from "./customCarouselArrowButtons";
+import CustomDot, { useDotButton } from "./customDot";
+import useEmblaCarousel from 'embla-carousel-react'
+import Fade from 'embla-carousel-fade'
+import useAutoPlay from "./autoplay";
+import { useState } from "react";
 
 interface Props {
     data: AniListAnime[]
@@ -15,29 +18,52 @@ interface Props {
 
 export default observer(function FeaturedCarousel({ data }: Props) {
     const { userStore } = useStore()
+    const [isHovered, setIsHovered] = useState(false)
+    const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Fade()])
+    const { onNextButtonClick, onPrevButtonClick } = usePrevNextButtons(emblaApi)
+    const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi)
+    const { progress, onStart, onPause } = useAutoPlay(emblaApi, 10000)
 
     const stripHtml = (html: string) => {
         return html.replace(/<[^>]*>/g, ''); // Removes anything between < and >
     }
 
-    return (
-        <Box as="section" overflow='hidden'>
-            <Box overflow='visible' position='relative'>
-                <Carousel
-                    responsive={featuredResponsive}
-                    infinite={true}
-                    autoPlay={true}
-                    autoPlaySpeed={10000}
-                    swipeable={true}
-                    containerClass='carousel-container'
-                    customLeftArrow={<CustomFeaturedLeftArrow />}
-                    customRightArrow={<CustomFeaturedRightArrow />}
-                >
-                    {data.map((anime) => (
-                        <Box id="carousel-item-container" key={anime.id} bgImage={[anime.coverImage.extraLarge ?? anime.coverImage.large!, anime.bannerImage!]} position='relative' height={['60vh', null, '70vh']} backgroundPosition='center' backgroundSize='cover' display='flex' alignItems={['end', null, 'center']} justifyContent='left' overflow='visible' >
-                            <Box id="carousel-item-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
+    const onHover = () => {
+        setIsHovered(true)
+        onPause()
+    }
 
-                            <Stack id="carousel-item-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
+    const onUnhover = () => {
+        setIsHovered(false)
+        onStart()
+    }
+
+    return (
+        <Box id="featured" pos="relative">
+            <Box id="featured-viewport" ref={emblaRef} onMouseEnter={onHover} onMouseLeave={onUnhover}>
+                <Box id="featured-container" display="flex" >
+                    {data.map((anime) => (
+                        <Box
+                            key={anime.id}
+                            id="featured-slide"
+                            flexGrow="0"
+                            flexShrink="0"
+                            flexBasis="100%"
+                            minW={0}
+                            maxW="100%"
+                            bgImage={[anime.coverImage.extraLarge ?? anime.coverImage.large!, anime.bannerImage!]}
+                            position='relative'
+                            height={['60vh', null, '70vh']}
+                            backgroundPosition='center'
+                            backgroundSize='cover'
+                            display='flex'
+                            alignItems={['end', null, 'center']}
+                            justifyContent='left'
+                            overflow='visible'
+                        >
+                            <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
+
+                            <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
                                 <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]}>
                                     <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
                                     {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
@@ -59,10 +85,17 @@ export default observer(function FeaturedCarousel({ data }: Props) {
 
                                 </Stack>
                             </Stack>
-
                         </Box>
                     ))}
-                </Carousel>
+                </Box>
+            </Box>
+
+            <CustomFeaturedPrevArrow onClick={onPrevButtonClick} />
+            <CustomFeaturedNextArrow onClick={onNextButtonClick} />
+            <Box id="featured-dots">
+                {scrollSnaps.map((_, index) => (
+                    <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} timeRemaining={progress} />
+                ))}
             </Box>
         </Box>
     )

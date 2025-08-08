@@ -1,6 +1,51 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { ArrowProps } from "react-multi-carousel";
+import { EmblaCarouselType } from 'embla-carousel'
+import { useCallback, useEffect, useState } from "react";
+
+interface UsePrevNextButtonsType {
+    prevBtnDisabled: boolean
+    nextBtnDisabled: boolean
+    onPrevButtonClick: () => void
+    onNextButtonClick: () => void
+}
+
+export function usePrevNextButtons(emblaApi: EmblaCarouselType | undefined, onButtonClick?: (emblaApi: EmblaCarouselType) => void): UsePrevNextButtonsType {
+    const [prevBtnDisabled, setPrevBtnDisabled] = useState(true)
+    const [nextBtnDisabled, setNextBtnDisabled] = useState(true)
+
+    const onPrevButtonClick = useCallback(() => {
+        if (!emblaApi) return
+        emblaApi.scrollPrev()
+        if (onButtonClick) onButtonClick(emblaApi)
+    }, [emblaApi, onButtonClick])
+
+    const onNextButtonClick = useCallback(() => {
+        if (!emblaApi) return
+        emblaApi.scrollNext()
+        if (onButtonClick) onButtonClick(emblaApi)
+    }, [emblaApi, onButtonClick])
+
+    const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
+        setPrevBtnDisabled(!emblaApi.canScrollPrev())
+        setNextBtnDisabled(!emblaApi.canScrollNext())
+    }, [])
+
+    useEffect(() => {
+        if (!emblaApi) return
+
+        onSelect(emblaApi)
+        emblaApi.on('reInit', onSelect).on('select', onSelect)
+    }, [emblaApi, onSelect])
+
+    return {
+        prevBtnDisabled,
+        nextBtnDisabled,
+        onPrevButtonClick,
+        onNextButtonClick
+    }
+}
 
 
 export function CustomLeftCarouselArrow({ onClick }: ArrowProps) {
@@ -89,14 +134,14 @@ export function CustomRightCarouselArrow({ onClick }: ArrowProps) {
     )
 }
 
-export function CustomFeaturedLeftArrow({ onClick }: ArrowProps) {
+export function CustomFeaturedPrevArrow({ onClick }: ArrowProps) {
     return (
         <IconButton
-            aria-label="left-arrow"
+            aria-label="featured-prev"
             variant='ghost'
             isRound
             fontSize={['1.5rem', '2rem', '2.5rem']}
-            icon={<ChevronLeftIcon/>}
+            icon={<ChevronLeftIcon />}
             position="absolute"
             left="5"
             top="50%"
@@ -113,10 +158,10 @@ export function CustomFeaturedLeftArrow({ onClick }: ArrowProps) {
     )
 }
 
-export function CustomFeaturedRightArrow({ onClick }: ArrowProps) {
+export function CustomFeaturedNextArrow({ onClick }: ArrowProps) {
     return (
         <IconButton
-            aria-label="right-arrow"
+            aria-label="featured-next"
             variant='ghost'
             isRound
             fontSize={['1.5rem', '2rem', '2.5rem']}

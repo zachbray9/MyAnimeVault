@@ -3,7 +3,7 @@ import { Box, Heading, Stack } from "@chakra-ui/react";
 import 'react-multi-carousel/lib/styles.css'
 import '../../styles/Carousel.css'
 import { regularResponsive } from "./CarouseBreakpoints";
-import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./CustomCarouselArrow";
+import { CustomLeftCarouselArrow, CustomRightCarouselArrow } from "./customCarouselArrowButtons";
 import { AniListAnime } from "../../models/aniListAnime";
 import CarouselCard from "./CarouselCard";
 
