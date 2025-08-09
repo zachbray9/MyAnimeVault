@@ -49,8 +49,16 @@ export default function useAutoPlay(emblaApi: EmblaCarouselType | undefined, del
         }
     }, [delay, elapsedTime, onTimeElapsed])
 
+    useEffect(() => {
+        if (!emblaApi) return
+
+        emblaApi.on("select", onReset)
+
+        return () => {
+            emblaApi.off("select", onReset)
+        }
+    }, [emblaApi, onReset])
 
 
-
-    return { isRunning, progress: Math.min(elapsedTime * delayDivisionCacheRef.current, 1), onStart, onPause }
+    return { isRunning, progress: Math.min(elapsedTime * delayDivisionCacheRef.current, 1), onStart, onPause, onReset }
 }

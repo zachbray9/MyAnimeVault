@@ -20,9 +20,9 @@ export default observer(function FeaturedCarousel({ data }: Props) {
     const { userStore } = useStore()
     const [isHovered, setIsHovered] = useState(false)
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Fade()])
+    const { progress, onStart, onPause } = useAutoPlay(emblaApi, 10000)
     const { onNextButtonClick, onPrevButtonClick } = usePrevNextButtons(emblaApi)
     const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi)
-    const { progress, onStart, onPause } = useAutoPlay(emblaApi, 10000)
 
     const stripHtml = (html: string) => {
         return html.replace(/<[^>]*>/g, ''); // Removes anything between < and >
@@ -39,8 +39,8 @@ export default observer(function FeaturedCarousel({ data }: Props) {
     }
 
     return (
-        <Box id="featured" pos="relative">
-            <Box id="featured-viewport" ref={emblaRef} onMouseEnter={onHover} onMouseLeave={onUnhover}>
+        <Box id="featured" pos="relative" display="flex" flexDir="column" gap={4}>
+            <Box id="featured-viewport" ref={emblaRef} >
                 <Box id="featured-container" display="flex" >
                     {data.map((anime) => (
                         <Box
@@ -64,7 +64,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
 
                             <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
-                                <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]}>
+                                <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]} onMouseEnter={onHover} onMouseLeave={onUnhover}>
                                     <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
                                     {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
@@ -92,7 +92,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
 
             <CustomFeaturedPrevArrow onClick={onPrevButtonClick} />
             <CustomFeaturedNextArrow onClick={onNextButtonClick} />
-            <Box id="featured-dots">
+            <Box id="featured-dots" display="flex" justifyContent="center" onMouseEnter={onHover} onMouseLeave={onUnhover}>
                 {scrollSnaps.map((_, index) => (
                     <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} timeRemaining={progress} />
                 ))}

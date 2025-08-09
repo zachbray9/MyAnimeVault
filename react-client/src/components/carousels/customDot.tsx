@@ -3,10 +3,9 @@ import { EmblaCarouselType } from 'embla-carousel'
 import { useCallback, useEffect, useState } from "react";
 
 interface Props {
-    autoPlaySpeed?: number,
     timeRemaining?: number,
     isHovered: boolean
-    isActive?: boolean,
+    isActive: boolean,
     onClick?: () => void
 }
 
@@ -53,7 +52,7 @@ export function useDotButton(emblaApi: EmblaCarouselType | undefined, onButtonCl
     }
 }
 
-export default function CustomDot({ onClick, isActive, timeRemaining }: Props) {
+export default function CustomDot({ onClick, isActive, timeRemaining, isHovered }: Props) {
 
     return (
         <Button
@@ -75,7 +74,7 @@ export default function CustomDot({ onClick, isActive, timeRemaining }: Props) {
                     left={0}
                     top={0}
                     bottom={0}
-                    w={`${timeRemaining! * 100}%`}
+                    w={isHovered ? "100%" : `${timeRemaining! * 100}%`}
                     transition="width 50ms linear"
                     bg="orange"
                     overflow="hidden"
