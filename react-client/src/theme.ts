@@ -113,7 +113,6 @@ const components = {
     Input: InputTheme
 }
 
-
 const theme = extendTheme({ config, styles, semanticTokens, components })
 
 export default theme

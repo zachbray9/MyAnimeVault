@@ -42,15 +42,12 @@ export default class UserStore {
         runInAction(() => this.user = null)
     }
 
-    getCurrentUser = async (navigate: (path: string) => void) => {
-        try {
-            const response = await myApiAgent.Auth.getCurrentUser()
-            runInAction(() => this.user = response.user ?? null)
-            navigate('/')
-        } catch (error) {
-            console.log(error)
-            throw error
-        }
+    setUser = (user: User) => {
+        this.user = user
+    }
+
+    clearUser = () => {
+        this.user = null
     }
 
     addAnimeToList = async (anime: AniListAnime) => {
