@@ -23,7 +23,7 @@ export default function AnimeCarousel({ data, heading }: Props) {
                 <Box id={`${headingLower}-viewport`} ref={emblaRef}>
                     <Box id={`${headingLower}-container`} display="flex">
                         {data.map((anime) => (
-                            <Box id={`${headingLower}-slide`} flexGrow={0} flexShrink={0} flexBasis={["44%", "30%", "25%", "20%", "17%", "13%"]} mr={6}>
+                            <Box key={anime.id} id={`${headingLower}-slide`} flexGrow={0} flexShrink={0} flexBasis={["44%", "30%", "25%", "20%", "17%", "13%"]} mr={6}>
                                 <CarouselCard anime={anime} key={anime.id} />
                             </Box>
                         ))}
