@@ -1,8 +1,12 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { Box, IconButton, useBreakpointValue } from "@chakra-ui/react";
-import { ArrowProps } from "react-multi-carousel";
+import { IconButton, useBreakpointValue } from "@chakra-ui/react";
 import { EmblaCarouselType } from 'embla-carousel'
 import { useCallback, useEffect, useState } from "react";
+
+interface ArrowButtonProps {
+    onClick: () => void,
+    disabled?: boolean
+}
 
 interface UsePrevNextButtonsType {
     prevBtnDisabled: boolean
@@ -48,7 +52,7 @@ export function usePrevNextButtons(emblaApi: EmblaCarouselType | undefined, onBu
 }
 
 
-export function CustomLeftCarouselArrow({ onClick }: ArrowProps) {
+export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps) {
     //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
     const responsivePadding = useBreakpointValue({
         base: '-1.25rem',
@@ -56,11 +60,16 @@ export function CustomLeftCarouselArrow({ onClick }: ArrowProps) {
     })
 
     return (
-        <Box
+        <IconButton
+            aria-label="carousel-prev"
+            icon={<ChevronRightIcon boxSize='2.5rem' color="white" />}
+            visibility={disabled ? "hidden" : "visible"}
             position="absolute"
             left={responsivePadding}
             top="0"
             bottom="0"
+            h="100%"
+            bg="transparent"
             display="flex"
             paddingX='0.5rem'
             alignItems="center"
@@ -85,13 +94,11 @@ export function CustomLeftCarouselArrow({ onClick }: ArrowProps) {
                     opacity: 1
                 }
             }}
-        >
-            <ChevronLeftIcon boxSize='2.5rem' color="white" />
-        </Box>
+        />
     )
 }
 
-export function CustomRightCarouselArrow({ onClick }: ArrowProps) {
+export function CustomNextCarouselArrow({ onClick, disabled }: ArrowButtonProps) {
     //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
     const responsivePadding = useBreakpointValue({
         base: '-1.25rem',
@@ -99,9 +106,14 @@ export function CustomRightCarouselArrow({ onClick }: ArrowProps) {
     })
 
     return (
-        <Box
+        <IconButton
+            aria-label="carousel-next"
+            icon={<ChevronRightIcon boxSize='2.5rem' color="white" />}
+            visibility={disabled ? "hidden" : "visible"}
             position="absolute"
             right={responsivePadding}
+            h="100%"
+            bg="transparent"
             top="0"
             bottom="0"
             display="flex"
@@ -128,13 +140,11 @@ export function CustomRightCarouselArrow({ onClick }: ArrowProps) {
                     opacity: 1
                 }
             }}
-        >
-            <ChevronRightIcon boxSize='2.5rem' color="white" />
-        </Box>
+        />
     )
 }
 
-export function CustomFeaturedPrevArrow({ onClick }: ArrowProps) {
+export function CustomFeaturedPrevArrow({ onClick }: ArrowButtonProps) {
     return (
         <IconButton
             aria-label="featured-prev"
@@ -158,7 +168,7 @@ export function CustomFeaturedPrevArrow({ onClick }: ArrowProps) {
     )
 }
 
-export function CustomFeaturedNextArrow({ onClick }: ArrowProps) {
+export function CustomFeaturedNextArrow({ onClick }: ArrowButtonProps) {
     return (
         <IconButton
             aria-label="featured-next"
