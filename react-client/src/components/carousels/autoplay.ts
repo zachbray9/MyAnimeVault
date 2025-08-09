@@ -35,7 +35,7 @@ export default function useAutoPlay(emblaApi: EmblaCarouselType | undefined, del
         if (isRunning) {
             intervalIdRef.current = setInterval(() => {
                 setElapsedTime(Date.now() - startTimeRef.current)
-            }, 50)
+            }, 500)
         }
 
         return () => {
