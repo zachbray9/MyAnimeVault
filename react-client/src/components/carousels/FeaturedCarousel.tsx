@@ -1,6 +1,5 @@
 import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
-import '../../styles/Carousel.css'
 import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";

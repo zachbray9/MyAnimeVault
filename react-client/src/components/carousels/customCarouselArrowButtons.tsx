@@ -62,7 +62,7 @@ export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps)
     return (
         <IconButton
             aria-label="carousel-prev"
-            icon={<ChevronRightIcon boxSize='2.5rem' color="white" />}
+            icon={<ChevronLeftIcon boxSize='2.5rem' color="white" />}
             visibility={disabled ? "hidden" : "visible"}
             position="absolute"
             left={responsivePadding}

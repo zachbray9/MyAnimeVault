@@ -1,5 +1,4 @@
 import { Box, Heading, Stack, useBreakpointValue } from "@chakra-ui/react";
-import '../../styles/Carousel.css'
 import { CustomNextCarouselArrow, CustomPrevCarouselArrow, usePrevNextButtons } from "./customCarouselArrowButtons";
 import { AniListAnime } from "../../models/aniListAnime";
 import CarouselCard from "./CarouselCard";
