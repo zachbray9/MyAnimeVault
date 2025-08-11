@@ -85,7 +85,6 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                     top={0}
                     bottom={0}
                     w="100%"
-                    transform={!isHovered ? "translate3d(-100%, 0, 0)" : "translate3d(0, 0, 0)"}
                     animation={`${progressKeyframes} ${delay + 100}ms linear forwards`} //added a millisecond of grace because setInterval lags behind animation
                     sx={{
                         animationPlayState: isHovered ? "paused" : "running",
