@@ -89,6 +89,7 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                     sx={{
                         animationPlayState: isHovered ? "paused" : "running",
                         willChange: "transform",
+                        transformStyle: "preserve-3d"
                     }}
                     bg="primary.base"
                     overflow="hidden"

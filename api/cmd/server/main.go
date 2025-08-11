@@ -31,8 +31,6 @@ func main() {
 
 	//initialize api endpoints
 	routes.InitRouter(server)
-	routes.InitStaticRoutes(server)
-	
 
 	port := os.Getenv("PORT")
 	server.Run("0.0.0.0:" + port)
