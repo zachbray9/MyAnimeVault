@@ -1,9 +1,9 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, keyframes } from "@chakra-ui/react";
 import { EmblaCarouselType } from 'embla-carousel'
 import { useCallback, useEffect, useState } from "react";
 
 interface Props {
-    timeRemaining?: number,
+    delay: number
     isHovered: boolean
     isActive: boolean,
     onClick?: () => void
@@ -52,7 +52,16 @@ export function useDotButton(emblaApi: EmblaCarouselType | undefined, onButtonCl
     }
 }
 
-export default function CustomDot({ onClick, isActive, timeRemaining, isHovered }: Props) {
+const progressKeyframes = keyframes`
+    0% {
+    transform: translate3d(-100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+`
+
+export default function CustomDot({ onClick, isActive, delay, isHovered }: Props) {
 
     return (
         <Button
@@ -62,9 +71,10 @@ export default function CustomDot({ onClick, isActive, timeRemaining, isHovered 
             minW={0}
             p={0}
             w={isActive ? 8 : 4}
-            h={2}
+            h={1.5}
             mx={1}
-            bg="gray"
+            bg={ isActive && isHovered ? "primary.base" : "gray"}
+            _hover={{ bg: "primary.base"}}
             pos="relative"
             overflow="hidden"
         >
@@ -74,12 +84,18 @@ export default function CustomDot({ onClick, isActive, timeRemaining, isHovered 
                     left={0}
                     top={0}
                     bottom={0}
-                    w={isHovered ? "100%" : `${timeRemaining! * 100}%`}
-                    transition="width 50ms linear"
-                    bg="orange"
+                    w="100%"
+                    transform={!isHovered ? "translate3d(-100%, 0, 0)" : "translate3d(0, 0, 0)"}
+                    animation={`${progressKeyframes} ${delay + 100}ms linear forwards`} //added a millisecond of grace because setInterval lags behind animation
+                    sx={{
+                        animationPlayState: isHovered ? "paused" : "running",
+                        willChange: "transform",
+                    }}
+                    bg="primary.base"
                     overflow="hidden"
                     h="100%"
-                />}
+                />
+            }
 
         </Button>
     )
