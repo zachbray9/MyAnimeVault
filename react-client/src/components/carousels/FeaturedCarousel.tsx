@@ -15,11 +15,13 @@ interface Props {
     data: AniListAnime[]
 }
 
+const DELAY: number = 10000 //in milliseconds
+
 export default observer(function FeaturedCarousel({ data }: Props) {
     const { userStore } = useStore()
     const [isHovered, setIsHovered] = useState(false)
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Fade()])
-    const { progress, onStart, onPause } = useAutoPlay(emblaApi, 10000)
+    const { onStart, onPause } = useAutoPlay(emblaApi, DELAY)
     const { onNextButtonClick, onPrevButtonClick } = usePrevNextButtons(emblaApi)
     const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi)
 
@@ -94,7 +96,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
             <Box w="100%" display="flex" justifyContent="center">
                 <Box id="featured-dots" w="fit-content" display="flex" justifyContent="center" onMouseEnter={onHover} onMouseLeave={onUnhover}>
                     {scrollSnaps.map((_, index) => (
-                        <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} timeRemaining={progress} />
+                        <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} delay={DELAY} />
                     ))}
                 </Box>
             </Box>
