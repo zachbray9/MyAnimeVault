@@ -16,7 +16,7 @@ export default function FooterItem({ children, href, isExternal, icon, onClick }
         color: 'text.subtle',
         _hover: {
             color: 'text._dark',
-            textDecoration: 'underline',                              
+            textDecoration: 'underline',
             cursor: 'pointer'
         }
     }
@@ -34,8 +34,8 @@ export default function FooterItem({ children, href, isExternal, icon, onClick }
                 {content}
             </Link>
         ) : (
-            <Link as={NavLink} to={href} {...sharedStyles}>
-                {content}
+            <Link asChild {...sharedStyles}>
+                <NavLink to={href}>{content}</NavLink>
             </Link>
         )
     }

@@ -1,4 +1,4 @@
-import { Box, Heading, IconButton, Input, InputGroup, InputRightElement, SimpleGrid, Stack } from "@chakra-ui/react";
+import { Box, Heading, IconButton, Input, InputGroup, SimpleGrid, Stack } from "@chakra-ui/react";
 import { observer } from "mobx-react-lite";
 import { CloseIcon } from "@chakra-ui/icons";
 import useAnimeSearch from "../hooks/useAnimeSearch";
@@ -14,7 +14,15 @@ export default observer(function Search() {
     return (
         <Stack as="main" alignItems='center' gap={['1.25rem', null, '4rem']}>
             <Box as="section" width='100%' bg='surface.1' display='flex' alignItems='center' justifyContent='center' paddingY={['1.25rem', '2rem']} >
-                <InputGroup maxWidth='55rem' paddingX={['1.25rem', '2rem']} >
+                <InputGroup
+                    maxWidth='55rem'
+                    paddingX={['1.25rem', '2rem']}
+                    endElement={query &&
+                        <IconButton aria-label="clear-search" variant='plain' onClick={() => setQuery("")}>
+                            <CloseIcon />
+                        </IconButton>
+                    }
+                >
                     <Input
                         variant='flushed'
                         placeholder="Search..."
@@ -25,13 +33,8 @@ export default observer(function Search() {
                         paddingBottom='0.5rem'
                         value={query}
                         onChange={handleInputChange}
-                    />
 
-                    {query &&
-                        <InputRightElement>
-                            <IconButton aria-label="clear-search" icon={<CloseIcon />} variant='unstyled' onClick={() => setQuery("")} />
-                        </InputRightElement>
-                    }
+                    />
                 </InputGroup>
             </Box>
 
@@ -39,9 +42,9 @@ export default observer(function Search() {
                 <Stack as="section" maxWidth='65rem' width='100%' gap={['1.25rem', null, '2rem']} padding={['1.25rem', null, '4rem']}>
                     <Heading size='lg'>Results</Heading>
 
-                    <SimpleGrid columns={[2, 3, 4]} spacing={['1.25rem', '1.75rem', '2.125rem']}>
+                    <SimpleGrid columns={[2, 3, 4]} gap={['1.25rem', '1.75rem', '2.125rem']}>
                         {results.map((anime) => (
-                            <CarouselCard key={anime.id} anime={anime}/>
+                            <CarouselCard key={anime.id} anime={anime} />
                         ))}
                     </SimpleGrid>
                 </Stack>

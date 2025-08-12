@@ -62,7 +62,6 @@ export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps)
     return (
         <IconButton
             aria-label="carousel-prev"
-            icon={<ChevronLeftIcon boxSize='2.5rem' color="white" />}
             visibility={disabled ? "hidden" : "visible"}
             position="absolute"
             left={responsivePadding}
@@ -94,7 +93,9 @@ export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps)
                     opacity: 1
                 }
             }}
-        />
+        >
+            <ChevronLeftIcon boxSize='2.5rem' color="white" />
+        </IconButton>
     )
 }
 
@@ -108,7 +109,6 @@ export function CustomNextCarouselArrow({ onClick, disabled }: ArrowButtonProps)
     return (
         <IconButton
             aria-label="carousel-next"
-            icon={<ChevronRightIcon boxSize='2.5rem' color="white" />}
             visibility={disabled ? "hidden" : "visible"}
             position="absolute"
             right={responsivePadding}
@@ -140,7 +140,9 @@ export function CustomNextCarouselArrow({ onClick, disabled }: ArrowButtonProps)
                     opacity: 1
                 }
             }}
-        />
+        >
+            <ChevronRightIcon boxSize='2.5rem' color="white" />
+        </IconButton>
     )
 }
 
@@ -149,9 +151,8 @@ export function CustomFeaturedPrevArrow({ onClick }: ArrowButtonProps) {
         <IconButton
             aria-label="featured-prev"
             variant='ghost'
-            isRound
+            rounded="full"
             fontSize={['1.5rem', '2rem', '2.5rem']}
-            icon={<ChevronLeftIcon />}
             position="absolute"
             left="5"
             top="50%"
@@ -164,7 +165,9 @@ export function CustomFeaturedPrevArrow({ onClick }: ArrowButtonProps) {
             _active={{
                 bg: 'blackAlpha.600'
             }}
-        />
+        >
+            <ChevronLeftIcon />
+        </IconButton>
     )
 }
 
@@ -173,9 +176,8 @@ export function CustomFeaturedNextArrow({ onClick }: ArrowButtonProps) {
         <IconButton
             aria-label="featured-next"
             variant='ghost'
-            isRound
+            rounded="full"
             fontSize={['1.5rem', '2rem', '2.5rem']}
-            icon={<ChevronRightIcon />}
             position="absolute"
             right="5"
             top="50%"
@@ -188,6 +190,8 @@ export function CustomFeaturedNextArrow({ onClick }: ArrowButtonProps) {
             _active={{
                 bg: 'blackAlpha.600'
             }}
-        />
+        >
+            <ChevronRightIcon />
+        </IconButton>
     )
 }

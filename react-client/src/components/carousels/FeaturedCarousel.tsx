@@ -1,6 +1,5 @@
-import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, IconButton, Stack, Text } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
-import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
@@ -10,6 +9,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Fade from 'embla-carousel-fade'
 import useAutoPlay from "./autoplay";
 import { useState } from "react";
+import { Tooltip } from "../ui/tooltip";
+import { Bookmark, Check, MoveRight } from "lucide-react";
 
 interface Props {
     data: AniListAnime[]
@@ -52,7 +53,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             flexBasis="100%"
                             minW={0}
                             maxW="100%"
-                            bgImage={[anime.coverImage.extraLarge ?? anime.coverImage.large!, anime.bannerImage!]}
+                            bgImage={[`url(${anime.coverImage.extraLarge ?? anime.coverImage.large})`, `url(${anime.bannerImage})`]}
                             position='relative'
                             height={['60vh', null, '70vh']}
                             backgroundPosition='center'
@@ -62,7 +63,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             justifyContent='left'
                             overflow='visible'
                         >
-                            <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
+                            <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='to-b' gradientFrom="transparent" gradientTo="background" display='flex' />
 
                             <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
                                 <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]} onMouseEnter={onHover} onMouseLeave={onUnhover}>
@@ -70,16 +71,24 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                     {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
                                     <Flex width={['100%', 'auto']} gap={2} >
-                                        <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
+                                        <NavLink to={`/anime/${anime.id}/details`}>
+                                            <Button bg='#ff640a' width={['100%', 'fit-content']} >
+                                                Check it out <MoveRight />
+                                            </Button>
+                                        </NavLink>
 
                                         {userStore.user?.animeIds.includes(anime.id) ? (
 
-                                            <Tooltip label='Remove from list' hasArrow>
-                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline' isLoading={userStore.isRemovingAnimeFromList} onClick={() => userStore.removeAnimeFromList(anime.id)} />
+                                            <Tooltip content='Remove from list' showArrow>
+                                                <IconButton aria-label="already-on-list" variant='outline' loading={userStore.isRemovingAnimeFromList} onClick={() => userStore.removeAnimeFromList(anime.id)}>
+                                                    <Check />
+                                                </IconButton>
                                             </Tooltip>
                                         ) : (
-                                            <Tooltip label='Add to list' hasArrow >
-                                                <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline' isLoading={userStore.isAddingAnimeToList} onClick={() => userStore.addAnimeToList(anime)} />
+                                            <Tooltip content='Add to list' showArrow >
+                                                <IconButton aria-label="add-to-list" variant='outline' loading={userStore.isAddingAnimeToList} onClick={() => userStore.addAnimeToList(anime)} >
+                                                    <Bookmark />
+                                                </IconButton>
                                             </Tooltip>
                                         )}
                                     </Flex>

@@ -1,4 +1,4 @@
-import { Button, FormControl, FormErrorMessage, Input, InputGroup, InputProps, InputRightElement } from "@chakra-ui/react";
+import { Button, Field, Input, InputGroup, InputProps } from "@chakra-ui/react";
 import { useField, useFormikContext } from "formik";
 import { ChangeEvent, useState } from "react";
 
@@ -22,25 +22,23 @@ export default function FormInput({ name, hideable, ...props }: Props) {
     }
 
     return (
-        <FormControl isInvalid={meta.touched && !!meta.error}>
-            <InputGroup>
+        <Field.Root invalid={meta.touched && !!meta.error}>
+            <InputGroup
+                endElement={hideable &&
+                    <Button onClick={toggleVisibility} variant='ghost' color='text.subtle' _hover={{ bg: 'none', color: 'text._dark' }}>{show ? 'hide' : 'show'}</Button>
+                }
+            >
                 <Input
                     {...props}
                     value={field.value}
                     onChange={handleInputChange}
                     type={hideable ? (show ? 'text' : 'password') : 'text'}
                 />
-
-                {hideable &&
-                    <InputRightElement>
-                        <Button onClick={toggleVisibility} variant='ghost' color='text.subtle' _hover={{bg: 'none', color: 'text._dark'}}>{show ? 'hide' : 'show'}</Button>
-                    </InputRightElement>
-                }
             </InputGroup>
 
             {meta.touched && meta.error && (
-                <FormErrorMessage>{meta.error}</FormErrorMessage>
+                <Field.ErrorText>{meta.error}</Field.ErrorText>
             )}
-        </FormControl>
+        </Field.Root>
     )
 }

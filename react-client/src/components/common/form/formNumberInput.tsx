@@ -1,4 +1,4 @@
-import { InputGroup, InputRightElement, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner } from "@chakra-ui/react";
+import { InputGroup, NumberInput, Spinner } from "@chakra-ui/react";
 import { useField, useFormikContext } from "formik";
 import { debounce } from "lodash";
 import { useEffect, useRef } from "react";
@@ -25,7 +25,7 @@ export default function FormNumberInput({ name, min, max, autoSubmit, isSubmttin
         }
     }, [])
 
-    const handleChange = (_: string, valueAsNumber: number) => {
+    const handleChange = (valueAsNumber: number) => {
         if(valueAsNumber !== field.value){
             setFieldValue(name, valueAsNumber)
     
@@ -36,30 +36,18 @@ export default function FormNumberInput({ name, min, max, autoSubmit, isSubmttin
     }
 
     return (
-        <InputGroup width='fit-content'>
-            <NumberInput
+        <InputGroup width='fit-content' endAddon={isSubmtting && <Spinner />}>
+            <NumberInput.Root
                 {...field}
-                variant='filled'
                 id={name}
                 min={min}
                 max={max}
-                clampValueOnBlur
-                keepWithinRange
-                onChange={handleChange}
-                isDisabled={isSubmtting}
+                onValueChange={value => handleChange(value.valueAsNumber)}
+                disabled={isSubmtting}
             >
-                <NumberInputField />
-                <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                </NumberInputStepper>
-            </NumberInput>
-
-            {isSubmtting &&
-                <InputRightElement>
-                    <Spinner />
-                </InputRightElement>
-            }
+                <NumberInput.Control />
+                <NumberInput.Input />
+            </NumberInput.Root>
         </InputGroup>
     )
 }

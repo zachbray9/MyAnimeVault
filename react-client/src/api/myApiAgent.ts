@@ -8,11 +8,10 @@ import { GetUserAnimeDetailsResponse } from "../models/responses/getUserAnimeDet
 import { UserAnimePatchRequest } from "../models/requests/userAnimePatchRequest";
 import { GetListResponse } from "../models/responses/getListResponse";
 import { RefreshResponse } from "../models/responses/refreshResponse";
-import { createStandaloneToast } from "@chakra-ui/react";
 import { store } from "../stores/store";
+import { toaster } from "../components/ui/toaster";
 
 const ResponseBody = <T>(response: AxiosResponse<T>) => response.data;
-const { toast } = createStandaloneToast()
 
 myApi.interceptors.response.use(
     (res) => res,
@@ -22,17 +21,12 @@ myApi.interceptors.response.use(
         if (response?.status === 401 && store.userStore.isLoggedIn) {
             store.userStore.logout()
             
-            toast({
+            toaster.create({
                 title: "Logged out",
                 description: "Your session has expired. Please login again to power up.",
-                colorScheme: "yellow",
-                position: "top",
-                variant: "solid",
-                isClosable: true,
+                type: "warning",
+                closable: true,
                 duration: 7000,
-                containerStyle: {
-                    zIndex: 9999
-                }
             })
         }
     }

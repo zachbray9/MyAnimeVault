@@ -1,5 +1,4 @@
-import { Flex, Heading, HStack, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, useDisclosure } from "@chakra-ui/react";
-import { FaBars, FaMagnifyingGlass, FaRegBookmark, FaRegUser } from "react-icons/fa6";
+import { Flex, Heading, HStack, IconButton, Image, Menu, Spacer, useDisclosure } from "@chakra-ui/react";
 import { navBarHeight, navBarIconSize } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
@@ -7,9 +6,10 @@ import Logo from "../../assets/MyAnimeVaultLogo.png"
 import { observer } from "mobx-react-lite";
 import SideMenu from "./SideMenu";
 import BrowseMenu from "./BrowseMenu";
+import { Bookmark, Search, User, Menu as MenuIcon } from "lucide-react";
 
 export default observer(function Navbar() {
-    const { isOpen, onClose, onToggle } = useDisclosure()
+    const { open, onClose, onToggle } = useDisclosure()
     const { userStore } = useStore()
 
     return (
@@ -17,27 +17,30 @@ export default observer(function Navbar() {
             {/* Hamburger menu button for small screens */}
             <IconButton
                 aria-label="hamburger-menu"
-                icon={<Icon as={FaBars} boxSize={navBarIconSize} />}
                 display={{ base: 'flex', md: 'none' }}
                 boxSize={navBarHeight}
                 padding='1rem'
-                variant='unstyled'
+                variant='plain'
                 borderRadius={0}
                 border='none'
                 boxShadow='none'
                 _hover={{ bg: 'surface.1' }}
                 _active={{ bg: 'surface.1' }}
                 onClick={onToggle}
-            />
+            >
+                <MenuIcon />
+            </IconButton>
 
             {/* Menu for small screens */}
-            <SideMenu isOpen={isOpen} onClose={onClose}/>
+            <SideMenu isOpen={open} onClose={onClose} />
 
             {/* Logo */}
-            <Flex as={NavLink} to={''} align='center' gap='0.5rem' padding='1rem'>
-                <Image src={Logo} boxSize='1.75rem' />
-                <Heading size='sm' display={['none', 'flex']} color='primary.base'>MyAnimeVault</Heading>
-            </Flex>
+            <NavLink to="">
+                <Flex align='center' gap='0.5rem' padding='1rem'>
+                    <Image src={Logo} boxSize='1.75rem' />
+                    <Heading size='sm' display={['none', 'flex']} color='primary.base'>MyAnimeVault</Heading>
+                </Flex>
+            </NavLink>
 
             {/* Browse Menu */}
             <BrowseMenu />
@@ -45,22 +48,44 @@ export default observer(function Navbar() {
             <Spacer />
 
             {/* Search, list, and account menu buttons */}
-            <IconButton as={NavLink} to='anime/search' aria-label="search" icon={<Icon as={FaMagnifyingGlass} boxSize={navBarIconSize} />} variant='navbar' />
-            <IconButton as={NavLink} to={'anime/list'} aria-label="list" icon={<Icon as={FaRegBookmark} boxSize={navBarIconSize} />} variant='navbar' />
-            <Menu>
-                <MenuButton as={IconButton} aria-label="options" icon={<Icon as={FaRegUser} boxSize={navBarIconSize} />} variant='navbar' />
+            <IconButton asChild aria-label="search" boxSize={navBarIconSize} >
+                <NavLink to="anime/search">
+                    <Search />
+                </NavLink>
+            </IconButton>
 
-                {userStore.user ? (
-                    <MenuList>
-                        <MenuItem onClick={() => userStore.logout()} >Log Out</MenuItem>
-                    </MenuList>
-                ) : (
-                    <MenuList>
-                        <MenuItem as={NavLink} to='/register'>Create Account</MenuItem>
-                        <MenuItem as={NavLink} to='/login' >Log In</MenuItem>
-                    </MenuList>
-                )}
-            </Menu>
-        </HStack>
+            <IconButton asChild aria-label="list" boxSize={navBarIconSize} >
+                <NavLink to="anime/list">
+                    <Bookmark />
+                </NavLink>
+            </IconButton>
+
+            <Menu.Root>
+                <Menu.Trigger asChild aria-label="options" >
+                    <IconButton aria-label="options" boxSize={navBarIconSize} >
+                        <User />
+                    </IconButton>
+                </Menu.Trigger>
+
+                <Menu.Positioner>
+                    <Menu.Content>
+                        {userStore.user ? (
+                            <Menu.ItemGroup>
+                                <Menu.Item value="Log Out" onClick={() => userStore.logout()} />
+                            </Menu.ItemGroup>
+                        ) : (
+                            <Menu.ItemGroup>
+                                <Menu.Item asChild value="register">
+                                    <NavLink to="/register">Create Account</NavLink>
+                                </Menu.Item>
+                                <Menu.Item asChild value="login" >
+                                    <NavLink to="/login">Log In</NavLink>
+                                </Menu.Item>
+                            </Menu.ItemGroup>
+                        )}
+                    </Menu.Content>
+                </Menu.Positioner>
+            </Menu.Root>
+        </HStack >
     )
 })
