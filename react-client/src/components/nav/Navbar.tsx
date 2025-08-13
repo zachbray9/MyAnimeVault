@@ -38,7 +38,7 @@ export default observer(function Navbar() {
             <NavLink to="">
                 <Flex align='center' gap='0.5rem' padding='1rem'>
                     <Image src={Logo} boxSize='1.75rem' />
-                    <Heading size='sm' display={['none', 'flex']} color='interactive.primary'>MyAnimeVault</Heading>
+                    <Heading size='sm' display={['none', 'flex']} color='text'>PlotArmor</Heading>
                 </Flex>
             </NavLink>
 

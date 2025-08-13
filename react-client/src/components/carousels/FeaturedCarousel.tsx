@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
@@ -67,17 +67,22 @@ export default observer(function FeaturedCarousel({ data }: Props) {
 
                             <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
                                 <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]} onMouseEnter={onHover} onMouseLeave={onUnhover}>
-                                    <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
+                                    <Heading size={['xl', null, "2xl", '4xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
 
-                                    {anime.genres &&
+                                    {/* {anime.genres &&
                                         <Text color="text.subtle" textAlign="center">{anime.genres.join(', ')}</Text>
-                                    }
+                                    } */}
+                                    <Flex gap={1}>
+                                        {anime.genres?.map((genre) => (
+                                            <Badge key={genre} bg="blackAlpha.400" borderRadius="full" px={2}>{genre}</Badge>
+                                        ))}
+                                    </Flex>
 
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
 
                                     <Flex width={['100%', 'auto']} gap={2} justifyContent="center">
                                         <NavLink to={`/anime/${anime.id}/details`}>
-                                            <Button bg='interactive.primary' width={['100%', 'fit-content']} >
+                                            <Button bg='interactive.primary' color="text"  width={['100%', 'fit-content']} >
                                                 Check it out <MoveRight />
                                             </Button>
                                         </NavLink>
@@ -87,9 +92,9 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                             loading={userStore.isRemovingAnimeFromList ?? userStore.isAddingAnimeToList}
                                             onAddToList={() => userStore.addAnimeToList(anime)}
                                             onRemoveFromList={() => userStore.removeAnimeFromList(anime.id)}
-                                            variant="outline"
-                                            borderColor="interactive.primary"
-                                            borderWidth={1}
+                                            variant="ghost"
+                                            color="text"
+                                            
                                             _hover={{ bg: "whiteAlpha.200" }}
                                         />
                                     </Flex>
