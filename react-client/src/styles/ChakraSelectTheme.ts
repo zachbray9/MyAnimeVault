@@ -6,9 +6,9 @@
 // const outline = definePartsStyle({
 //     field: {
 //         _focusVisible: {
-//             ringColor: 'primary.base',
-//             ringOffsetColor: 'primary.base',
-//             borderColor: 'primary.base',
+//             ringColor: 'interactive.primary',
+//             ringOffsetColor: 'interactive.primary',
+//             borderColor: 'interactive.primary',
 //             boxShadow: '0 0 0 1px (--chakra-colors-chakra-primary-base)'
 //         },
 //     },

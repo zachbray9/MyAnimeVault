@@ -6,18 +6,18 @@
 
 // const filled = definePartsStyle({
 //     field: {
-//         background: 'surface.1',
+//         background: 'background.secondary',
 //         border: '1px solid',
 //         _hover: {
-//             background: 'surface.1',
-//             borderColor: 'surface.2',
+//             background: 'background.secondary',
+//             borderColor: 'background.card',
 //         },
 //         _focus: {
-//             background: 'surface.1',
-//             borderColor: 'primary.base',
+//             background: 'background.secondary',
+//             borderColor: 'interactive.primary',
 //             _hover: {
-//                 borderColor: 'primary.base',
-//             boxShadow: 'primary.base'
+//                 borderColor: 'interactive.primary',
+//             boxShadow: 'interactive.primary'
 //             }
 //         }
 //     }

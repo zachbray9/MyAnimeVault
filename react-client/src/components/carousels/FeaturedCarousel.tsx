@@ -77,7 +77,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
 
                                     <Flex width={['100%', 'auto']} gap={2} justifyContent="center">
                                         <NavLink to={`/anime/${anime.id}/details`}>
-                                            <Button bg='primary.base' width={['100%', 'fit-content']} >
+                                            <Button bg='interactive.primary' width={['100%', 'fit-content']} >
                                                 Check it out <MoveRight />
                                             </Button>
                                         </NavLink>
@@ -88,7 +88,8 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                             onAddToList={() => userStore.addAnimeToList(anime)}
                                             onRemoveFromList={() => userStore.removeAnimeFromList(anime.id)}
                                             variant="outline"
-                                            borderColor="primary.base"
+                                            borderColor="interactive.primary"
+                                            borderWidth={1}
                                             _hover={{ bg: "whiteAlpha.200" }}
                                         />
                                     </Flex>

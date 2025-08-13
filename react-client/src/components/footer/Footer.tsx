@@ -8,7 +8,7 @@ export default observer(function Footer() {
     const { userStore } = useStore()
 
     return (
-        <Flex background='linear-gradient(to bottom, #000, #213944)' justifyContent='center' paddingX={['1rem', '1.5rem', '2rem']} paddingY={['4rem']} marginTop={['4rem']} wrap='wrap' gap='4rem'>
+        <Flex bgGradient="to-b" gradientFrom="background" gradientTo="background.tertiary" justifyContent='center' paddingX={['1rem', '1.5rem', '2rem']} paddingY={['4rem']} marginTop={['4rem']} wrap='wrap' gap='4rem'>
             <Stack>
                 <Heading size='md'>Connect With Us</Heading>
                 <FooterItem href="https://github.com/zachbray9/MyAnimeVault" isExternal icon={Github}>Github</FooterItem>

@@ -13,7 +13,7 @@ export default observer(function Navbar() {
     const { userStore } = useStore()
 
     return (
-        <HStack bg='surface.2' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={100} >
+        <HStack bg='background.card' position='fixed' width='100%' height={navBarHeight} paddingX={{ base: '0', md: '4rem' }} gap={0} justify='center' zIndex={100} >
             {/* Hamburger menu button for small screens */}
             <IconButton
                 aria-label="hamburger-menu"
@@ -24,8 +24,8 @@ export default observer(function Navbar() {
                 borderRadius={0}
                 border='none'
                 boxShadow='none'
-                _hover={{ bg: 'surface.1' }}
-                _active={{ bg: 'surface.1' }}
+                _hover={{ bg: 'background.secondary' }}
+                _active={{ bg: 'background.secondary' }}
                 onClick={onToggle}
             >
                 <MenuIcon />
@@ -38,7 +38,7 @@ export default observer(function Navbar() {
             <NavLink to="">
                 <Flex align='center' gap='0.5rem' padding='1rem'>
                     <Image src={Logo} boxSize='1.75rem' />
-                    <Heading size='sm' display={['none', 'flex']} color='primary.base'>MyAnimeVault</Heading>
+                    <Heading size='sm' display={['none', 'flex']} color='interactive.primary'>MyAnimeVault</Heading>
                 </Flex>
             </NavLink>
 
@@ -48,13 +48,13 @@ export default observer(function Navbar() {
             <Spacer />
 
             {/* Search, list, and account menu buttons */}
-            <IconButton asChild aria-label="search" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
+            <IconButton asChild aria-label="search" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background.secondary"}}>
                 <NavLink to="anime/search">
                     <Search />
                 </NavLink>
             </IconButton>
 
-            <IconButton asChild aria-label="list" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
+            <IconButton asChild aria-label="list" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background.secondary"}}>
                 <NavLink to="anime/list">
                     <Bookmark />
                 </NavLink>
@@ -62,13 +62,13 @@ export default observer(function Navbar() {
 
             <Menu.Root>
                 <Menu.Trigger asChild aria-label="options" >
-                    <IconButton aria-label="options" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
+                    <IconButton aria-label="options" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background.secondary"}}>
                         <User />
                     </IconButton>
                 </Menu.Trigger>
 
                 <Menu.Positioner>
-                    <Menu.Content>
+                    <Menu.Content bg="background.secondary">
                         {userStore.user ? (
                             <Menu.ItemGroup>
                                 <Menu.Item value="logout" onClick={() => userStore.logout()}>Log Out</Menu.Item>

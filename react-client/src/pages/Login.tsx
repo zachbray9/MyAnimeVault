@@ -22,7 +22,7 @@ export default observer(function Login() {
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']}>
-                <Card.Root bg="surface.1" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Card.Root bg="background.secondary" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', error: null }}
                         onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({ error: "Your email or password is incorrect." }))}
@@ -45,12 +45,12 @@ export default observer(function Login() {
                                         {errors.error && <Text color='text.danger'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" bg="primary.base" loading={isSubmitting} >Log In</Button>
+                                    <Button type="submit" bg="interactive.primary" loading={isSubmitting} >Log In</Button>
 
                                     <Flex gap={1}>
                                         <Text>No account?</Text>
                                         <NavLink to="/register">
-                                            <Link color='primary.base' _hover={{ color: 'text', borderColor: "text"}} transition='color 200ms'>Create One</Link>
+                                            <Link color='interactive.primary' _hover={{ color: 'text', borderColor: "text"}} transition='color 200ms'>Create One</Link>
                                         </NavLink>
                                     </Flex>
                                 </Card.Footer>

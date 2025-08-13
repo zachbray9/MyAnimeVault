@@ -13,7 +13,7 @@ interface Props {
 export default function FormSelect({ name, options, autoSubmit, isSubmtting }: Props) {
     const [field] = useField(name)
     const { setFieldValue, submitForm } = useFormikContext()
-    const [primarybase, surface1, surface2, text] = useToken('colors', ['primary.base', 'surface.1', 'surface.2', 'text._dark'])
+    const [primarybase, surface1, surface2, text] = useToken('colors', ['interactive.primary', 'background.secondary', 'background.card', 'text._dark'])
 
     return (
         <Select<ReactSelectOption>

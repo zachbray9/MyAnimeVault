@@ -34,7 +34,7 @@ export default function SideMenu({ isOpen, onClose }: Props) {
                                     </Accordion.ItemTrigger>
 
                                     <Accordion.ItemContent>
-                                        <Accordion.ItemBody as={Stack} background="surface.2">
+                                        <Accordion.ItemBody as={Stack} background="background.card">
                                             {
                                                 genres.map(genre => (
                                                     <SideMenuButton key={genre} to={`/anime/browse/${genre}`} onClose={onClose} paddingX="2.5rem" paddingY="1.5rem" >{genre.charAt(0).toUpperCase() + genre.slice(1)}</SideMenuButton>

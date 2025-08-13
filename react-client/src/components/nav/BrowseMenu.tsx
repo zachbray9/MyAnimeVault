@@ -14,7 +14,7 @@ export default function BrowseMenu() {
 
             <Portal>
                 <Menu.Positioner>
-                    <Menu.Content bg="surface.1">
+                    <Menu.Content bg="background.secondary">
                         <Grid width='600px' templateColumns='1fr 3fr'>
                             <Box maxWidth='300px'>
                                 <Menu.ItemGroup>

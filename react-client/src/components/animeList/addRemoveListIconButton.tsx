@@ -15,13 +15,13 @@ interface Props extends IconButtonProps {
 export default function AddRemoveListIconButton({ isInList, loading, onAddToList, onRemoveFromList, ...props }: Props) {
     return isInList ? (
         <Tooltip content='Remove from list' showArrow closeDelay={0} >
-            <IconButton aria-label="already-on-list" color="primary.base" loading={loading} onClick={onRemoveFromList} {...props}>
+            <IconButton aria-label="already-on-list" color="interactive.primary" loading={loading} onClick={onRemoveFromList} {...props}>
                 <Check />
             </IconButton>
         </Tooltip>
     ) : (
         <Tooltip content='Add to list' showArrow closeDelay={0} >
-            <IconButton aria-label="add-to-list" color="primary.base" loading={loading} onClick={onAddToList} {...props}>
+            <IconButton aria-label="add-to-list" color="interactive.primary" loading={loading} onClick={onAddToList} {...props}>
                 <Bookmark />
             </IconButton>
         </Tooltip>

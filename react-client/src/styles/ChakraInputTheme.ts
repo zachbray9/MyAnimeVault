@@ -8,10 +8,10 @@
 //     field: {
 //         border: '0px 0px 0px 1px solid',
 //         _focus: {
-//             borderColor: 'primary.base',
+//             borderColor: 'interactive.primary',
 //             boxShadow: 'none',
 //             _hover: {
-//                 borderColor: 'primary.base',
+//                 borderColor: 'interactive.primary',
 //                 boxShadow: 'none'
 //             }
 //         },
@@ -29,10 +29,10 @@
 //         border: '1px solid',
 //         borderRadius: '6px',
 //         _focus: {
-//             borderColor: 'primary.base',
+//             borderColor: 'interactive.primary',
 //             boxShadow: 'none',
 //             _hover: {
-//                 borderColor: 'primary.base',
+//                 borderColor: 'interactive.primary',
 //                 boxShadow: 'none'
 //             }
 //         },

@@ -13,7 +13,7 @@ export default observer(function Search() {
 
     return (
         <Stack as="main" alignItems='center' gap={['1.25rem', null, '4rem']}>
-            <Box as="section" width='100%' bg='surface.1' display='flex' alignItems='center' justifyContent='center' paddingY={['1.25rem', '2rem']} >
+            <Box as="section" width='100%' bg='background' display='flex' alignItems='center' justifyContent='center' paddingY={['1.25rem', '2rem']} >
                 <InputGroup
                     maxWidth='55rem'
                     paddingX={['1.25rem', '2rem']}
@@ -28,7 +28,7 @@ export default observer(function Search() {
                         placeholder="Search..."
                         fontSize={['1.5rem', '1.75rem', '2.125rem']}
                         _focusVisible={{
-                            borderColor: 'primary.base'
+                            borderColor: 'interactive.primary'
                         }}
                         paddingBottom='0.5rem'
                         value={query}

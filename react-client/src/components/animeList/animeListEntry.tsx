@@ -12,7 +12,7 @@ export default function AnimeListEntry({ userAnime }: Props) {
 
     return (
         <NavLink to={`/anime/${userAnime.id}/details`}>
-            <Flex key={userAnime.id} width='100%' justify='start' gap={['1.5rem', '1.75rem', '2rem']} padding={['0.5rem', '0.75rem', '1rem']} _hover={{ bg: 'surface.1' }}>
+            <Flex key={userAnime.id} width='100%' justify='start' gap={['1.5rem', '1.75rem', '2rem']} padding={['0.5rem', '0.75rem', '1rem']} _hover={{ bg: 'background.secondary' }}>
                 <Image src={userAnime.coverImage?.large} aspectRatio='2/3' boxSize={imageHeight} objectFit='contain' />
                 <Stack width='100%' justify='space-between'>
                     <Stack>
@@ -21,7 +21,12 @@ export default function AnimeListEntry({ userAnime }: Props) {
                     </Stack>
 
                     <Stack>
-                        <Progress.Root size={['sm', 'md', 'lg']} color='primary.base' min={0} max={userAnime.episodes || (userAnime.numEpisodesWatched === 0 ? Infinity : userAnime.numEpisodesWatched * 2)} value={userAnime.numEpisodesWatched} />
+                        <Progress.Root size={['sm', 'md', 'lg']} min={0} max={userAnime.episodes || (userAnime.numEpisodesWatched === 0 ? Infinity : userAnime.numEpisodesWatched * 2)} value={userAnime.numEpisodesWatched} >
+                            <Progress.Track bg="background.secondary">
+                                <Progress.Range bg="interactive.primary"/>
+                            </Progress.Track>
+                        </Progress.Root>
+
                         <Flex justify='space-between'>
                             <Text fontSize={['xs', 'sm', 'md']} display='flex' alignItems='center' gap={1}><Star color="yellow" /> {userAnime.rating}</Text>
                             <Text fontSize={['xs', 'sm', 'md']}>{`${userAnime.numEpisodesWatched} / ${userAnime.episodes || '?'} ep`}</Text>

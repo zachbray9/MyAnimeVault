@@ -5,7 +5,7 @@
 
 // const baseStyle = definePartsStyle({
 //     filledTrack: {
-//         bg: "primary.base"
+//         bg: "interactive.primary"
 //     }
 // });
 

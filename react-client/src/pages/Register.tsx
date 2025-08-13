@@ -23,7 +23,7 @@ export default observer(function Register() {
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']} position='relative'>
-                <Card.Root bg="surface.1" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Card.Root bg="background.secondary" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', confirmPassword: '', error: null }}
                         onSubmit={(values, { setErrors }) => userStore.register(values).catch(() => setErrors({ error: 'There was a problem creating your account.' }))}
@@ -48,13 +48,13 @@ export default observer(function Register() {
                                         {errors.error && <Text color='text.danger'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" bg="primary.base" _hover={{bg: "primary.hover"}} loading={isSubmitting} >Create Account</Button>
+                                    <Button type="submit" bg="interactive.primary" _hover={{bg: "primary.hover"}} loading={isSubmitting} >Create Account</Button>
 
 
                                     <Flex gap={1}>
                                         <Text>Already have an account?</Text>
                                         <NavLink to="/login">
-                                            <Link color='primary.base' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Log In</Link>
+                                            <Link color='interactive.primary' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Log In</Link>
                                         </NavLink>
                                     </Flex>
 
