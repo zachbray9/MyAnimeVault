@@ -97,7 +97,7 @@ export default observer(function AnimeDetails() {
                                             <Button variant='outline' loading={userStore.isRemovingAnimeFromList} width='fit-content' onClick={() => userStore.removeAnimeFromList(animeStore.selectedAnime!.id)}>Remove from list <Trash /></Button>
                                         </Stack>
                                     ) : (
-                                        <Button bg="primary.base" _hover={{bg: "primary.hover"}} loading={userStore.isAddingAnimeToList} width='fit-content' onClick={() => userStore.addAnimeToList(animeStore.selectedAnime!)}>Add to list <Plus /></Button>
+                                        <Button bg="interactive.primary" _hover={{bg: "primary.hover"}} loading={userStore.isAddingAnimeToList} width='fit-content' onClick={() => userStore.addAnimeToList(animeStore.selectedAnime!)}>Add to list <Plus /></Button>
                                     )}
                                 </Skeleton>
                             </Stack>

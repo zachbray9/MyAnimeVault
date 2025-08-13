@@ -1,5 +1,5 @@
 import { Flex, Heading, HStack, IconButton, Image, Menu, Spacer, useDisclosure } from "@chakra-ui/react";
-import { navBarHeight, navBarIconSize } from "../../theme";
+import { navBarHeight } from "../../theme";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import Logo from "../../assets/MyAnimeVaultLogo.png"

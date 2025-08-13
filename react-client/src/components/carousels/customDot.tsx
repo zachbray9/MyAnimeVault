@@ -74,8 +74,8 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
             w={isActive ? 8 : 4}
             h={1.5}
             mx={1}
-            bg={ isActive && isHovered ? "primary.base" : "gray"}
-            _hover={{ bg: "primary.base"}}
+            bg={ isActive && isHovered ? "interactive.primary" : "gray.600"}
+            _hover={{ bg: "interactive.primary"}}
             pos="relative"
             overflow="hidden"
             transition="width 200ms ease-out, background 200ms ease-out"
@@ -95,7 +95,7 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                         willChange: "transform",
                         transformStyle: "preserve-3d"
                     }}
-                    bg="primary.base"
+                    bg="interactive.primary"
                     overflow="hidden"
                     h="100%"
                 />
