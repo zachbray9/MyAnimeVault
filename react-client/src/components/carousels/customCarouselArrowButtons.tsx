@@ -56,7 +56,7 @@ export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps)
     //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
     const responsivePadding = useBreakpointValue({
         base: '-1.25rem',
-        md: '-4rem'
+        md: '-4.1rem'
     })
 
     return (
@@ -83,8 +83,10 @@ export function CustomPrevCarouselArrow({ onClick, disabled }: ArrowButtonProps)
                 left: 0,
                 right: 0,
                 bottom: 0,
-                bgGradient: 'linear(to-l, transparent, rgba(0, 0, 0, 0.80))',
-                transition: 'opacity 0.3s',
+                backgroundGradient: "to-l",
+                gradientFrom: "transparent",
+                gradientTo: "background",
+                transition: 'opacity 300ms',
                 opacity: 0,
                 zIndex: -1
             }}
@@ -103,7 +105,7 @@ export function CustomNextCarouselArrow({ onClick, disabled }: ArrowButtonProps)
     //needs to be the same as the padding of the top level stack in the AnimeCarousel component, but negative
     const responsivePadding = useBreakpointValue({
         base: '-1.25rem',
-        md: '-4rem'
+        md: '-4.1rem'
     })
 
     return (
@@ -130,8 +132,10 @@ export function CustomNextCarouselArrow({ onClick, disabled }: ArrowButtonProps)
                 left: 0,
                 right: 0,
                 bottom: 0,
-                bgGradient: 'linear(to-r, transparent, rgba(0, 0, 0, 0.80))',
-                transition: 'opacity 0.3s',
+                backgroundGradient: "to-r",
+                gradientFrom: "transparent",
+                gradientTo: "background",
+                transition: 'opacity 300ms',
                 opacity: 0,
                 zIndex: -1
             }}

@@ -1,13 +1,13 @@
 import { Box, Flex, Icon, Link, Text } from "@chakra-ui/react"
+import { LucideIcon } from "lucide-react"
 import { ReactNode } from "react"
-import { IconType } from "react-icons"
 import { NavLink } from "react-router-dom"
 
 interface Props {
     children: ReactNode
     href?: string
     isExternal?: boolean
-    icon?: IconType
+    icon?: LucideIcon
     onClick?: () => void
 }
 
@@ -15,15 +15,16 @@ export default function FooterItem({ children, href, isExternal, icon, onClick }
     const sharedStyles = {
         color: 'text.subtle',
         _hover: {
-            color: 'text._dark',
+            color: 'text',
             textDecoration: 'underline',
             cursor: 'pointer'
-        }
+        },
+        transition: "color 200ms ease-out"
     }
 
     const content = (
         <Flex gap='0.5rem' alignItems='center'>
-            {icon && <Icon as={icon} />}
+            {icon && <Icon as={icon} size="md"/>}
             <Text>{children}</Text>
         </Flex>
     )

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import { Box, Button, Card, Heading, Link, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Card, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import FormInput from "../components/common/form/FormInput"
 import { useStore } from "../stores/store"
@@ -22,7 +22,7 @@ export default observer(function Login() {
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']}>
-                <Card.Root maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Card.Root bg="surface.1" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', error: null }}
                         onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({ error: "Your email or password is incorrect." }))}
@@ -30,8 +30,8 @@ export default observer(function Login() {
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
                             <Form onSubmit={handleSubmit} >
-                                <Card.Header display='flex' justifyContent='center'>
-                                    <Heading>Log In</Heading>
+                                <Card.Header>
+                                    <Heading size="3xl" textAlign="center">Log In</Heading>
                                 </Card.Header>
 
                                 <Card.Body as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
@@ -45,14 +45,14 @@ export default observer(function Login() {
                                         {errors.error && <Text color='text.danger'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" variant='solid' loading={isSubmitting} >Log In</Button>
+                                    <Button type="submit" bg="primary.base" loading={isSubmitting} >Log In</Button>
 
-                                    <Text>
-                                        No account?
+                                    <Flex gap={1}>
+                                        <Text>No account?</Text>
                                         <NavLink to="/register">
-                                            <Link color='primary.base' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Create One</Link>
+                                            <Link color='primary.base' _hover={{ color: 'text', borderColor: "text"}} transition='color 200ms'>Create One</Link>
                                         </NavLink>
-                                    </Text>
+                                    </Flex>
                                 </Card.Footer>
                             </Form>
                         )}

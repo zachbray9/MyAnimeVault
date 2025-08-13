@@ -17,7 +17,7 @@ export default function AnimeCarousel({ data, heading }: Props) {
 
     return (
         <Stack className="carousel-main-wrapper" gap={{ base: '0.5rem', md: '1rem' }} paddingX={{ base: '1.25rem', md: '4rem' }} overflow='hidden' >
-            <Heading size={{ base: "md", md: "lg" }} fontWeight="semibold">{heading}</Heading>
+            <Heading size={{ base: "xl", md: "3xl" }} fontWeight="semibold">{heading}</Heading>
 
             <Box id={headingLower} pos="relative">
                 <Box id={`${headingLower}-viewport`} ref={emblaRef}>

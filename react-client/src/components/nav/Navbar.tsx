@@ -71,7 +71,7 @@ export default observer(function Navbar() {
                     <Menu.Content>
                         {userStore.user ? (
                             <Menu.ItemGroup>
-                                <Menu.Item value="Log Out" onClick={() => userStore.logout()} />
+                                <Menu.Item value="logout" onClick={() => userStore.logout()}>Log Out</Menu.Item>
                             </Menu.ItemGroup>
                         ) : (
                             <Menu.ItemGroup>

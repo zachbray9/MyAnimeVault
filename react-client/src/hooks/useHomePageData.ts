@@ -12,7 +12,9 @@ export default function useHomePageData() {
 
     const { data, isPending, error } = useQuery({
         queryKey: ["home"],
-        queryFn: fetchHomeData
+        queryFn: fetchHomeData,
+        refetchOnWindowFocus: false,
+        staleTime: Infinity
     })
 
     if (error) {

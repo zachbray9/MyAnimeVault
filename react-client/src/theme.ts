@@ -1,5 +1,4 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
-import { iconButtonRecipe } from "./styles/chakraIconButtonStyles";
 // import { SelectTheme } from "./styles/ChakraSelectTheme";
 // import { NumberInputTheme } from "./styles/ChakraNumberInputTheme";
 // import { ProgressTheme } from "./styles/ChakraProgressBarTheme";
@@ -39,10 +38,6 @@ const config = defineConfig({
                 }
             }
         },
-        recipes: {
-            button: iconButtonRecipe,
-            iconButton: iconButtonRecipe
-        }
     },
     globalCss: {
         "html, body": {

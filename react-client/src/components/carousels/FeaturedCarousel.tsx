@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, IconButton, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
@@ -9,8 +9,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Fade from 'embla-carousel-fade'
 import useAutoPlay from "./autoplay";
 import { useState } from "react";
-import { Tooltip } from "../ui/tooltip";
-import { Bookmark, Check, MoveRight } from "lucide-react";
+import { MoveRight } from "lucide-react";
+import AddRemoveListIconButton from "../animeList/addRemoveListIconButton";
 
 interface Props {
     data: AniListAnime[]
@@ -68,29 +68,29 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
                                 <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]} onMouseEnter={onHover} onMouseLeave={onUnhover}>
                                     <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
-                                    {anime.genres && <Text color="text.subtle">{anime.genres.join(', ')}</Text>}
+
+                                    {anime.genres &&
+                                        <Text color="text.subtle" textAlign="center">{anime.genres.join(', ')}</Text>
+                                    }
+
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
-                                    <Flex width={['100%', 'auto']} gap={2} >
+
+                                    <Flex width={['100%', 'auto']} gap={2} justifyContent="center">
                                         <NavLink to={`/anime/${anime.id}/details`}>
-                                            <Button bg='#ff640a' width={['100%', 'fit-content']} >
+                                            <Button bg='primary.base' width={['100%', 'fit-content']} >
                                                 Check it out <MoveRight />
                                             </Button>
                                         </NavLink>
 
-                                        {userStore.user?.animeIds.includes(anime.id) ? (
-
-                                            <Tooltip content='Remove from list' showArrow>
-                                                <IconButton aria-label="already-on-list" variant="outline" loading={userStore.isRemovingAnimeFromList} onClick={() => userStore.removeAnimeFromList(anime.id)}>
-                                                    <Check />
-                                                </IconButton>
-                                            </Tooltip>
-                                        ) : (
-                                            <Tooltip content='Add to list' showArrow >
-                                                <IconButton aria-label="add-to-list" variant="outline" loading={userStore.isAddingAnimeToList} onClick={() => userStore.addAnimeToList(anime)} >
-                                                    <Bookmark />
-                                                </IconButton>
-                                            </Tooltip>
-                                        )}
+                                        <AddRemoveListIconButton
+                                            isInList={userStore.user?.animeIds.includes(anime.id) ?? false}
+                                            loading={userStore.isRemovingAnimeFromList ?? userStore.isAddingAnimeToList}
+                                            onAddToList={() => userStore.addAnimeToList(anime)}
+                                            onRemoveFromList={() => userStore.removeAnimeFromList(anime.id)}
+                                            variant="outline"
+                                            borderColor="primary.base"
+                                            _hover={{ bg: "whiteAlpha.200" }}
+                                        />
                                     </Flex>
 
                                 </Stack>

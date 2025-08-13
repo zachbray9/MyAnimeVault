@@ -1,11 +1,11 @@
-import { Box, Flex, IconButton, Image, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Stack, Text } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
 import { NavLink } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
 import '../../styles/CarouselCard.css'
-import { Tooltip } from "../ui/tooltip";
-import { Bookmark, Check, Star } from "lucide-react"
+import { Star } from "lucide-react"
+import AddRemoveListIconButton from "../animeList/addRemoveListIconButton";
 
 interface Props {
     anime: AniListAnime
@@ -57,19 +57,16 @@ export default observer(function CarouselCard({ anime }: Props) {
                                 <Text fontSize='xs' lineClamp={5}>{cleanDescription}</Text>
                             </Stack>
                             <Flex >
-                                {userStore.user?.animeIds.includes(anime.id) ? (
-                                    <Tooltip content='Remove from list' positioning={{ placement: "top" }} showArrow>
-                                        <IconButton aria-label="add-to-list-button-card" variant='ghost' color='primary.base' onClick={handleRemoveFromList} loading={userStore.isRemovingAnimeFromList} >
-                                            <Check />
-                                        </IconButton>
-                                    </Tooltip>
-                                ) : (
-                                    <Tooltip content='Add to list' positioning={{ placement: "top" }} showArrow>
-                                        <IconButton aria-label="add-to-list-button-card" variant='ghost' color='primary.base' onClick={handleAddToList} loading={userStore.isAddingAnimeToList} >
-                                            <Bookmark />
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
+                                <AddRemoveListIconButton 
+                                    isInList={userStore.user?.animeIds.includes(anime.id) ?? false}
+                                    loading={userStore.isAddingAnimeToList ?? userStore.isRemovingAnimeFromList}
+                                    onAddToList={() => handleAddToList}
+                                    onRemoveFromList={() => handleRemoveFromList}
+                                    variant="ghost"
+                                    _hover={{
+                                        bg: "whiteAlpha.200"
+                                    }}
+                                />
                             </Flex>
                         </Stack>
                     </Box>

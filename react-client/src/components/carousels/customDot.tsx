@@ -80,6 +80,7 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
             overflow="hidden"
             transition="width 200ms ease-out, background 200ms ease-out"
             willChange="width"
+            border="none"
         >
             {isActive &&
                 <Box
