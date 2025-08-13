@@ -8,8 +8,8 @@ const genres: string[] = ["action", "adventure", "comedy", "drama", "ecchi", "fa
 export default function BrowseMenu() {
     return (
         <Menu.Root>
-            <Menu.Trigger asChild>
-                <Button variant="plain" size="sm" h="100%" outline="none">Browse <ChevronDownIcon /></Button>
+            <Menu.Trigger asChild visibility={{base: "hidden", sm: "hidden", md: "visible"}}>
+                <Button variant="ghost" size="sm" h="100%" outline="none">Browse <ChevronDownIcon /></Button>
             </Menu.Trigger>
 
             <Portal>

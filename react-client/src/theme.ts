@@ -13,12 +13,12 @@ const config = defineConfig({
         tokens: {
             colors: {
                 surface: {
-                    1: {value: '#141519'},
-                    2: {value: '#23252b'}
+                    1: { value: '#141519' },
+                    2: { value: '#23252b' }
                 },
                 primary: {
-                    base: {value: '#ff640a'},
-                    hover: {value: '#ff8c2b'}
+                    base: { value: '#ff640a' },
+                    hover: { value: '#ff8c2b' }
                 }
             },
 
@@ -26,21 +26,22 @@ const config = defineConfig({
         semanticTokens: {
             colors: {
                 text: {
-                    value: { base: "#000", _dark: "#f5f5f5"},
+                    DEFAULT: { value: { base: "#000", _dark: "#f5f5f5" } },
                     subtle: {
-                        value: { base: "#a0a0a0", _dark: "#a0a0a0"}
+                        value: { base: "#a0a0a0", _dark: "#a0a0a0" }
                     },
                     danger: {
-                        value: { base: "red.600", _dark: "red.600"}
+                        value: { base: "red.600", _dark: "red.600" }
                     }
                 },
                 background: {
-                    value: { base: "#fff", _dark: "#000"}
+                    value: { base: "#fff", _dark: "#000" }
                 }
             }
         },
         recipes: {
-            button: iconButtonRecipe
+            button: iconButtonRecipe,
+            iconButton: iconButtonRecipe
         }
     },
     globalCss: {

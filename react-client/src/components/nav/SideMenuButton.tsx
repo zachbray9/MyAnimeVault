@@ -12,7 +12,7 @@ interface Props {
 
 export default function SideMenuButton({ children, to, onClose, paddingX = '1rem', paddingY = '0.5rem' }: Props) {
     return (
-        <Button asChild onClick={onClose} variant='ghost' justifyContent='start' _focus={{ background: 'inherit', color: 'primary.base', borderLeft: '3px solid', borderColor: 'primary.base' }} paddingX={paddingX} paddingY={paddingY}>
+        <Button asChild onClick={onClose} size="lg" variant='ghost' justifyContent='start' border="none" paddingX={paddingX} paddingY={paddingY}>
             <NavLink to={to}>{children}</NavLink>
         </Button>
     )

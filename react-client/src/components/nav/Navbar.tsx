@@ -48,13 +48,13 @@ export default observer(function Navbar() {
             <Spacer />
 
             {/* Search, list, and account menu buttons */}
-            <IconButton asChild aria-label="search" boxSize={navBarIconSize} >
+            <IconButton asChild aria-label="search" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
                 <NavLink to="anime/search">
                     <Search />
                 </NavLink>
             </IconButton>
 
-            <IconButton asChild aria-label="list" boxSize={navBarIconSize} >
+            <IconButton asChild aria-label="list" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
                 <NavLink to="anime/list">
                     <Bookmark />
                 </NavLink>
@@ -62,7 +62,7 @@ export default observer(function Navbar() {
 
             <Menu.Root>
                 <Menu.Trigger asChild aria-label="options" >
-                    <IconButton aria-label="options" boxSize={navBarIconSize} >
+                    <IconButton aria-label="options" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "surface.1"}}>
                         <User />
                     </IconButton>
                 </Menu.Trigger>
