@@ -45,7 +45,7 @@ export default observer(function Navbar() {
             </Flex>
 
             {/* Browse Menu */}
-            <Flex flexShrink={1}>
+            <Flex flexShrink={1} h="100%">
                 <BrowseMenu />
             </Flex>
 
