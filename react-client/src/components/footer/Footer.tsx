@@ -11,7 +11,7 @@ export default observer(function Footer() {
         <Flex bgGradient="to-b" gradientFrom="background" gradientTo="background.tertiary" justifyContent='center' paddingX={['1rem', '1.5rem', '2rem']} paddingY={['4rem']} marginTop={['4rem']} wrap='wrap' gap='4rem'>
             <Stack>
                 <Heading size='md'>Connect With Us</Heading>
-                <FooterItem href="https://github.com/zachbray9/MyAnimeVault" isExternal icon={Github}>Github</FooterItem>
+                <FooterItem href="https://github.com/zachbray9/PlotArmor" isExternal icon={Github}>Github</FooterItem>
 
             </Stack>
 
