@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
-interface Props{
+interface Props {
     children: ReactNode
     to: string
     onClose: () => void
@@ -10,10 +10,10 @@ interface Props{
     paddingY?: string
 }
 
-export default function SideMenuButton({children, to, onClose, paddingX = '1rem', paddingY = '0.5rem'} : Props){
+export default function SideMenuButton({ children, to, onClose, paddingX = '1rem', paddingY = '0.5rem' }: Props) {
     return (
-        <Button as={NavLink} to={to} onClick={onClose} variant='ghost' justifyContent='start' _focus={{background: 'inherit', color: 'primary.base', borderLeft: '3px solid', borderColor: 'primary.base'}} paddingX={paddingX} paddingY={paddingY}>
-            {children}
+        <Button asChild onClick={onClose} size="lg" variant='ghost' justifyContent='start' border="none" paddingX={paddingX} paddingY={paddingY}>
+            <NavLink to={to}>{children}</NavLink>
         </Button>
     )
 }

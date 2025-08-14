@@ -11,7 +11,7 @@ export default observer(function Home() {
     return (
         <>
             <Helmet>
-                <title>MyAnimeVault - Explore, rate, and keep track of your favorite anime</title>
+                <title>PlotArmor - Explore, rate, and keep track of your favorite anime</title>
             </Helmet>
 
             <Stack as="main" gap='4rem' overflow='hidden'>

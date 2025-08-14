@@ -22,7 +22,7 @@ export default observer(function List() {
     return (
         <>
             <Helmet>
-                <title>Anime List - MyAnimeVault</title>
+                <title>Anime List - PlotArmor</title>
             </Helmet>
 
             <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%'>

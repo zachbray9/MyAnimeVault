@@ -1,4 +1,5 @@
-import { Box, Button, keyframes } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { EmblaCarouselType } from 'embla-carousel'
 import { useCallback, useEffect, useState } from "react";
 
@@ -73,10 +74,13 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
             w={isActive ? 8 : 4}
             h={1.5}
             mx={1}
-            bg={ isActive && isHovered ? "primary.base" : "gray"}
-            _hover={{ bg: "primary.base"}}
+            bg={ isActive && isHovered ? "interactive.primary" : "gray.600"}
+            _hover={{ bg: "interactive.primary"}}
             pos="relative"
             overflow="hidden"
+            transition="width 200ms ease-out, background 200ms ease-out"
+            willChange="width"
+            border="none"
         >
             {isActive &&
                 <Box
@@ -86,12 +90,12 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                     bottom={0}
                     w="100%"
                     animation={`${progressKeyframes} ${delay + 100}ms linear forwards`} //added a millisecond of grace because setInterval lags behind animation
-                    sx={{
+                    style={{
                         animationPlayState: isHovered ? "paused" : "running",
                         willChange: "transform",
                         transformStyle: "preserve-3d"
                     }}
-                    bg="primary.base"
+                    bg="interactive.primary"
                     overflow="hidden"
                     h="100%"
                 />

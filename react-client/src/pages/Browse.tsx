@@ -41,7 +41,7 @@ export default observer(function Browse() {
     return (
         <>
             <Helmet>
-                <title>{`${formattedCategory} Anime Shows and Movies - MyAnimeVault`}</title>
+                <title>{`${formattedCategory} Anime Shows and Movies - PlotArmor`}</title>
             </Helmet>
 
             <Box display='flex' justifyContent='center' width='100%'>
@@ -51,13 +51,23 @@ export default observer(function Browse() {
                         {category && <Text>{categoryDescriptionMap.get(category)}</Text>}
                     </Stack>
 
-                    <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)', 'repeat(5, 1fr)', 'repeat(6, 1fr)', null, 'repeat(7, 1fr)']} gap={['1rem', '1.5rem', '2rem']}>
-                        {animeList.map(anime => (
+                    <Grid
+                        templateColumns={{
+                            base: 'repeat(2, 1fr)',
+                            sm: 'repeat(3, 1fr)',
+                            md: 'repeat(4, 1fr)',
+                            lg: 'repeat(5, 1fr)',
+                            xl: 'repeat(6, 1fr)', 
+                            xlTo2xl: 'repeat(7, 1fr)'
+                        }}
+                        gap={['1rem', '1.5rem', '2rem']}
+                    >
+                        {animeList.map((anime) => (
                             <CarouselCard key={anime.id} anime={anime} />
                         ))}
                     </Grid>
                 </Stack>
-            </Box>
+            </Box >
         </>
     )
 })

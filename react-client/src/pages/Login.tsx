@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Card, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import FormInput from "../components/common/form/FormInput"
 import { useStore } from "../stores/store"
@@ -18,41 +18,46 @@ export default observer(function Login() {
     return (
         <>
             <Helmet>
-                <title>MyAnimeVault Login: Keep Track of Your Favorite Shows With Your Account</title>
+                <title>Suit up - Login to PlotArmor</title>
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']}>
-                <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Card.Root bg="background.secondary" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', error: null }}
-                        onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({error: "Your email or password is incorrect."}))}
+                        onSubmit={(values, { setErrors }) => userStore.login(values).catch(() => setErrors({ error: "Your email or password is incorrect." }))}
                         validationSchema={validationSchema}
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
                             <Form onSubmit={handleSubmit} >
-                                <CardHeader display='flex' justifyContent='center'>
-                                    <Heading>Log In</Heading>
-                                </CardHeader>
+                                <Card.Header>
+                                    <Heading size="3xl" textAlign="center">Log In</Heading>
+                                </Card.Header>
 
-                                <CardBody as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
+                                <Card.Body as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
                                     <FormInput name="email" placeholder="Email" variant='flushed' />
 
                                     <FormInput name="password" placeholder="Password" variant='flushed' hideable />
-                                </CardBody>
+                                </Card.Body>
 
-                                <CardFooter display='flex' flexDirection='column' justify='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
+                                <Card.Footer display='flex' flexDirection='column' justifyContent='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
                                     <Box width='100%' >
                                         {errors.error && <Text color='text.danger'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" variant='solid' isLoading={isSubmitting} >Log In</Button>
+                                    <Button type="submit" bg="interactive.primary" loading={isSubmitting} >Log In</Button>
 
-                                    <Text>No account? <Text as={NavLink} to='/register' variant='link' color='primary.base' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Create One</Text></Text>
-                                </CardFooter>
+                                    <Flex gap={1}>
+                                        <Text>No account?</Text>
+                                        <NavLink to="/register">
+                                            <Link color='interactive.primary' _hover={{ color: 'text', borderColor: "text"}} transition='color 200ms'>Create One</Link>
+                                        </NavLink>
+                                    </Flex>
+                                </Card.Footer>
                             </Form>
                         )}
                     </Formik>
-                </Card>
+                </Card.Root>
 
             </Box>
         </>

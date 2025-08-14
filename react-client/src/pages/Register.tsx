@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Card, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { observer } from "mobx-react-lite";
 import FormInput from "../components/common/form/FormInput";
@@ -19,11 +19,11 @@ export default observer(function Register() {
     return (
         <>
             <Helmet>
-                <title>Register for MyAnimeVault: Explore Anime Anytime!</title>
+                <title>Unlock your armor - Sign up for PlotArmor</title>
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']} position='relative'>
-                <Card maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
+                <Card.Root bg="background.secondary" maxWidth='31rem' width='100%' padding={['1.25rem', '1.75rem', '2rem']}>
                     <Formik
                         initialValues={{ email: '', password: '', confirmPassword: '', error: null }}
                         onSubmit={(values, { setErrors }) => userStore.register(values).catch(() => setErrors({ error: 'There was a problem creating your account.' }))}
@@ -31,31 +31,38 @@ export default observer(function Register() {
                     >
                         {({ handleSubmit, isSubmitting, errors }) => (
                             <Form onSubmit={handleSubmit} >
-                                <CardHeader display='flex' justifyContent='center'>
-                                    <Heading>Create Account</Heading>
-                                </CardHeader>
+                                <Card.Header>
+                                    <Heading size="3xl" textAlign="center">Create Account</Heading>
+                                </Card.Header>
 
-                                <CardBody as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
+                                <Card.Body as={Stack} gap={['1.5rem', '1.75rem', '2rem']}>
                                     <FormInput name="email" placeholder="Email" variant='flushed' />
 
                                     <FormInput name="password" placeholder="Password" variant='flushed' hideable />
 
                                     <FormInput name="confirmPassword" placeholder="Confirm Password" variant='flushed' hideable />
-                                </CardBody>
+                                </Card.Body>
 
-                                <CardFooter display='flex' flexDirection='column' justify='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
+                                <Card.Footer display='flex' flexDirection='column' justifyContent='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
                                     <Box width='100%' >
                                         {errors.error && <Text color='text.danger'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" variant='solid' isLoading={isSubmitting} >Create Account</Button>
+                                    <Button type="submit" bg="interactive.primary" _hover={{bg: "primary.hover"}} loading={isSubmitting} >Create Account</Button>
 
-                                    <Text>Already have an account? <Text as={NavLink} to='/login' variant='link' color='primary.base' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Log In</Text></Text>
-                                </CardFooter>
+
+                                    <Flex gap={1}>
+                                        <Text>Already have an account?</Text>
+                                        <NavLink to="/login">
+                                            <Link color='interactive.primary' _hover={{ color: 'text._dark' }} transition='all 0.3s'>Log In</Link>
+                                        </NavLink>
+                                    </Flex>
+
+                                </Card.Footer>
                             </Form>
                         )}
                     </Formik>
-                </Card>
+                </Card.Root>
 
             </Box>
         </>

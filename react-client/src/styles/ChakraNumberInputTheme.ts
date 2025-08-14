@@ -1,26 +1,26 @@
-import { numberInputAnatomy } from '@chakra-ui/anatomy'
-import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
+// import { numberInputAnatomy } from '@chakra-ui/anatomy'
+// import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
 
-const { definePartsStyle, defineMultiStyleConfig } =
-  createMultiStyleConfigHelpers(numberInputAnatomy.keys)
+// const { definePartsStyle, defineMultiStyleConfig } =
+//   createMultiStyleConfigHelpers(numberInputAnatomy.keys)
 
-const filled = definePartsStyle({
-    field: {
-        background: 'surface.1',
-        border: '1px solid',
-        _hover: {
-            background: 'surface.1',
-            borderColor: 'surface.2',
-        },
-        _focus: {
-            background: 'surface.1',
-            borderColor: 'primary.base',
-            _hover: {
-                borderColor: 'primary.base',
-            boxShadow: 'primary.base'
-            }
-        }
-    }
-})
+// const filled = definePartsStyle({
+//     field: {
+//         background: 'background.secondary',
+//         border: '1px solid',
+//         _hover: {
+//             background: 'background.secondary',
+//             borderColor: 'background.card',
+//         },
+//         _focus: {
+//             background: 'background.secondary',
+//             borderColor: 'interactive.primary',
+//             _hover: {
+//                 borderColor: 'interactive.primary',
+//             boxShadow: 'interactive.primary'
+//             }
+//         }
+//     }
+// })
 
-export const NumberInputTheme = defineMultiStyleConfig({ variants: {filled} })
+// export const NumberInputTheme = defineMultiStyleConfig({ variants: {filled} })

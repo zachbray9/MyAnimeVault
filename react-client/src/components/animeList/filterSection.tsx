@@ -1,5 +1,5 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import { Input, InputGroup, InputLeftElement, Stack, Text } from "@chakra-ui/react";
+import { Input, InputGroup, Stack, Text } from "@chakra-ui/react";
 import ReactSelect from "react-select";
 import { useReactSelectStyles } from "../../styles/reactSelectStyles";
 import { WatchStatusOptions } from "../../constants/watchStatusOptions";
@@ -14,11 +14,7 @@ export default observer(function FilterSection() {
 
     return (
         <Stack gap='1rem'>
-            <InputGroup>
-                <InputLeftElement>
-                    <SearchIcon color='text.subtle' />
-                </InputLeftElement>
-
+            <InputGroup startElement={<SearchIcon color='text.subtle' />}>
                 <Input placeholder="Search" variant='outline' value={listStore.searchQuery} onChange={e => listStore.setSearchQuery(e.target.value)}/>
             </InputGroup>
 
@@ -32,17 +28,6 @@ export default observer(function FilterSection() {
                     onChange={selectedOption => listStore.setWatchStatusFilter(selectedOption ? selectedOption.value as string : null)}
                     isClearable
                 />
-                {/* <ReactSelect<ReactSelectOption, true>
-                    styles={selectStyles}
-                    placeholder='Genres'
-                    options={GenreOptions}
-                    isMulti
-                    closeMenuOnSelect={false}
-                    value={GenreOptions.filter(option => listStore.genresFilter.includes(option.value) )}
-                    onChange={selectedGenres => {
-                        listStore.setGenresFilter(selectedGenres.map(option => option.value as string))
-                    }}
-                /> */}
             </Stack>
 
             <Stack gap='0.5rem'>

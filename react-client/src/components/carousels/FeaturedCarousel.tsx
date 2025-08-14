@@ -1,6 +1,5 @@
-import { Box, Button, Flex, Heading, IconButton, Stack, Text, Tooltip } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
-import { FaArrowRightLong, FaCheck, FaRegBookmark } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
 import { observer } from "mobx-react-lite";
@@ -10,6 +9,8 @@ import useEmblaCarousel from 'embla-carousel-react'
 import Fade from 'embla-carousel-fade'
 import useAutoPlay from "./autoplay";
 import { useState } from "react";
+import { MoveRight } from "lucide-react";
+import AddRemoveListIconButton from "../animeList/addRemoveListIconButton";
 
 interface Props {
     data: AniListAnime[]
@@ -52,7 +53,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             flexBasis="100%"
                             minW={0}
                             maxW="100%"
-                            bgImage={[anime.coverImage.extraLarge ?? anime.coverImage.large!, anime.bannerImage!]}
+                            bgImage={[`url(${anime.coverImage.extraLarge ?? anime.coverImage.large})`, `url(${anime.bannerImage})`]}
                             position='relative'
                             height={['60vh', null, '70vh']}
                             backgroundPosition='center'
@@ -62,26 +63,40 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                             justifyContent='left'
                             overflow='visible'
                         >
-                            <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='linear(to-b, transparent, rgba(0, 0, 0, 1))' display='flex' />
+                            <Box id="featured-slide-overlay" zIndex={1} position='absolute' bottom={0} width={'100%'} height={'75%'} bgGradient='to-b' gradientFrom="transparent" gradientTo="background" display='flex' />
 
                             <Stack id="featured-slide-content" zIndex={2} marginTop={[null, '10%']} width='100%' paddingX={[4, null, 40]} paddingY={[4, null, 0]}>
                                 <Stack maxW={["100%", null, "70%", null, "50%"]} w={"100%"} gap={4} alignItems={["center", null, "start"]} onMouseEnter={onHover} onMouseLeave={onUnhover}>
-                                    <Heading size={['lg', null, 'xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
-                                    {anime.genres && <Text color='text.subtle'>{anime.genres.join(', ')}</Text>}
+                                    <Heading size={['xl', null, "2xl", '4xl']} textAlign={['center', null, 'left']}>{anime.title.english ?? anime.title.romaji}</Heading>
+
+                                    {/* {anime.genres &&
+                                        <Text color="text.subtle" textAlign="center">{anime.genres.join(', ')}</Text>
+                                    } */}
+                                    <Flex gap={1}>
+                                        {anime.genres?.map((genre) => (
+                                            <Badge key={genre} bg="blackAlpha.400" borderRadius="full" px={2}>{genre}</Badge>
+                                        ))}
+                                    </Flex>
+
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
-                                    <Flex width={['100%', 'auto']} gap={2} >
-                                        <Button as={NavLink} to={`/anime/${anime.id}/details`} bg='#ff640a' width={['100%', 'fit-content']} rightIcon={<FaArrowRightLong />}>Check it out</Button>
 
-                                        {userStore.user?.animeIds.includes(anime.id) ? (
+                                    <Flex width={['100%', 'auto']} gap={2} justifyContent="center">
+                                        <NavLink to={`/anime/${anime.id}/details`}>
+                                            <Button bg='interactive.primary' color="text" _hover={{bg: "interactive.primary-hover"}} width={['100%', 'fit-content']} >
+                                                Check it out <MoveRight />
+                                            </Button>
+                                        </NavLink>
 
-                                            <Tooltip label='Remove from list' hasArrow>
-                                                <IconButton aria-label="already-on-list" icon={<FaCheck />} variant='outline' isLoading={userStore.isRemovingAnimeFromList} onClick={() => userStore.removeAnimeFromList(anime.id)} />
-                                            </Tooltip>
-                                        ) : (
-                                            <Tooltip label='Add to list' hasArrow >
-                                                <IconButton aria-label="add-to-list" icon={<FaRegBookmark />} variant='outline' isLoading={userStore.isAddingAnimeToList} onClick={() => userStore.addAnimeToList(anime)} />
-                                            </Tooltip>
-                                        )}
+                                        <AddRemoveListIconButton
+                                            isInList={userStore.user?.animeIds.includes(anime.id) ?? false}
+                                            loading={userStore.isRemovingAnimeFromList ?? userStore.isAddingAnimeToList}
+                                            onAddToList={() => userStore.addAnimeToList(anime)}
+                                            onRemoveFromList={() => userStore.removeAnimeFromList(anime.id)}
+                                            variant="ghost"
+                                            color="text"
+                                            
+                                            _hover={{ bg: "whiteAlpha.200" }}
+                                        />
                                     </Flex>
 
                                 </Stack>

@@ -1,9 +1,8 @@
-import { AspectRatio, Badge, Box, Button, Flex, Grid, Heading, Icon, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
+import { AspectRatio, Badge, Box, Button, Flex, Grid, Heading, Image, Skeleton, Stack, Text, Wrap } from "@chakra-ui/react";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { FaPlus, FaStar, FaTrash } from "react-icons/fa6";
 import DOMPurify from "dompurify";
 import LoadingComponent from "../components/common/loading/LoadingComponent";
 import RatingInputForm from "../components/forms/ratingInputForm";
@@ -12,6 +11,7 @@ import NumEpisodesWatchedInputForm from "../components/forms/numEpisodesWatchedI
 import { Helmet } from "react-helmet-async";
 import { CharacterEdge } from "../models/characterEdge";
 import CharacterCard from "../components/animeDetails/characterCard";
+import { Plus, Star, Trash } from "lucide-react";
 
 export default observer(function AnimeDetails() {
     const { animeStore, listStore, userStore } = useStore()
@@ -60,7 +60,7 @@ export default observer(function AnimeDetails() {
         return (
             <>
                 <Helmet>
-                    <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - MyAnimeVault`}</title>
+                    <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - PlotArmor`}</title>
                 </Helmet>
 
                 <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >
@@ -69,7 +69,7 @@ export default observer(function AnimeDetails() {
                             <Image src={selectedAnime?.coverImage.large} aspectRatio='2/3' />
                             <Stack gap={4}>
                                 {/* Title */}
-                                <Heading size='lg'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
+                                <Heading size='3xl'>{selectedAnime?.title.english || selectedAnime?.title.romaji}</Heading>
 
                                 {/* Genres */}
                                 <Wrap>
@@ -83,21 +83,21 @@ export default observer(function AnimeDetails() {
 
                                 {/* Score */}
                                 <Flex align='center' justify='start' gap={1}>
-                                    <Icon as={FaStar} boxSize='1.5rem' color='yellow' />
-                                    <Text fontSize='1.25rem'>{averageScore || 'Unscored'}</Text>
+                                    <Star size={24} color="yellow" fill="yellow"/>
+                                    <Text fontSize='1.25rem'>{averageScore ?? 'Unscored'}</Text>
                                 </Flex>
 
                                 {/* List controls */}
-                                <Skeleton isLoaded={!listStore.isLoadingUserAnimeDetails}>
+                                <Skeleton loading={listStore.isLoadingUserAnimeDetails}>
                                     {userAnimeDetails ? (
                                         <Stack gap='1rem'>
                                             <RatingInputForm />
                                             <WatchStatusInputForm />
                                             <NumEpisodesWatchedInputForm />
-                                            <Button variant='outline' isLoading={userStore.isRemovingAnimeFromList} width='fit-content' rightIcon={<FaTrash />} onClick={() => userStore.removeAnimeFromList(animeStore.selectedAnime!.id)}>Remove from list</Button>
+                                            <Button variant='outline' loading={userStore.isRemovingAnimeFromList} width='fit-content' onClick={() => userStore.removeAnimeFromList(animeStore.selectedAnime!.id)}>Remove from list <Trash /></Button>
                                         </Stack>
                                     ) : (
-                                        <Button variant='solid' isLoading={userStore.isAddingAnimeToList} width='fit-content' rightIcon={<FaPlus />} onClick={() => userStore.addAnimeToList(animeStore.selectedAnime!)}>Add to list</Button>
+                                        <Button bg="interactive.primary" _hover={{bg: "primary.hover"}} loading={userStore.isAddingAnimeToList} width='fit-content' onClick={() => userStore.addAnimeToList(animeStore.selectedAnime!)}>Add to list <Plus /></Button>
                                     )}
                                 </Skeleton>
                             </Stack>
