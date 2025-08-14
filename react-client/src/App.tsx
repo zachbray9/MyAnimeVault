@@ -1,11 +1,11 @@
 import { Outlet, ScrollRestoration } from 'react-router-dom'
-import Navbar from './components/nav/Navbar'
 import { Box, Stack } from '@chakra-ui/react'
 import { useStore } from './stores/store'
 import LoadingComponent from './components/common/loading/LoadingComponent'
 import { observer } from 'mobx-react-lite'
 import Footer from './components/footer/Footer'
 import usePersistentLogin from './hooks/usePersistentLogin'
+import Navbar from './components/nav/Navbar'
 
 export default observer(function App() {
   const { commonStore } = useStore()

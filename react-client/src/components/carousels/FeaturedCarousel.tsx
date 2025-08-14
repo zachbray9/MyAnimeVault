@@ -82,7 +82,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
 
                                     <Flex width={['100%', 'auto']} gap={2} justifyContent="center">
                                         <NavLink to={`/anime/${anime.id}/details`}>
-                                            <Button bg='interactive.primary' color="text"  width={['100%', 'fit-content']} >
+                                            <Button bg='interactive.primary' color="text" _hover={{bg: "interactive.primary-hover"}} width={['100%', 'fit-content']} >
                                                 Check it out <MoveRight />
                                             </Button>
                                         </NavLink>

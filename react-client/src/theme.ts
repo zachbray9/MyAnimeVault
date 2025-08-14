@@ -1,6 +1,6 @@
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
 
-const navBarHeight = ['3.75rem', null, '3rem']
+const navBarHeight = ['3.75rem', null, '3.75rem']
 const navBarIconSize = ['1.25em', null, '1em']
 
 const config = defineConfig({
