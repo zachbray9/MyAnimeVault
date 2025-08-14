@@ -60,7 +60,7 @@ export default observer(function AnimeDetails() {
         return (
             <>
                 <Helmet>
-                    <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - MyAnimeVault`}</title>
+                    <title>{`${selectedAnime?.title.english || selectedAnime?.title.romaji} - PlotArmor`}</title>
                 </Helmet>
 
                 <Box padding={['1.25rem', null, '4rem']} display='flex' alignItems='start' justifyContent='center' width='100%' >

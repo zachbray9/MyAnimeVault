@@ -41,7 +41,7 @@ export default observer(function Browse() {
     return (
         <>
             <Helmet>
-                <title>{`${formattedCategory} Anime Shows and Movies - MyAnimeVault`}</title>
+                <title>{`${formattedCategory} Anime Shows and Movies - PlotArmor`}</title>
             </Helmet>
 
             <Box display='flex' justifyContent='center' width='100%'>

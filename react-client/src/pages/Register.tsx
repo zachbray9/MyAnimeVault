@@ -19,7 +19,7 @@ export default observer(function Register() {
     return (
         <>
             <Helmet>
-                <title>Register for MyAnimeVault: Explore Anime Anytime!</title>
+                <title>Unlock your armor - Sign up for PlotArmor</title>
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']} position='relative'>

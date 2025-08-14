@@ -18,7 +18,7 @@ export default observer(function Login() {
     return (
         <>
             <Helmet>
-                <title>MyAnimeVault Login: Keep Track of Your Favorite Shows With Your Account</title>
+                <title>Suit up - Login to PlotArmor</title>
             </Helmet>
 
             <Box width='100%' height='85svh' display='flex' justifyContent='center' alignItems='center' padding={['1.5rem', '1.75rem', '4rem']}>
