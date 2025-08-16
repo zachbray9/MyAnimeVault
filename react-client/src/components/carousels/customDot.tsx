@@ -7,7 +7,6 @@ interface Props {
     delay: number
     isHovered: boolean
     isActive: boolean,
-    index: number,
     onClick?: () => void
 }
 
@@ -63,7 +62,20 @@ const progressKeyframes = keyframes`
   }
 `
 
-export default function CustomDot({ onClick, isActive, delay, isHovered, index }: Props) {
+export default function CustomDot({ onClick, isActive, delay, isHovered }: Props) {
+    const [shouldAnimate, setShouldAnimate] = useState(false)
+
+    useEffect(() => {
+        if(isActive){
+            setShouldAnimate(false)
+        }
+
+        setTimeout(() => {
+            setShouldAnimate(true)
+        }, 0)
+
+    }, [isActive])
+
 
     return (
         <Button
@@ -83,9 +95,8 @@ export default function CustomDot({ onClick, isActive, delay, isHovered, index }
             willChange="width"
             border="none"
         >
-            {isActive &&
+            {isActive && shouldAnimate &&
                 <Box
-                    key={index}
                     pos="absolute"
                     left={0}
                     top={0}
