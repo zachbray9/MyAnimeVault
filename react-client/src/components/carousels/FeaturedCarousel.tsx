@@ -111,7 +111,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
             <Box w="100%" display="flex" justifyContent="center">
                 <Box id="featured-dots" w="fit-content" display="flex" justifyContent="center" onMouseEnter={onHover} onMouseLeave={onUnhover}>
                     {scrollSnaps.map((_, index) => (
-                        <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} delay={DELAY} />
+                        <CustomDot key={index} index={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} delay={DELAY} />
                     ))}
                 </Box>
             </Box>
