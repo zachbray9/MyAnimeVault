@@ -68,11 +68,12 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
     useEffect(() => {
         if(isActive){
             setShouldAnimate(false)
+
+            setTimeout(() => {
+                setShouldAnimate(true)
+            }, 0)
         }
 
-        setTimeout(() => {
-            setShouldAnimate(true)
-        }, 0)
 
     }, [isActive])
 
@@ -102,7 +103,8 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                     top={0}
                     bottom={0}
                     w="100%"
-                    animation={`${progressKeyframes} ${delay + 100}ms linear forwards`} //added a millisecond of grace because setInterval lags behind animation
+                    animation={shouldAnimate ? `${progressKeyframes} ${delay + 100}ms linear forwards` : "none"} //added a millisecond of grace because setInterval lags behind animation
+                    transform={shouldAnimate ? undefined : "translate3d(-100%, 0, 0)"}
                     style={{
                         animationPlayState: isHovered ? "paused" : "running",
                         willChange: "transform",
