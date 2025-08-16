@@ -14,12 +14,12 @@ export default function SideMenu({ isOpen, onClose }: Props) {
             <Portal >
                 <Drawer.Backdrop mt={navBarHeight} />
                 <Drawer.Positioner >
-                    <Drawer.Content mt={navBarHeight}>
+                    <Drawer.Content mt={navBarHeight} bg="background">
                         <Drawer.Header>
                             <Drawer.Title color='text.subtle'>Browse</Drawer.Title>
                         </Drawer.Header>
 
-                        <Drawer.Body as={Stack}  overflow="auto" pb={navBarHeight}>
+                        <Drawer.Body as={Stack}  overflow="auto" pb={navBarHeight} bg="background">
                             {
                                 sortValues.map(sortValue => (
                                     <SideMenuButton key={sortValue} to={`/anime/browse/${sortValue}`} onClose={onClose} >{sortValue.charAt(0).toUpperCase() + sortValue.slice(1)}</SideMenuButton>
