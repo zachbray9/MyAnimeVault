@@ -45,7 +45,7 @@ export default observer(function Navbar() {
             </Flex>
 
             {/* Browse Menu */}
-            <Flex flexShrink={1}>
+            <Flex flexShrink={1} h="100%">
                 <BrowseMenu />
             </Flex>
 
@@ -59,14 +59,14 @@ export default observer(function Navbar() {
                     </NavLink>
                 </IconButton>
 
-                <IconButton asChild aria-label="list" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background"}}>
+                <IconButton asChild aria-label="list" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background"}} _focusVisible={{bg: "background"}}>
                     <NavLink to="anime/list">
                         <Bookmark />
                     </NavLink>
                 </IconButton>
 
                 <Menu.Root>
-                    <Menu.Trigger asChild aria-label="options" >
+                    <Menu.Trigger asChild aria-label="options" focusVisibleRing="none" _expanded={{bg: "background"}}>
                         <IconButton aria-label="options" h="100%" aspectRatio="1/1" bg="transparent" color="text" _hover={{bg: "background"}}>
                             <User />
                         </IconButton>

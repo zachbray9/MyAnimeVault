@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Heading, Stack, Text, Wrap } from "@chakra-ui/react";
 import { AniListAnime } from "../../models/aniListAnime";
 import { NavLink } from "react-router-dom";
 import { useStore } from "../../stores/store";
@@ -72,11 +72,11 @@ export default observer(function FeaturedCarousel({ data }: Props) {
                                     {/* {anime.genres &&
                                         <Text color="text.subtle" textAlign="center">{anime.genres.join(', ')}</Text>
                                     } */}
-                                    <Flex gap={1}>
+                                    <Wrap gap={1} justifyContent="center">
                                         {anime.genres?.map((genre) => (
                                             <Badge key={genre} bg="blackAlpha.400" borderRadius="full" px={2}>{genre}</Badge>
                                         ))}
-                                    </Flex>
+                                    </Wrap>
 
                                     <Text display={{ base: 'none', md: '-webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4' }} overflow='hidden' textOverflow='ellipsis'>{stripHtml(anime.description!)}</Text>
 
@@ -111,7 +111,7 @@ export default observer(function FeaturedCarousel({ data }: Props) {
             <Box w="100%" display="flex" justifyContent="center">
                 <Box id="featured-dots" w="fit-content" display="flex" justifyContent="center" onMouseEnter={onHover} onMouseLeave={onUnhover}>
                     {scrollSnaps.map((_, index) => (
-                        <CustomDot key={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} delay={DELAY} />
+                        <CustomDot key={index} index={index} onClick={() => onDotButtonClick(index)} isActive={selectedIndex === index ? true : false} isHovered={isHovered} delay={DELAY} />
                     ))}
                 </Box>
             </Box>
