@@ -42,16 +42,16 @@ export default observer(function Register() {
                                 </Card.Header>
 
                                 <Card.Body as={Stack} gap={4}>
-                                    <FormInput name="email" placeholder="Email" bg="surface.sunken" rounded="lg" />
+                                    <FormInput name="email" placeholder="Email" bg="surface.sunken" rounded="lg" _autofill={{ WebkitTextFillColor: "text", boxShadow: "0 0 0px 1000px var(--chakra-colors-surface-sunken) inset !important" }} />
 
-                                    <FormInput name="password" placeholder="Password" bg="surface.sunken" rounded="lg" hideable />
+                                    <FormInput name="password" placeholder="Password" bg="surface.sunken" rounded="lg" _autofill={{ WebkitTextFillColor: "text", boxShadow: "0 0 0px 1000px var(--chakra-colors-surface-sunken) inset !important" }} hideable />
 
-                                    <FormInput name="confirmPassword" placeholder="Confirm Password" bg="surface.sunken" rounded="lg" hideable />
+                                    <FormInput name="confirmPassword" placeholder="Confirm Password" bg="surface.sunken" rounded="lg" _autofill={{ WebkitTextFillColor: "text", boxShadow: "0 0 0px 1000px var(--chakra-colors-surface-sunken) inset !important" }} hideable />
                                 </Card.Body>
 
                                 <Card.Footer display='flex' flexDirection='column' justifyContent='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
                                     <Box width='100%' >
-                                        {errors.error && <Text color='text.danger'>{errors.error}</Text>}
+                                        {errors.error && <Text color='status.error'>{errors.error}</Text>}
                                     </Box>
 
                                     <Button type="submit" bg="interactive.primary" color="text" w="100%" _hover={{ bg: "interactive.primary-hover" }} loading={isSubmitting} >Create Account</Button>

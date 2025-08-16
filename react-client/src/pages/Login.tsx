@@ -32,7 +32,7 @@ export default observer(function Login() {
                         {({ handleSubmit, isSubmitting, errors }) => (
                             <Form onSubmit={handleSubmit} >
                                 <Card.Header as={Stack} alignItems="center" textAlign="center" gap={2}>
-                                    <Image src={Logo} boxSize="75px" alt="PlotArmor Logo"/>
+                                    <Image src={Logo} boxSize="75px" alt="PlotArmor Logo" />
                                     <Stack gap={1}>
                                         <Heading size="3xl" textAlign="center">Welcome back</Heading>
                                         <Text color="text.subtle">Sign in to suit up and get back to exploring.</Text>
@@ -40,22 +40,22 @@ export default observer(function Login() {
                                 </Card.Header>
 
                                 <Card.Body as={Stack} gap={4}>
-                                    <FormInput name="email" placeholder="Email" bg="surface.sunken" rounded="lg"/>
+                                    <FormInput name="email" placeholder="Email" bg="surface.sunken" rounded="lg" _autofill={{ WebkitTextFillColor: "text", boxShadow: "0 0 0px 1000px var(--chakra-colors-surface-sunken) inset !important" }} />
 
-                                    <FormInput name="password" placeholder="Password" bg="surface.sunken" rounded="lg" hideable />
+                                    <FormInput name="password" placeholder="Password" bg="surface.sunken" rounded="lg" _autofill={{ WebkitTextFillColor: "text", boxShadow: "0 0 0px 1000px var(--chakra-colors-surface-sunken) inset !important" }} hideable />
                                 </Card.Body>
 
                                 <Card.Footer display='flex' flexDirection='column' justifyContent='start' alignItems='center' gap={['1.25rem', '1.75', '2rem']}>
                                     <Box width='100%' >
-                                        {errors.error && <Text color='text.danger'>{errors.error}</Text>}
+                                        {errors.error && <Text color='status.error'>{errors.error}</Text>}
                                     </Box>
 
-                                    <Button type="submit" bg="interactive.primary" color="text" w="100%" rounded="lg" _hover={{bg: "interactive.primary-hover"}} loading={isSubmitting} >Log In</Button>
+                                    <Button type="submit" bg="interactive.primary" color="text" w="100%" rounded="lg" _hover={{ bg: "interactive.primary-hover" }} loading={isSubmitting} >Log In</Button>
 
                                     <Flex gap={1} color="text.subtle">
                                         <Text>No account?</Text>
                                         <NavLink to="/register">
-                                            <Text color='interactive.primary' _hover={{ color: 'interactive.primary-hover'}} transition='color 200ms' cursor="pointer">Create One</Text>
+                                            <Text color='interactive.primary' _hover={{ color: 'interactive.primary-hover' }} transition='color 200ms' cursor="pointer">Create One</Text>
                                         </NavLink>
                                     </Flex>
                                 </Card.Footer>
