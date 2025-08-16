@@ -40,7 +40,7 @@ export default observer(function List() {
                             <Grid gridTemplateColumns={{base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xlOnly: "repeat(4, 1fr)", xlTo2xl: "repeat(5, 1fr)"}} gap={4} alignItems="stretch" width='100%'>
                                 {listStore.isLoadingList ? (
                                         Array.from({ length: 5 }).map((_, index) => (
-                                            <Skeleton key={index} height={['100px', '150px', '225px']} />
+                                            <Skeleton key={index} w="100%" h="200px" rounded="lg"/>
                                         ))
                                 ) : (
                                     filteredList.map(userAnime => (
