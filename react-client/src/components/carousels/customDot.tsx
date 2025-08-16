@@ -63,21 +63,6 @@ const progressKeyframes = keyframes`
 `
 
 export default function CustomDot({ onClick, isActive, delay, isHovered }: Props) {
-    const [shouldAnimate, setShouldAnimate] = useState(false)
-
-    useEffect(() => {
-        if(isActive){
-            setShouldAnimate(false)
-
-            setTimeout(() => {
-                setShouldAnimate(true)
-            }, 0)
-        }
-
-
-    }, [isActive])
-
-
     return (
         <Button
             className={isActive ? "active" : "inactive"}
@@ -96,15 +81,15 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
             willChange="width"
             border="none"
         >
-            {isActive && shouldAnimate &&
+            {isActive &&
                 <Box
                     pos="absolute"
                     left={0}
                     top={0}
                     bottom={0}
                     w="100%"
-                    animation={shouldAnimate ? `${progressKeyframes} ${delay + 100}ms linear forwards` : "none"} //added a millisecond of grace because setInterval lags behind animation
-                    transform={shouldAnimate ? undefined : "translate3d(-100%, 0, 0)"}
+                    h="100%"
+                    animation={`${progressKeyframes} ${delay + 100}ms linear forwards`} //added a millisecond of grace because setInterval lags behind animation
                     style={{
                         animationPlayState: isHovered ? "paused" : "running",
                         willChange: "transform",
@@ -112,7 +97,6 @@ export default function CustomDot({ onClick, isActive, delay, isHovered }: Props
                     }}
                     bg="interactive.primary"
                     overflow="hidden"
-                    h="100%"
                 />
             }
 
