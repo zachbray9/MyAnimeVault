@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import { Box, Button, Card, Flex, Heading, Image, Link, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Card, Flex, Heading, Image, Stack, Text } from "@chakra-ui/react"
 import { Form, Formik } from "formik"
 import FormInput from "../components/common/form/FormInput"
 import { useStore } from "../stores/store"
