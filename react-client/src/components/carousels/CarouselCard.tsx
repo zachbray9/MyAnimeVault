@@ -22,17 +22,11 @@ export default observer(function CarouselCard({ anime }: Props) {
 
     const cleanDescription = stripHtmlTags(anime.description ?? "")
 
-    const handleAddToList = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        e.stopPropagation()
-
+    const handleAddToList = () => {
         userStore.addAnimeToList(anime)
     }
 
-    const handleRemoveFromList = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault()
-        e.stopPropagation()
-
+    const handleRemoveFromList = () => {
         userStore.removeAnimeFromList(anime.id)
     }
 
@@ -60,8 +54,8 @@ export default observer(function CarouselCard({ anime }: Props) {
                                 <AddRemoveListIconButton 
                                     isInList={userStore.user?.animeIds.includes(anime.id) ?? false}
                                     loading={userStore.isAddingAnimeToList ?? userStore.isRemovingAnimeFromList}
-                                    onAddToList={() => handleAddToList}
-                                    onRemoveFromList={() => handleRemoveFromList}
+                                    onAddToList={handleAddToList}
+                                    onRemoveFromList={handleRemoveFromList}
                                     variant="ghost"
                                     _hover={{
                                         bg: "whiteAlpha.200"

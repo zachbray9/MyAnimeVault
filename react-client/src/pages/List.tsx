@@ -37,7 +37,7 @@ export default observer(function List() {
                         <GridItem as={Stack} alignItems='end' gap='1rem'>
                             <Text color='text.subtle'>{`${filteredList.length} entries`}</Text>
 
-                            <Stack gap={['1rem', '1.25rem', '2rem']} width='100%'>
+                            <Grid gridTemplateColumns={{base: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xlOnly: "repeat(4, 1fr)", xlTo2xl: "repeat(5, 1fr)"}} gap={4} alignItems="stretch" width='100%'>
                                 {listStore.isLoadingList ? (
                                         Array.from({ length: 5 }).map((_, index) => (
                                             <Skeleton key={index} height={['100px', '150px', '225px']} />
@@ -47,7 +47,7 @@ export default observer(function List() {
                                         <AnimeListEntry userAnime={userAnime} key={userAnime.id} />
                                     ))
                                 )}
-                            </Stack>
+                            </Grid>
                         </GridItem>
 
                     </Grid>
