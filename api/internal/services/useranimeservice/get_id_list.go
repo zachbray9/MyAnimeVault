@@ -3,38 +3,23 @@ package useranimeservice
 import (
 	"fmt"
 	"myanimevault/internal/database"
+	"myanimevault/internal/models/entities"
+
+	"github.com/google/uuid"
 )
 
-func GetIdList(userId string) ([]int64, error) {
-	var animeIdList []int64 = []int64{}
+func GetIdList(userId string) ([]uint, error) {
+	animeIdList := []uint{}
 
-	query := `
-	SELECT anime_id
-	FROM userAnimes
-	WHERE user_id = $1
-	`
-
-	stmt, err := database.Db.Prepare(query)
-
+	id, err := uuid.Parse(userId)
 	if err != nil {
-		return animeIdList, fmt.Errorf("an error occurred while preparing the query: %w", err)
+		return animeIdList, fmt.Errorf("invalid user id format: %w", err)
 	}
 
-	defer stmt.Close()
-	rows, err := stmt.Query(userId)
+	err = database.Db.Model(entities.UserAnime{}).Select("anime_id").Where("user_id = ?", id).Find(&animeIdList).Error
 
 	if err != nil {
-		return animeIdList, fmt.Errorf("an error occurred while executing the query statement: %w", err)
-	}
-
-	for rows.Next() {
-		var id int64
-		err = rows.Scan(&id)
-		if err != nil {
-			return animeIdList, fmt.Errorf("an error occurred while scanning the db rows: %w", err)
-		}
-
-		animeIdList = append(animeIdList, id)
+		return animeIdList, fmt.Errorf("an error occurred while querying anime ids: %w", err)
 	}
 
 	return animeIdList, nil

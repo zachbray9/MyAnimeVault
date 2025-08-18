@@ -12,7 +12,7 @@ import (
 
 func GetUserAnimeHandler(context *gin.Context) {
 	userId := context.GetString("userId")
-	animeId, err := strconv.ParseInt(context.Param("animeId"), 10, 64)
+	animeId, err := strconv.ParseUint(context.Param("animeId"), 10, 64)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_anime_id"})
@@ -21,7 +21,7 @@ func GetUserAnimeHandler(context *gin.Context) {
 
 	var userAnime dtos.UserAnimeDetailsDto = dtos.UserAnimeDetailsDto{}
 
-	err = useranimeservice.GetUserAnime(userId, animeId, &userAnime)
+	err = useranimeservice.GetUserAnime(userId, uint(animeId), &userAnime)
 
 	if err != nil {
 		switch err {

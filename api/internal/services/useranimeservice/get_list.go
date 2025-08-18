@@ -4,50 +4,53 @@ import (
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/dtos"
+	"myanimevault/internal/models/entities"
+
+	"github.com/google/uuid"
 )
 
 func GetList(userId string) ([]dtos.UserAnimeDto, error) {
-	query := `
-	SELECT anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes 
-	FROM userAnimes
-	WHERE user_id = $1
-	`
+	var userAnimes []entities.UserAnime
+	var animeList []dtos.UserAnimeDto
 
-	stmt, err := database.Db.Prepare(query)
-
+	// Parse the userId string to UUID
+	userUUID, err := uuid.Parse(userId)
 	if err != nil {
-		return nil, fmt.Errorf("could not prepare the database query: %w", err)
+		return nil, fmt.Errorf("invalid user ID format: %w", err)
 	}
 
-	defer stmt.Close()
-	rows, err := stmt.Query(userId)
+	// Query using GORM to get user anime records
+	err = database.Db.Select("anime_id, english_title, romaji_title, large_poster, medium_poster, format, season, season_year, watch_status, rating, num_episodes_watched, episodes").
+		Where("user_id = ?", userUUID).
+		Find(&userAnimes).Error
 
 	if err != nil {
-		return nil, fmt.Errorf("could not execute database query statement: %w", err)
+		return nil, fmt.Errorf("could not execute database query: %w", err)
 	}
 
-	defer rows.Close()
+	// Convert to DTOs
+	animeList = make([]dtos.UserAnimeDto, 0, len(userAnimes))
+	for _, userAnime := range userAnimes {
+		dto := dtos.UserAnimeDto{
+			AnimeId:            userAnime.AnimeId,
+			Format:             userAnime.Format,
+			Season:             userAnime.Season,
+			SeasonYear:         userAnime.SeasonYear,
+			WatchStatus:        userAnime.WatchStatus,
+			Rating:             *userAnime.Rating,
+			NumEpisodesWatched: userAnime.NumEpisodesWatched,
+			Episodes:           userAnime.Episodes,
+		}
 
-	animeList := make([]dtos.UserAnimeDto, 0)
+		// Handle nested title struct
+		dto.Title.English = userAnime.EnglishTitle
+		dto.Title.Romaji = userAnime.RomajiTitle
 
-	for rows.Next() {
-		var userAnime dtos.UserAnimeDto
-		rows.Scan(
-			&userAnime.AnimeId,
-			&userAnime.Title.English,
-			&userAnime.Title.Romaji,
-			&userAnime.CoverImage.Large,
-			&userAnime.CoverImage.Medium,
-			&userAnime.Format,
-			&userAnime.Season,
-			&userAnime.SeasonYear,
-			&userAnime.WatchStatus,
-			&userAnime.Rating,
-			&userAnime.NumEpisodesWatched,
-			&userAnime.Episodes,
-		)
+		// Handle nested cover image struct
+		dto.CoverImage.Large = userAnime.LargePoster
+		dto.CoverImage.Medium = userAnime.MediumPoster
 
-		animeList = append(animeList, userAnime)
+		animeList = append(animeList, dto)
 	}
 
 	return animeList, nil

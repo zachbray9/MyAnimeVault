@@ -1,7 +1,7 @@
 package requests
 
 type UserAnimePatchRequest struct {
-	Rating             *int64  `json:"rating"`
-	WatchStatus        *string `json:"watchStatus"`
-	NumEpisodesWatched *int64  `json:"numEpisodesWatched"`
+	Rating             *int    `json:"rating"`
+	WatchStatus        *string `json:"watch_status"`
+	NumEpisodesWatched *int    `json:"num_episodes_watched"`
 }

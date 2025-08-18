@@ -12,7 +12,7 @@ import (
 
 func UpdateUserAnimeHandler(context *gin.Context) {
 	userId := context.GetString("userId")
-	animeId, err := strconv.ParseInt(context.Param("animeId"), 10, 64)
+	animeId, err := strconv.ParseUint(context.Param("animeId"), 10, 64)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": "invalid_anime_id"})
@@ -27,7 +27,7 @@ func UpdateUserAnimeHandler(context *gin.Context) {
 		return
 	}
 
-	err = useranimeservice.Update(userId, animeId, patchRequest)
+	err = useranimeservice.Update(userId, uint(animeId), patchRequest)
 
 	if err != nil {
 		switch err {

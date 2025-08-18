@@ -2,41 +2,30 @@ package userservice
 
 import (
 	"context"
-	"database/sql"
+	"errors"
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/entities"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func Get(context context.Context, id uuid.UUID) (entities.User, error) {
-	user := entities.User{}
+	var user entities.User
 
-	query := `
-		SELECT id, email, password_hash, date_registered
-		FROM users
-		WHERE id = $1
-	`
-
-	stmt, err := database.Db.Prepare(query)
+	// Query using GORM to get user by ID
+	err := database.Db.WithContext(context).
+		Select("id, email, password_hash, created_at").
+		Where("id = ?", id).
+		First(&user).Error
 
 	if err != nil {
-		return user, fmt.Errorf("an error occurred while preparing the query statement: %w", err)
-	}
-
-	row := stmt.QueryRow(id)
-
-	err = row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.DateRegistered)
-
-	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return user, customErrors.ErrNotFound
-		default:
-			return user, fmt.Errorf("an error occurred while scanning the db row: %w", err)
 		}
+		return user, fmt.Errorf("an error occurred while querying the user: %w", err)
 	}
 
 	return user, nil

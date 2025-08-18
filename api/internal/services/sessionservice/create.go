@@ -13,6 +13,7 @@ import (
 func Create(context context.Context, userId uuid.UUID, deviceId string, duration time.Duration) (entities.Session, error) {
 	expiresAt := time.Now().Add(duration)
 	session := entities.Session{
+		Id:        uuid.New(),
 		UserId:    userId,
 		DeviceId:  deviceId,
 		ExpiresAt: expiresAt,

@@ -40,7 +40,7 @@ func RegisterHandler(context *gin.Context) {
 		default:
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error", "message": "Something went wrong. Please try again."})
 		}
-		
+
 		return
 	}
 
@@ -48,7 +48,7 @@ func RegisterHandler(context *gin.Context) {
 	deviceId := uuid.NewString()
 
 	//create session
-	session, err := sessionservice.Create(context.Request.Context(), user.Id, deviceId, 24 * time.Hour * 30)
+	session, err := sessionservice.Create(context.Request.Context(), user.Id, deviceId, 24*time.Hour*30)
 	if err != nil {
 		log.Printf("sessionService.Create: failed to create a session for user %s: %v", user.Id, err)
 		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error", "message": "Something went wrong. Please try again later."})
@@ -57,14 +57,14 @@ func RegisterHandler(context *gin.Context) {
 
 	//create session id cookie
 	sessionIdCookie := cookieutil.CreateSessionCookie(session.Id.String())
-	
+
 	//create device id cookie
 	deviceIdCookie := cookieutil.CreateDeviceCookie(deviceId)
 
 	userDto := dtos.UserDto{
-		Id:        user.Id.String(),
-		Email:     user.Email,
-		AnimeIds:  make([]int64, 0),
+		Id:       user.Id.String(),
+		Email:    user.Email,
+		AnimeIds: make([]uint, 0),
 	}
 
 	//add cookies to response

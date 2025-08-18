@@ -1,41 +1,44 @@
 package useranimeservice
 
 import (
+	"errors"
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/dtos"
+	"myanimevault/internal/models/entities"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-func GetUserAnime(userId string, animeId int64, userAnime *dtos.UserAnimeDetailsDto) error {
-	query := `
-	SELECT rating, watch_status, num_episodes_watched
-	FROM userAnimes
-	WHERE user_id = $1 AND anime_id = $2
-	`
-
-	stmt, err := database.Db.Prepare(query)
-
+func GetUserAnime(userId string, animeId uint, userAnime *dtos.UserAnimeDetailsDto) error {
+	userUUID, err := uuid.Parse(userId)
 	if err != nil {
-		return fmt.Errorf("there was a problem preparing the db query: %w", err)
+		return fmt.Errorf("invalid user ID format: %w", err)
 	}
 
-	defer stmt.Close()
-	row := stmt.QueryRow(userId, animeId)
+	var result entities.UserAnime
 
-	var rating int64
-	var watchStatus string
-	var numEpisodesWatched int64
-
-	err = row.Scan(&rating, &watchStatus, &numEpisodesWatched)
+	err = database.Db.Select("rating, watch_status, num_episodes_watched").
+		Where("user_id = ? AND anime_id = ?", userUUID, animeId).
+		First(&result).Error
 
 	if err != nil {
-		return customErrors.ErrNotFound
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return customErrors.ErrNotFound
+		}
+		return fmt.Errorf("there was a problem querying the database: %w", err)
 	}
 
-	userAnime.Rating = rating
-	userAnime.WatchStatus = watchStatus
-	userAnime.NumEpisodesWatched = numEpisodesWatched
+	// Map the result to the DTO
+	if result.Rating != nil {
+		userAnime.Rating = *result.Rating
+	} else {
+		userAnime.Rating = 0 // or handle nil rating as needed
+	}
+	userAnime.WatchStatus = result.WatchStatus
+	userAnime.NumEpisodesWatched = result.NumEpisodesWatched
 
 	return nil
 }
