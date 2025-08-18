@@ -2,19 +2,19 @@ package sessionservice
 
 import (
 	"context"
+	"fmt"
 	"myanimevault/internal/database"
+	"myanimevault/internal/models/entities"
 
 	"github.com/google/uuid"
 )
 
 func DeleteByUserAndDevice(context context.Context, userId uuid.UUID, deviceId string) error {
-	query := `
-		DELETE
-		FROM sessions
-		WHERE user_id = $1 AND device_id = $2
-	`
+	result := database.Db.WithContext(context).Where("user_id = ? AND device_id = ?", userId, deviceId).Delete(&entities.Session{})
 
-	_, err := database.Db.ExecContext(context, query, userId, deviceId)
+	if result.Error != nil {
+		return fmt.Errorf("failed to delete sessions: %w", result.Error)
+	}
 
-	return err
+	return nil
 }

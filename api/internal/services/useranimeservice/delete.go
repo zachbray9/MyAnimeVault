@@ -4,35 +4,24 @@ import (
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
+	"myanimevault/internal/models/entities"
+
+	"github.com/google/uuid"
 )
 
-func Delete(userId string, animeId int64) error {
-	query := `
-	DELETE 
-	FROM userAnimes 
-	WHERE user_id = $1 AND anime_id = $2
-	`
-
-	stmt, err := database.Db.Prepare(query)
-
+func Delete(userId string, animeId uint) error {
+	id, err := uuid.Parse(userId)
 	if err != nil {
-		return fmt.Errorf("there was a problem preparing the delete query: %w", err)
+		return fmt.Errorf("invalid user id format: %w", err)
 	}
 
-	defer stmt.Close()
-	result, err := stmt.Exec(userId, animeId)
+	result := database.Db.Where("user_id = ? AND anime_id = ?", id, animeId).Delete(&entities.UserAnime{})
 
-	if err != nil {
-		return fmt.Errorf("there was a problem executing the delete query: %w", err)
+	if result.Error != nil {
+		return fmt.Errorf("failed to delete useranime: %w", result.Error)
 	}
 
-	numRows, err := result.RowsAffected()
-
-	if err != nil {
-		return fmt.Errorf("there was a problem with executing RowsAffected: %w", err)
-	}
-
-	if numRows < 1 {
+	if result.RowsAffected == 0 {
 		return customErrors.ErrNotFound
 	}
 

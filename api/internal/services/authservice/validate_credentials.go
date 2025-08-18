@@ -2,34 +2,27 @@ package authservice
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/entities"
 	"myanimevault/internal/utils"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 func ValidateCredentials(context context.Context, email string, password string) (entities.User, error) {
-	query := `
-	SELECT id, email, password_hash, date_registered
-	FROM users
-	WHERE email = $1
-	`
-
-	row := database.Db.QueryRowContext(context, query, strings.ToLower(email))
-
 	user := entities.User{}
 
-	err := row.Scan(&user.Id, &user.Email, &user.PasswordHash, &user.DateRegistered)
+	result := database.Db.WithContext(context).Where("email = ?", strings.ToLower(email)).First(&user)
 
-	if err != nil {
-		switch err {
-		case sql.ErrNoRows:
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
 			return entities.User{}, customErrors.ErrNotFound
 		default:
-			return entities.User{}, fmt.Errorf("an error occurred while querying the database: %w", err)
+			return entities.User{}, fmt.Errorf("an error occurred while querying the database: %w", result.Error)
 		}
 	}
 

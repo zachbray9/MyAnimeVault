@@ -19,6 +19,8 @@ func main() {
 	}
 
 	database.InitDb()
+	database.RunMigrations()
+
 	var server = gin.Default()
 
 	//cors policy

@@ -2,28 +2,30 @@ package sessionservice
 
 import (
 	"context"
-	"database/sql"
+	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/entities"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func GetById(context context.Context, sessionId string) (*entities.Session, error) {
-	query := `
-		SELECT id, user_id, device_id, created_at, expires_at
-		FROM sessions
-		WHERE id = $1
-		LIMIT 1
-	`
-
-	row := database.Db.QueryRowContext(context, query, sessionId)
+	id, err := uuid.Parse(sessionId)
+	if err != nil {
+		return nil, fmt.Errorf("invalid session id format: %w", err)
+	}
 
 	session := entities.Session{}
-	err := row.Scan(&session.Id, &session.UserId, &session.DeviceId, &session.CreatedAt, &session.ExpiresAt)
+	result := database.Db.WithContext(context).First(&session, id)
 
-	if err == sql.ErrNoRows {
-		return nil, nil
-	} else if err != nil {
-		return nil, err
+	if result.Error != nil {
+		switch result.Error {
+		case gorm.ErrRecordNotFound:
+			return nil, nil
+		default:
+			return nil, fmt.Errorf("failed to get session: %w", result.Error)
+		}
 	}
 
 	return &session, nil
