@@ -6,7 +6,6 @@ type UserAnime struct {
 	Id                 uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	UserId             uuid.UUID `json:"user_id" gorm:"type:uuid;not null"`
 	AnimeId            uint      `json:"anime_id" gorm:"not null"`
-	AniListId          uint      `json:"anilist_id,omitempty"`
 	EnglishTitle       string    `json:"english_title,omitempty"`
 	RomajiTitle        string    `json:"romaji_title,omitempty"`
 	LargePoster        string    `json:"large_poster,omitempty"`

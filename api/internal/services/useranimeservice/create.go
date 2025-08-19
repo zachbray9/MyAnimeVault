@@ -16,6 +16,7 @@ func Create(userId string, userAnime dtos.UserAnimeDto) (entities.UserAnime, err
 	}
 
 	newEntry := entities.UserAnime{
+		Id:           uuid.New(),
 		UserId:       id,
 		AnimeId:      userAnime.AnimeId,
 		EnglishTitle: userAnime.Title.English,

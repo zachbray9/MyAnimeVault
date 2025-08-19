@@ -16,7 +16,7 @@ func GetIdList(userId string) ([]uint, error) {
 		return animeIdList, fmt.Errorf("invalid user id format: %w", err)
 	}
 
-	err = database.Db.Model(entities.UserAnime{}).Select("anime_id").Where("user_id = ?", id).Find(&animeIdList).Error
+	err = database.Db.Model(entities.UserAnime{}).Select("anime_id").Where("user_id = ?", id).Find(&animeIdList).Error //will change to anime_id once database has data
 
 	if err != nil {
 		return animeIdList, fmt.Errorf("an error occurred while querying anime ids: %w", err)
