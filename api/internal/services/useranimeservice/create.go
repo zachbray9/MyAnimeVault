@@ -19,14 +19,6 @@ func Create(userId string, userAnime dtos.UserAnimeDto) (entities.UserAnime, err
 		Id:           uuid.New(),
 		UserId:       id,
 		AnimeId:      userAnime.AnimeId,
-		EnglishTitle: userAnime.Title.English,
-		RomajiTitle:  userAnime.Title.Romaji,
-		LargePoster:  userAnime.CoverImage.Large,
-		MediumPoster: userAnime.CoverImage.Medium,
-		Format:       userAnime.Format,
-		Season:       userAnime.Season,
-		SeasonYear:   userAnime.SeasonYear,
-		Episodes:     userAnime.Episodes,
 	}
 
 	result := database.Db.Create(&newEntry)

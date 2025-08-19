@@ -33,22 +33,10 @@ func GetList(userId string) ([]dtos.UserAnimeDto, error) {
 	for _, userAnime := range userAnimes {
 		dto := dtos.UserAnimeDto{
 			AnimeId:            userAnime.AnimeId,
-			Format:             userAnime.Format,
-			Season:             userAnime.Season,
-			SeasonYear:         userAnime.SeasonYear,
 			WatchStatus:        userAnime.WatchStatus,
 			Rating:             *userAnime.Rating,
 			NumEpisodesWatched: userAnime.NumEpisodesWatched,
-			Episodes:           userAnime.Episodes,
 		}
-
-		// Handle nested title struct
-		dto.Title.English = userAnime.EnglishTitle
-		dto.Title.Romaji = userAnime.RomajiTitle
-
-		// Handle nested cover image struct
-		dto.CoverImage.Large = userAnime.LargePoster
-		dto.CoverImage.Medium = userAnime.MediumPoster
 
 		animeList = append(animeList, dto)
 	}

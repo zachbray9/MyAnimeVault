@@ -19,7 +19,7 @@ func main() {
 	}
 
 	database.InitDb()
-	database.RunMigrations()
+	database.RunMigrationsAndSeedData()
 
 	var server = gin.Default()
 
