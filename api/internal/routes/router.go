@@ -19,7 +19,6 @@ func InitRouter(server *gin.Engine) {
 	if err != nil {
 		panic(fmt.Sprintf("failed to create new image service: %v", err))
 	}
-
 	animeRepo := animerepo.NewAnimeRepository()
 	animeService := animeservice.NewAnimeService(animeRepo, imageService)
 	animeHandler := animehandler.NewAnimeHandler(animeService)

@@ -16,4 +16,11 @@ func (h *AnimeHandler) AddAnimeHandler(context *gin.Context) {
 		return
 	}
 
+	anime, err := h.AnimeService.Create(context, req)
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error", "message": "there was a problem creating the anime entry"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"anime": anime})
 }
