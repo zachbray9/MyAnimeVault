@@ -2,7 +2,7 @@ package authhandler
 
 import (
 	"log"
-	"myanimevault/internal/services/sessionservice"
+	sessionservice "myanimevault/internal/services/session_service"
 	"net/http"
 	"time"
 
@@ -31,7 +31,7 @@ func LogoutHandler(context *gin.Context) {
 		Value:    "",
 		Path:     "/",
 		Expires:  time.Unix(0, 0),
-		MaxAge: -1,
+		MaxAge:   -1,
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteLaxMode,
@@ -42,7 +42,7 @@ func LogoutHandler(context *gin.Context) {
 		Value:    "",
 		Path:     "/",
 		Expires:  time.Unix(0, 0),
-		MaxAge: -1,
+		MaxAge:   -1,
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteLaxMode,

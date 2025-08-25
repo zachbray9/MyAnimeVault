@@ -1,6 +1,6 @@
 package animehandler
 
-import animeservice "myanimevault/internal/services/anime"
+import animeservice "myanimevault/internal/services/anime_service"
 
 type AnimeHandler struct {
 	AnimeService *animeservice.AnimeService

@@ -1,4 +1,4 @@
-package anime
+package animerepository
 
 import (
 	"context"

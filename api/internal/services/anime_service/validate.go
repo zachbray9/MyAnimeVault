@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/repository/genre"
-	"myanimevault/internal/repository/studio"
+	genrerepo "myanimevault/internal/repository/genre_repository"
+	studiorepo "myanimevault/internal/repository/studio_repository"
 )
 
 func (s *AnimeService) ValidateAnimeData(req requests.CreateAnimeRequest) error {
@@ -54,7 +54,7 @@ func (s *AnimeService) ValidateAnimeData(req requests.CreateAnimeRequest) error 
 	}
 
 	//validate studio exists
-	studioExists, err := studio.Exists(database.Db, req.StudioId)
+	studioExists, err := studiorepo.Exists(database.Db, req.StudioId)
 	if err != nil {
 		return fmt.Errorf("there was a problem checking if studio exists: %w", err)
 	}
@@ -63,7 +63,7 @@ func (s *AnimeService) ValidateAnimeData(req requests.CreateAnimeRequest) error 
 	}
 
 	//validate genres exist
-	genreExists, err := genre.ExistsAll(database.Db, req.Genres)
+	genreExists, err := genrerepo.ExistsAll(database.Db, req.Genres)
 	if err != nil {
 		return fmt.Errorf("there was a problem checking if genres exist: %w", err)
 	}

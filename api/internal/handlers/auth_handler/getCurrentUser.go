@@ -4,8 +4,8 @@ import (
 	"log"
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/dtos"
-	"myanimevault/internal/services/useranimeservice"
-	"myanimevault/internal/services/userservice"
+	userservice "myanimevault/internal/services/user_service"
+	useranimeservice "myanimevault/internal/services/useranime_service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

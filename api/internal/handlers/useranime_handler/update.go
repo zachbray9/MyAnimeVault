@@ -3,7 +3,7 @@ package useranimehandler
 import (
 	"myanimevault/internal/models/customErrors"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/services/useranimeservice"
+	useranimeservice "myanimevault/internal/services/useranime_service"
 	"net/http"
 	"strconv"
 

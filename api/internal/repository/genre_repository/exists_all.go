@@ -1,4 +1,4 @@
-package genre
+package genrerepository
 
 import (
 	"myanimevault/internal/models/entities"

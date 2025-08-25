@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"log"
-	"myanimevault/internal/services/sessionservice"
-	"myanimevault/internal/services/userservice"
+	sessionservice "myanimevault/internal/services/session_service"
+	userservice "myanimevault/internal/services/user_service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,13 +20,13 @@ func Authenticate(context *gin.Context) {
 	}
 
 	//check if there is a valid session in the database, then return user details
-		session, err := sessionservice.GetById(context.Request.Context(), sessionId)
-		if err != nil || session.IsExpired() {
-			log.Printf("Invalid session: %v", err)
-			context.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized", "message": "Session invalid or expired."})
-			context.Abort()
-			return
-		}
+	session, err := sessionservice.GetById(context.Request.Context(), sessionId)
+	if err != nil || session.IsExpired() {
+		log.Printf("Invalid session: %v", err)
+		context.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized", "message": "Session invalid or expired."})
+		context.Abort()
+		return
+	}
 
 	//validate user still exists
 	user, err := userservice.Get(context.Request.Context(), session.UserId)

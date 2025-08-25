@@ -2,16 +2,16 @@ package useranimehandler
 
 import (
 	"myanimevault/internal/models/customErrors"
-	"myanimevault/internal/services/useranimeservice"
+	"myanimevault/internal/models/dtos"
+	useranimeservice "myanimevault/internal/services/useranime_service"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteUserAnimeHandler(context *gin.Context) {
+func GetUserAnimeHandler(context *gin.Context) {
 	userId := context.GetString("userId")
-
 	animeId, err := strconv.ParseUint(context.Param("animeId"), 10, 64)
 
 	if err != nil {
@@ -19,12 +19,14 @@ func DeleteUserAnimeHandler(context *gin.Context) {
 		return
 	}
 
-	err = useranimeservice.Delete(userId, uint(animeId))
+	var userAnime dtos.UserAnimeDetailsDto = dtos.UserAnimeDetailsDto{}
+
+	err = useranimeservice.GetUserAnime(userId, uint(animeId), &userAnime)
 
 	if err != nil {
 		switch err {
 		case customErrors.ErrNotFound:
-			context.JSON(http.StatusNotFound, gin.H{"error": "anime_not_found"})
+			context.JSON(http.StatusNotFound, gin.H{"error": "not_found"})
 			return
 		default:
 			context.JSON(http.StatusInternalServerError, gin.H{"error": "internal_server_error"})
@@ -32,5 +34,5 @@ func DeleteUserAnimeHandler(context *gin.Context) {
 		}
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "Anime was successfully deleted from your list."})
+	context.JSON(http.StatusOK, gin.H{"message": "successfully retrieved UserAnime details.", "userAnime": userAnime})
 }

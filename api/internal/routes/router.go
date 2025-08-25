@@ -3,13 +3,13 @@ package routes
 import (
 	"fmt"
 	animehandler "myanimevault/internal/handlers/anime_handler"
-	"myanimevault/internal/handlers/authhandler"
+	authhandler "myanimevault/internal/handlers/auth_handler"
 	imagehandler "myanimevault/internal/handlers/image_handler"
-	"myanimevault/internal/handlers/useranimehandler"
+	useranimehandler "myanimevault/internal/handlers/useranime_handler"
 	"myanimevault/internal/middleware"
-	animerepo "myanimevault/internal/repository/anime"
-	animeservice "myanimevault/internal/services/anime"
-	imageservice"myanimevault/internal/services/image_service"
+	animerepo "myanimevault/internal/repository/anime_repository"
+	animeservice "myanimevault/internal/services/anime_service"
+	imageservice "myanimevault/internal/services/image_service"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -26,8 +26,6 @@ func InitRouter(server *gin.Engine) {
 
 	animeHandler := animehandler.NewAnimeHandler(animeService)
 	imageHandler := imagehandler.NewImageHandler(imageService)
-
-
 
 	api := server.Group("/api")
 	//auth routes
@@ -49,5 +47,3 @@ func InitRouter(server *gin.Engine) {
 	//image routes
 	api.POST("/image/upload", imageHandler.UploadImageHandler)
 }
-
-

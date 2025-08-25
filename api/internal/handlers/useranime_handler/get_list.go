@@ -1,7 +1,7 @@
 package useranimehandler
 
 import (
-	"myanimevault/internal/services/useranimeservice"
+	useranimeservice "myanimevault/internal/services/useranime_service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

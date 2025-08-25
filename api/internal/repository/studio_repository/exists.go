@@ -1,4 +1,4 @@
-package studio
+package studiorepository
 
 import (
 	"myanimevault/internal/models/entities"
