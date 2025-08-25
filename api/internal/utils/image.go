@@ -1,21 +1,34 @@
 package utils
 
-import (
-	"encoding/base64"
-	"fmt"
-	"strings"
-)
-
-func DecodeBase64Image(base64Str string) ([]byte, error) {
-	// Remove data:image/jpeg;base64, prefix if present
-	if strings.Contains(base64Str, ",") {
-		base64Str = strings.Split(base64Str, ",")[1]
+func IsValidImageType(imageExt string) bool {
+	validTypes := []string{
+		".jpg",
+		".png",
+		".webp",
 	}
 
-	imageData, err := base64.StdEncoding.DecodeString(base64Str)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode base64 image: %w", err)
+	for _, validType := range validTypes {
+		if imageExt == validType {
+			return true
+		}
 	}
+	return false
+}
 
-	return imageData, nil
+func IsValidImageSize(fileSize int64) bool {
+	const MAX_FILE_SIZE = 10 * 1024 * 1024 //10mb
+	return fileSize <= MAX_FILE_SIZE
+}
+
+func GetExtensionFromContentType(contentType string) string {
+	switch contentType {
+	case "image/jpeg", "image/jpg":
+		return ".jpg"
+	case "image/png":
+		return ".png"
+	case "image/webp":
+		return ".webp"
+	default:
+		return ".jpg"
+	}
 }

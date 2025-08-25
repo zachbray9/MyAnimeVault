@@ -6,7 +6,6 @@ import (
 	"myanimevault/internal/database"
 	"myanimevault/internal/models/entities"
 	"myanimevault/internal/models/requests"
-	"myanimevault/internal/utils"
 
 	"gorm.io/gorm"
 )
@@ -18,34 +17,6 @@ func (s *AnimeService)Create(context context.Context, req requests.CreateAnimeRe
 		err := s.ValidateAnimeData(req)
 		if err != nil {
 			return fmt.Errorf("invalid create anime request: %w", err)
-		}
-
-		//upload poster image to s3
-		posterUrl := ""
-		if req.Poster != "" {
-			posterData, err := utils.DecodeBase64Image(req.Poster)
-			if err != nil {
-				return fmt.Errorf("failed to decode base64 image for poster: %w", err)
-			}
-
-			posterUrl, err = s.imageService.UploadPoster(context, posterData, req.EnglishTitle)
-			if err != nil {
-				return fmt.Errorf("failed to upload poster image to s3: %w", err)
-			}
-		}
-
-		//upload banner image to s3
-		bannerUrl := ""
-		if req.Banner != "" {
-			bannerData, err := utils.DecodeBase64Image(req.Banner)
-			if err != nil {
-				return fmt.Errorf("failed to decode base64 image for banner: %w", err)
-			}
-
-			bannerUrl, err = s.imageService.UploadBanner(context, bannerData, req.EnglishTitle)
-			if err != nil {
-				return fmt.Errorf("failed to upload banner image to s3: %w", err)
-			}
 		}
 
 		//map CreateAnimeRequest to Anime
@@ -60,8 +31,8 @@ func (s *AnimeService)Create(context context.Context, req requests.CreateAnimeRe
 		anime.EndDate = req.EndDate
 		anime.Season = req.Season
 		anime.SeasonYear = req.SeasonYear
-		anime.PosterUrl = posterUrl
-		anime.BannerUrl = bannerUrl
+		anime.PosterS3Key = req.Poster
+		anime.BannerS3Key = req.Banner
 		anime.TrailerUrl = req.TrailerUrl
 		anime.IsAdult = req.IsAdult
 		anime.AgeRating = req.AgeRating

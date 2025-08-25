@@ -2,15 +2,15 @@ package animeservice
 
 import (
 	"myanimevault/internal/repository/anime"
-	"myanimevault/internal/services/image"
+	imageservice "myanimevault/internal/services/image_service"
 )
 
 type AnimeService struct {
 	animeRepo anime.AnimeRepository
-	imageService *image.ImageService
+	imageService *imageservice.ImageService
 }
 
-func NewAnimeService(animeRepo anime.AnimeRepository, imageService *image.ImageService) *AnimeService {
+func NewAnimeService(animeRepo anime.AnimeRepository, imageService *imageservice.ImageService) *AnimeService {
 	return &AnimeService{
 		animeRepo: animeRepo,
 		imageService: imageService,

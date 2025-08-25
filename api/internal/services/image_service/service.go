@@ -1,4 +1,4 @@
-package image
+package imageservice
 
 import (
 	"context"
@@ -15,7 +15,10 @@ type ImageService struct {
 }
 
 func NewImageService(region string, bucket string) (*ImageService, error) {
-	cfg, err := config.LoadDefaultConfig(context.Background(), config.WithRegion(region))
+	cfg, err := config.LoadDefaultConfig(
+		context.Background(), 
+		config.WithRegion(region),
+	)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to load aws config: %w", err)

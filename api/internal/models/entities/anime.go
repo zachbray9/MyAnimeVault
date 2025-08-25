@@ -26,8 +26,8 @@ type Anime struct {
 	SeasonYear *int       `json:"season_year,omitempty"`
 
 	//media urls
-	PosterUrl  string `json:"poster_url,omitempty"`
-	BannerUrl  string `json:"banner_url,omitempty"`
+	PosterS3Key  string `json:"poster_s3_key,omitempty"`
+	BannerS3Key  string `json:"banner_s3_key,omitempty"`
 	TrailerUrl string `json:"trailer_url,omitempty"`
 
 	//ratings and popularity
